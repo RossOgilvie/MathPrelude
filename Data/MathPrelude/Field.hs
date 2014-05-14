@@ -7,6 +7,8 @@ import qualified Prelude as P
 import Data.MathPrelude.Ring
 import Data.MathPrelude.Abelian
 import Data.MathPrelude.EuclideanDomain
+import Data.MathPrelude.OverrideEQ
+
 
 ------------------------------
 --- Field
@@ -15,7 +17,7 @@ import Data.MathPrelude.EuclideanDomain
 class IntDom a => Field a where
 	recip :: a -> a
 	(/) :: a -> a -> a
-	fromRational :: Quotient Integer -> a
+	fromRational :: Rational -> a
 
 	recip x = one / x
 	(/) x y = x * recip y
@@ -108,12 +110,15 @@ instance Floating Double where
 	epsilon = 1e-14
 	nearZero a = P.abs a <= epsilon
 
+instance NumEq Double where	(===) = eqFloat
+instance NumEq Float where	(===) = eqFloat
+
 ------------------------------
 --- Quotient
 ------------------------------
 
 data Quotient a = a :% a deriving Show
---type Rational = Quotient Integer
+type Rational = Quotient Integer
 
 ------------------------------
 --- Quotient - Instances

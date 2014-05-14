@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module Data.MathPrelude.Polynomial where
 
 import BasicPrelude
@@ -10,62 +10,71 @@ import Data.MathPrelude.Monoid
 import Data.MathPrelude.Module
 import Data.MathPrelude.Field
 import Data.MathPrelude.EuclideanDomain
+import Data.MathPrelude.OverrideEQ
 
 -----------------------------------
 --- Poly
 -----------------------------------
-data Poly a = Poly Int [a]
+data Poly a = Poly [(Int,a)]
 
 -----------------------------------
 --- Instances
 -----------------------------------
 
+instance Functor Poly where
+	fmap f (Poly xs) = Poly (map (fmap f) xs)
+
 instance Show a => Show (Poly a) where
-	show (Poly n l) = "Poly " ++ P.show l'
-		where l' = take (n+1) l
+	show (Poly xs) = intercalate " + " . map show_m $ xs
+		where
+			show_m (n,x)
+				| n == 0 = P.show x
+				| n == 1 = P.show x ++ "x"
+				| otherwise = P.show x ++ "x^" ++ P.show n
 
 instance Eq a => Eq (Poly a) where
-	(==) (Poly n xs) (Poly m ys) = xs' == ys'
+	(==) (Poly xs) (Poly ys) = xs == ys
+
+instance NumEq a => NumEq (Poly a) where
+	(===) (Poly xs') (Poly ys') = tripEq xs' ys'
 		where
-			n' = max n m + 1
-			xs' = take n' xs
-			ys' = take n' ys
+			tripEq [] [] = True
+			tripEq ((n,a):xs) ((m,b):ys)
+				| n == m = a === b && tripEq xs ys
+				| otherwise = False
+			tripEq _ _ = False
 
-instance Functor Poly where
-	fmap f (Poly n xs) = Poly n (fmap f xs)
+instance (Monoid a, NumEq a) => Monoid (Poly a) where
+	mempty = monomial 0 mempty
+	mappend p q = simplifyP $ merge mappend p q
 
-instance (Eq a, Monoid a) => Monoid (Poly a) where
-	mempty = poly [mempty]
-	mappend (Poly n xs) (Poly m ys) = simplifyP $ Poly (max n m) (zipWith mappend xs ys)
+instance (Abelian a, NumEq a) => Abelian (Poly a) where
+	negate = map negate
+	(-) p q = simplifyP $ merge (-) p q
 
-instance Abelian a => Abelian (Poly a) where
-	negate = fmap negate
-	(-) (Poly n xs) (Poly m ys) = simplifyP $ Poly (max n m) (zipWith (-) xs ys)
-
-instance Ring a => Ring (Poly a) where
+instance (Ring a, NumEq a) => Ring (Poly a) where
 	one = poly [one]
 	fromInteger n = poly [fromInteger n]
-	(*) (Poly n xs) (Poly m ys) = simplifyP $ Poly (n+m) [ sum [ (xs!!i)*(ys!!(k-i)) | i <- [0..k]] | k <- [0..]]
+	(*) (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,b) <- ys ]
 
-instance IntDom a => IntDom (Poly a)
+instance (IntDom a, NumEq a) => IntDom (Poly a)
 
-instance Ring a => Module (Poly a) a where
+instance (Ring a, NumEq a) => Module (Poly a) a where
   scale r p = map (r*) p
 
-instance Field a => EuclideanDomain (Poly a) where
-	stdUnit p = poly [leadingTerm p]
-	stdAssociate p = leadingTerm p ./ p
-	--p `div` q = stdAssociate (div' p q)
-	p `div` q = div' p q
+instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
+	stdUnit p = monomial 0 (leadingCoeff p)
+	stdAssociate p = leadingCoeff p ./ p
+	div p q = Poly . simplifyP' $ div' p q
 		where
 			div' p q
-				| d < 0 = poly [zero]
-				| otherwise = monomial d factor + div' r q
-				where
-					d = degree p - degree q
-					factor = leadingTerm p / leadingTerm q
-					r = behead (degree p) $ p - (factor .* q)
-					behead d p@(Poly n xs) = if n == d then poly $ take n xs else p
+				| d < 0 = [(0,mempty)]
+				| otherwise = div' r q ++ [(d, factor)]
+					where
+						dp = degree p
+						d = dp - degree q
+						factor = leadingCoeff p / leadingCoeff q
+						r = removeTerm dp $ p - shiftPower d (factor .* q)
 	p `mod` q = p - (p `div` q)*q
 
 
@@ -73,29 +82,62 @@ instance Field a => EuclideanDomain (Poly a) where
 --- Methods
 -----------------------------------
 
-poly :: Monoid a => [a] -> Poly a
-poly l = Poly (length l - 1) (l ++ repeat mempty)
+poly :: [a] -> Poly a
+poly ls = Poly $ zip [0..] ls
 
-safeHead :: a -> [a] -> a
-safeHead x [] = x
-safeHead _ xs = head xs
+merge :: (a -> a-> a) -> Poly a -> Poly a -> Poly a
+merge' f p [] = p
+merge' f [] q = q
+merge' f (x@(n,a):xs) (y@(m,b):ys)
+	| n == m = (n, f a b) : merge' f xs ys
+	| n < m = x : merge' f xs (y:ys)
+	| otherwise = y : merge' f (x:xs) ys
+merge f (Poly xs) (Poly ys) = Poly $ merge' f xs ys
 
-constTerm :: Monoid a => Poly a -> a
-constTerm (Poly n xs) = safeHead mempty xs
-leadingTerm :: (Eq a, Monoid a) => Poly a -> a
-leadingTerm (Poly n xs) = safeHead mempty . dropWhile (== mempty) . reverse . take (n+1) $ xs
+constCoeff :: Monoid a => Poly a -> a
+constCoeff (Poly ((n,a):xs)) = if n == 0 then a else mempty
 
-simplifyP :: (Monoid a, Eq a) => Poly a -> Poly a
-simplifyP (Poly n xs) = poly . reverse . dropWhile (== mempty) . reverse . take (n+1) $ xs
+leadingCoeff :: Poly a -> a
+leadingCoeff (Poly xs) = snd . head . reverse $ xs
 
-degree p = n where Poly n _ = simplifyP p
+degree (Poly xs) = fst . head . reverse $ xs
 
-monomial d c = poly $ pad ++ [c]
-	where pad = take d $ repeat zero
+sortSimplifyP :: (Monoid a, NumEq a) => Poly a -> Poly a
+sortSimplifyP (Poly xs) = Poly $ sortSimplifyP' xs
+sortSimplifyP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
+sortSimplifyP' = filterP' . combineP' . sortP'
+
+simplifyP :: (Monoid a, NumEq a) => Poly a -> Poly a
+simplifyP (Poly xs) = Poly $ simplifyP' xs
+simplifyP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
+simplifyP' = filterP' . combineP'
+
+combineP (Poly xs) = Poly $ combineP' xs
+combineP' [] = []
+combineP' [x] = [x]
+combineP' (x@(n,a):y@(m,b):xs)
+	| n == m = combineP' $ (n, mappend a b):xs
+	| otherwise = x : combineP' (y:xs)
+
+filterP :: (Monoid a, NumEq a) => Poly a -> Poly a
+filterP (Poly xs) = Poly $ filterP' xs
+filterP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
+filterP' = filter (\(n,a) -> n == 0 || a /== mempty)
+
+sortP :: Poly a -> Poly a
+sortP (Poly xs) = Poly $ sortP' xs
+sortP' xs = sortBy (\x y -> compare (fst x) (fst y)) xs
+
+monomial d c = Poly [(d,c)]
+
+removeTerm d (Poly xs) = Poly $ filter (\(n,_) -> n /= d) xs
+
+shiftPower d (Poly xs) = Poly $ map (\(n,a) -> (n + d,a)) xs
 
 polyEval :: Ring a => Poly a -> a -> a
-polyEval (Poly n xs) x = blah xs'
+polyEval (Poly xs) pt = shift 0 xs
 	where
-		xs' = take (n+1) xs
-		blah [] = zero
-		blah (y:ys) = y + (blah ys)*x
+		shift _ [] = zero
+		shift k (y@(n,a):ys)
+			| k == n = a + (shift (k+1) ys)*pt
+			| otherwise = (shift (k+1) (y:ys))*pt
