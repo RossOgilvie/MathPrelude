@@ -35,8 +35,8 @@ instance Show a => Show (Poly a) where
 instance Eq a => Eq (Poly a) where
 	(==) (Poly xs) (Poly ys) = xs == ys
 
-instance NumEq a => NumEq (Poly a) where
-	(===) (Poly xs') (Poly ys') = tripEq xs' ys'
+instance (NumEq a, Monoid a) => NumEq (Poly a) where
+	(===) (Poly xs') (Poly ys') = tripEq (sortSimplifyP' xs') (sortSimplifyP' ys')
 		where
 			tripEq [] [] = True
 			tripEq ((n,a):xs) ((m,b):ys)
@@ -44,13 +44,13 @@ instance NumEq a => NumEq (Poly a) where
 				| otherwise = False
 			tripEq _ _ = False
 
-instance (Monoid a, NumEq a) => Monoid (Poly a) where
+instance Monoid a => Monoid (Poly a) where
 	mempty = monomial 0 mempty
-	mappend p q = simplifyP $ merge mappend p q
+	mappend p q = merge mappend p q
 
-instance (Abelian a, NumEq a) => Abelian (Poly a) where
+instance Abelian a => Abelian (Poly a) where
 	negate = map negate
-	(-) p q = simplifyP $ merge (-) p q
+	(-) p q = merge (-) p q
 
 instance (Ring a, NumEq a) => Ring (Poly a) where
 	one = poly [one]
@@ -65,7 +65,7 @@ instance (Ring a, NumEq a) => Module (Poly a) a where
 instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
 	stdUnit p = monomial 0 (leadingCoeff p)
 	stdAssociate p = leadingCoeff p ./ p
-	div p q = Poly . simplifyP' $ div' p q
+	div p q = Poly $ div' p q
 		where
 			div' p q
 				| d < 0 = [(0,mempty)]
