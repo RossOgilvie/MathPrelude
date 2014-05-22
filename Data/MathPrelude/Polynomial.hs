@@ -12,6 +12,8 @@ import Data.MathPrelude.Field
 import Data.MathPrelude.EuclideanDomain
 import Data.MathPrelude.OverrideEQ
 
+import Test.QuickCheck
+
 -----------------------------------
 --- Poly
 -----------------------------------
@@ -24,13 +26,17 @@ data Poly a = Poly [(Int,a)]
 instance Functor Poly where
 	fmap f (Poly xs) = Poly (map (fmap f) xs)
 
-instance Show a => Show (Poly a) where
-	show (Poly xs) = intercalate " + " . map show_m $ xs
+instance (Show a, Ring a) => Show (Poly a) where
+	show (Poly xs) = s
 		where
 			show_m (n,x)
 				| n == 0 = P.show x
+				| n == 1 && (x == one) = "x"
 				| n == 1 = P.show x ++ "x"
+				| x == one = "x^" ++ P.show n
 				| otherwise = P.show x ++ "x^" ++ P.show n
+			s' = intercalate " + " . map show_m . filter (\(_,x) -> x /= zero) $ xs
+			s = if s' /= "" then s' else "0"
 
 instance Eq a => Eq (Poly a) where
 	(==) (Poly xs) (Poly ys) = xs == ys
@@ -44,13 +50,13 @@ instance (NumEq a, Monoid a) => NumEq (Poly a) where
 				| otherwise = False
 			tripEq _ _ = False
 
-instance Monoid a => Monoid (Poly a) where
+instance (Monoid a, NumEq a) => Monoid (Poly a) where
 	mempty = monomial 0 mempty
-	mappend p q = merge mappend p q
+	mappend p q = filterP $ merge mappend p q
 
-instance Abelian a => Abelian (Poly a) where
+instance (Abelian a, NumEq a) => Abelian (Poly a) where
 	negate = map negate
-	(-) p q = merge (-) p q
+	(-) p q = filterP $ merge (-) p q
 
 instance (Ring a, NumEq a) => Ring (Poly a) where
 	one = poly [one]
@@ -77,7 +83,8 @@ instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
 						r = removeTerm dp $ p - shiftPower d (factor .* q)
 	p `mod` q = p - (p `div` q)*q
 
-
+p = poly [1,1] :: Poly Double
+q = poly [1,2,1]  :: Poly Double
 -----------------------------------
 --- Methods
 -----------------------------------
