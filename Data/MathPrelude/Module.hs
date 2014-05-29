@@ -24,8 +24,8 @@ class (Abelian m, Ring s) => Module m s where
 --- Instances
 -----------------------------------
 
-instance Ring r => Module r r where
-  scale r s = r*s
+-- instance Ring r => Module r r where
+--   scale r s = r*s
 
 -----------------------------------
 --- Vector Space

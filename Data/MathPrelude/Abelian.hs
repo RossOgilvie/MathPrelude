@@ -5,8 +5,9 @@ import BasicPrelude
 import qualified Prelude as P
 
 import Data.MathPrelude.Monoid
+import Data.MathPrelude.OverrideEQ
 
-class (Eq a, Monoid a) => Abelian a where
+class (NumEq a, Monoid a) => Abelian a where
 	zero :: a
 	(+) :: a -> a -> a
 	negate :: a -> a

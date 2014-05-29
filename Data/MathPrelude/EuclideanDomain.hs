@@ -6,6 +6,7 @@ import qualified Prelude as P
 
 import Data.MathPrelude.Ring
 import Data.MathPrelude.Abelian
+import Data.MathPrelude.OverrideEQ
 
 -----------------------------------
 --- EuclideanDomain
@@ -60,13 +61,15 @@ instance EuclideanDomain Int64 where
 gcd :: EuclideanDomain a => a -> a -> a
 gcd a b = stdAssociate $ gcd' a b
 gcd' a b
-	| b == zero = a
+	| b =~ zero = a
 	| otherwise = gcd' b (a `mod` b)
 
-extendedEuclidAlg :: (EuclideanDomain a, Eq a) => a -> a -> (a,a)
+extendedEuclidAlg :: (EuclideanDomain a, NumEq a) => a -> a -> (a,a)
 extendedEuclidAlg a b
-	| r == zero = (zero,one)
-	| otherwise = (y, x - y * q)
+	| r =~ zero = (zero,one) -------
+	| otherwise = (y, x - (y * q))
 		where
 			(q,r) = a `divMod` b
 			(x,y) = extendedEuclidAlg b r
+
+

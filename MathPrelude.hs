@@ -7,6 +7,7 @@ module MathPrelude
 import BasicPrelude
 import qualified Prelude as P
 
+import Data.MathPrelude.OverrideEQ
 import Data.MathPrelude.Monoid
 import Data.MathPrelude.Abelian
 import Data.MathPrelude.Ring
@@ -19,7 +20,12 @@ import Data.MathPrelude.Module
 
 
 ------------ fun stuff
-newtype Z2 = Z2 Integer deriving Show
+newtype Z2 = Z2 Integer deriving (Show)
+
+instance NumEq Z2 where
+	(=~) = (==)
+	epsilon = Z2 0
+	nearZero = (== Z2 0)
 
 instance Eq Z2 where
 	(==) (Z2 x) (Z2 y) = (x-y) `mod` 2 == 0
@@ -48,7 +54,7 @@ agm :: (Field a, Floating a) => a -> a -> a
 agm a g = fst . head . dropWhile test . iterate next $ (a,g)
 	where
 		next (!a,!g) = ((a+g)/ fromInteger 2, sqrt (a*g))
-		test (!a,!g) = not $ eqFloat a g
+		test (!a,!g) = not $ a =~ g
 
 
 ellipticK ::(Field a, Floating a) => a -> a
@@ -78,7 +84,7 @@ magm x y = (\(x,_,_) -> x) .head . dropWhile test . iterate next $ (x,y,zero)
 		nexty p@(_,_,z) = z + root p
 		nextz p@(_,_,z) = z - root p
 		next p = (nextx p, nexty p, nextz p)
-		test (x,y,_) = not $ eqFloat x y
+		test (x,y,_) = not $ x =~ y
 
 ellipticE :: (Field a, Floating a) => a -> a
 ellipticE k = (pi/fromInteger 2) * (magm one k') / (agm one (sqrt k'))

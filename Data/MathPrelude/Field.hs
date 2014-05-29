@@ -49,18 +49,10 @@ class Field a => Floating a where
 	acosh :: a -> a
 	atanh :: a -> a
 
-
-	epsilon :: a
-	nearZero :: a -> Bool
-	eqFloat :: a -> a -> Bool
-
 	logBase b x = log x / log b
 	x ** y = exp ( y * log x )
 	tan x = sin x / cos x
 	tanh x = sinh x / cosh x
-
-	nearZero x = eqFloat x zero
-	eqFloat x y = nearZero (x-y)
 
 instance Floating Float where
 	pi = P.pi
@@ -83,8 +75,6 @@ instance Floating Float where
 	acosh = P.acosh
 	atanh = P.atanh
 
-	epsilon = 1e-6
-	nearZero a = P.abs a <= epsilon
 
 instance Floating Double where
 	pi = P.pi
@@ -106,12 +96,6 @@ instance Floating Double where
 	asinh = P.asinh
 	acosh = P.acosh
 	atanh = P.atanh
-
-	epsilon = 1e-14
-	nearZero a = P.abs a <= epsilon
-
-instance NumEq Double where	(===) = eqFloat
-instance NumEq Float where	(===) = eqFloat
 
 ------------------------------
 --- Quotient
@@ -150,6 +134,12 @@ instance (IntDom a, Eq a) => Eq (Quotient a) where
 		| x == zero = y == zero
 		| y == zero = x == zero
 		| otherwise = (p-q) == zero
+
+instance (IntDom a, NumEq a) => NumEq (Quotient a) where
+	(=~) p@(x:%_) q@(y:%_)
+		| x =~ zero = y =~ zero
+		| y =~ zero = x =~ zero
+		| otherwise = (p-q) =~ zero
 
 instance (IntDom a, Ord a) => Ord (Quotient a) where
 	compare (x:%y) (x':%y') = parity' num yord y'ord

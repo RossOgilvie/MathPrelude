@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module Data.MathPrelude.Complex where
 
 import BasicPrelude
@@ -8,15 +8,22 @@ import Data.MathPrelude.Field
 import Data.MathPrelude.Module
 import Data.MathPrelude.Ring
 import Data.MathPrelude.Abelian
+import Data.MathPrelude.OverrideEQ
 -----------------------------------
 --- Complex
 -----------------------------------
 
-data Complex a = a :+ a deriving (Show, Eq)
+data Complex a = a :+ a deriving (Eq)
 
 -----------------------------------
 --- Instances
 -----------------------------------
+
+instance (Show a, NumEq a, Monoid a)  => Show (Complex a) where
+	show (x :+ y)
+		| y =~ mempty = P.show x
+		| x =~ mempty = P.show y ++ "i"
+		| otherwise = "(" ++ P.show x ++ "+" ++ P.show y ++ "i)"
 
 instance Monoid a => Monoid (Complex a) where
 	mempty = mempty :+ mempty
@@ -35,7 +42,7 @@ instance Field a => Field (Complex a) where
 	recip z@(x:+y) = (x/zz) :+ (negate y/zz)
 		where zz = realPart $ normsq z
 
-instance Num a => Num (Complex a) where
+instance (NumEq a, Num a) => Num (Complex a) where
 	abs = undefined
 	signum = undefined
 
@@ -68,8 +75,10 @@ instance (Ord a, Field a, Floating a) => Floating (Complex a) where
 	--acosh = P.acosh
 	--atanh = P.atanh
 
-	epsilon = fromReal epsilon
-	nearZero = nearZero . sqrt . normsq'
+instance NumEq a => NumEq (Complex a) where
+	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)
+	epsilon = epsilon :+ epsilon
+	nearZero (a:+b)= nearZero a && nearZero b
 
 
 -----------------------------------
