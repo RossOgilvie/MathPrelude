@@ -6,9 +6,6 @@ import qualified Prelude as P
 
 import Data.MathPrelude.Field
 import Data.MathPrelude.Module
-import Data.MathPrelude.Ring
-import Data.MathPrelude.Abelian
-import Data.MathPrelude.OverrideEQ
 -----------------------------------
 --- Complex
 -----------------------------------
@@ -18,6 +15,9 @@ data Complex a = a :+ a deriving (Eq)
 -----------------------------------
 --- Instances
 -----------------------------------
+
+instance Functor Complex where
+	fmap f (x :+ y) = f x :+ f y
 
 instance (Show a, NumEq a, Monoid a)  => Show (Complex a) where
 	show (x :+ y)
@@ -46,8 +46,10 @@ instance (NumEq a, Num a) => Num (Complex a) where
 	abs = undefined
 	signum = undefined
 
-instance Ring s => Module (Complex s) s where
-	scale r (x :+ y) = (r*x) :+ (r*y)
+-- instance Ring s => Module (Complex s) s where
+-- 	scale r (x :+ y) = (r*x) :+ (r*y)
+instance Module m r => Module (Complex m) r where
+	scale r z = map (scale r) z
 
 
 instance (Ord a, Field a, Floating a) => Floating (Complex a) where
@@ -64,16 +66,21 @@ instance (Ord a, Field a, Floating a) => Floating (Complex a) where
 	sin (x:+y) = ((sin x)*(cosh y)) :+ ((cos x)*(sinh y))
 	cos (x:+y) = ((cos x)*(cosh y)) :+ (negate $ (sin x)*(sinh y))
 	--tan  -- use default
-	--asin = P.asin
-	--acos = P.acos
-	--atan = P.atan
-	--atan2 = P.atan2
+	asin z = (negate iu) * log (iu*z + sqrt(one - z*z))
+	acos z = half * pi - asin z
+		where half = fromReal $ recip $ fromInteger 2
+	atan z = half*iu*(log (one - iu*z) - log (one + iu*z))
+		where half = fromReal $ recip $ fromInteger 2
+	atan2 x y
+		| nearZero x = zero
+		| otherwise = atan (y/x)
 	sinh (x:+y) = ((sinh x)*(cos y)) :+ ((cosh x)*(sin y))
 	cosh (x:+y) = ((cosh x)*(cos y)) :+ ((sinh x)*(sin y))
 	--tanh  -- use default
-	--asinh = P.asinh
-	--acosh = P.acosh
-	--atanh = P.atanh
+	asinh z = log (z + sqrt(z*z + one))
+	acosh z = log (z + sqrt(z + one)*sqrt(z - one))
+	atanh z = half * log ((one + z)/(one - z))
+		where half = fromReal $ recip $ fromInteger 2
 
 instance NumEq a => NumEq (Complex a) where
 	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)

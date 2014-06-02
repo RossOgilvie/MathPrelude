@@ -29,3 +29,8 @@ instance NumEq a => NumEq [a] where
 	(=~) x y = length x == length y && (and $ zipWith (=~) x y)
 	epsilon = [epsilon]
 	nearZero xs = and . map nearZero $ xs
+
+instance (NumEq a, NumEq b) => NumEq (a,b) where
+	(a,b) =~ (c,d) = a =~ c && b =~ d
+	epsilon = (epsilon,epsilon)
+	nearZero (a,b) = nearZero a && nearZero b

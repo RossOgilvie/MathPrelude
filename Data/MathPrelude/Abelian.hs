@@ -1,5 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Data.MathPrelude.Abelian where
+module Data.MathPrelude.Abelian(Abelian(..), module Data.MathPrelude.OverrideEQ, sum) where
 
 import BasicPrelude
 import qualified Prelude as P
@@ -19,8 +19,7 @@ class (NumEq a, Monoid a) => Abelian a where
 	(-) x y = x + negate y
 infixl 6  +, -
 
-instance Abelian Int where negate = P.negate; (-) = (P.-)
---instance Abelian Int where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
+instance Abelian Int where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
 instance Abelian Integer where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
 instance Abelian Int32 where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
 instance Abelian Int64 where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)

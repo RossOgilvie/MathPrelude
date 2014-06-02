@@ -1,13 +1,11 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Data.MathPrelude.Field where
+module Data.MathPrelude.Field (module Data.MathPrelude.Ring, Field(..), Fractional(..), Floating(..), Quotient(..), Rational, simplifyQ)  where
 
 import BasicPrelude
 import qualified Prelude as P
 
 import Data.MathPrelude.Ring
-import Data.MathPrelude.Abelian
 import Data.MathPrelude.EuclideanDomain
-import Data.MathPrelude.OverrideEQ
 
 
 ------------------------------
@@ -140,6 +138,8 @@ instance (IntDom a, NumEq a) => NumEq (Quotient a) where
 		| x =~ zero = y =~ zero
 		| y =~ zero = x =~ zero
 		| otherwise = (p-q) =~ zero
+	epsilon = epsilon :% one
+	nearZero q = q =~ zero
 
 instance (IntDom a, Ord a) => Ord (Quotient a) where
 	compare (x:%y) (x':%y') = parity' num yord y'ord

@@ -1,12 +1,10 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Data.MathPrelude.EuclideanDomain where
+module Data.MathPrelude.EuclideanDomain(module Data.MathPrelude.Ring, EuclideanDomain(..), gcd, extEuclidAlg) where
 
 import BasicPrelude
 import qualified Prelude as P
 
 import Data.MathPrelude.Ring
-import Data.MathPrelude.Abelian
-import Data.MathPrelude.OverrideEQ
 
 -----------------------------------
 --- EuclideanDomain
@@ -64,12 +62,12 @@ gcd' a b
 	| b =~ zero = a
 	| otherwise = gcd' b (a `mod` b)
 
-extendedEuclidAlg :: (EuclideanDomain a, NumEq a) => a -> a -> (a,a)
-extendedEuclidAlg a b
-	| r =~ zero = (zero,one) -------
+extEuclidAlg :: (EuclideanDomain a, NumEq a) => a -> a -> (a,a)
+extEuclidAlg a b
+	| r =~ zero = (zero,one)
 	| otherwise = (y, x - (y * q))
 		where
 			(q,r) = a `divMod` b
-			(x,y) = extendedEuclidAlg b r
+			(x,y) = extEuclidAlg b r
 
 

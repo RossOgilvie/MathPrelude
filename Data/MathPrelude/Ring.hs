@@ -1,5 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Data.MathPrelude.Ring where
+module Data.MathPrelude.Ring(module Data.MathPrelude.Abelian, Ring(..), (^), product, Num(..), IntDom(..), Integral(..)) where
 
 import BasicPrelude
 import qualified Prelude as P
@@ -22,7 +22,8 @@ class Abelian a => Ring a where
 					| even n    = fin + fin
 					| otherwise = fin + fin + one
 						where fin = fi (n `P.div` 2)
-infixl 7  *
+
+infixl 7 *
 
 product :: Ring a => [a] -> a
 product = foldr (*) one
@@ -47,7 +48,7 @@ instance Num Int64 where abs = P.abs; signum = P.signum
 instance Num Float where abs = P.abs; signum = P.signum
 instance Num Double where abs = P.abs; signum = P.signum
 
-class Ring a => IntDom a where;
+class Ring a => IntDom a
 
 instance IntDom Int
 instance IntDom Integer
@@ -55,3 +56,26 @@ instance IntDom Int32
 instance IntDom Int64
 instance IntDom Float
 instance IntDom Double
+
+class Ring a => Integral a where
+	convIntegral :: a -> a
+	toIntegral :: Integer -> a
+	fromIntegral :: a -> Integer
+
+	convIntegral =  toIntegral . fromIntegral
+
+instance Integral Int where toIntegral = P.fromInteger; fromIntegral = P.toInteger
+instance Integral Integer where toIntegral = P.fromInteger; fromIntegral = P.toInteger
+instance Integral Int32 where toIntegral = P.fromInteger; fromIntegral = P.toInteger
+instance Integral Int64 where toIntegral = P.fromInteger; fromIntegral = P.toInteger
+
+
+
+
+
+
+
+
+
+
+

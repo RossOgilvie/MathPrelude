@@ -1,16 +1,13 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
-module Data.MathPrelude.Polynomial(Poly, poly, polyEval, monomialP, scalarP, constP, leadingP, degreeP, termwiseP) where
+module Data.MathPrelude.Polynomial(module Data.MathPrelude.Field, module Data.MathPrelude.EuclideanDomain, module Data.MathPrelude.Module
+	, Poly, poly, polyEval, monomialP, xnP, scalarP, constP, leadingP, degreeP, termwiseP) where
 
 import BasicPrelude
 import qualified Prelude as P
 
-import Data.MathPrelude.Ring
-import Data.MathPrelude.Abelian
-import Data.MathPrelude.Monoid
 import Data.MathPrelude.Module
 import Data.MathPrelude.Field
 import Data.MathPrelude.EuclideanDomain
-import Data.MathPrelude.OverrideEQ
 
 -- import Test.QuickCheck((==>), Property, quickCheck, verboseCheck, Arbitrary(..), Gen)
 import Test.QuickCheck
@@ -68,8 +65,10 @@ instance (Ring a, NumEq a) => Ring (Poly a) where
 
 instance (IntDom a, NumEq a) => IntDom (Poly a)
 
-instance (Ring a, NumEq a) => Module (Poly a) a where
-  scale r p = map (r*) p
+-- instance (Ring a, NumEq a) => Module (Poly a) a where
+--   scale r p = map (r*) p
+instance Module m r => Module (Poly m) r where
+  scale r p = map (scale r) p
 
 instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
 	stdUnit p = monomialP 0 (leadingP p)
@@ -87,19 +86,21 @@ instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
 						r = removeTerm dp $ p - shiftPower d (factor .* q)
 	p `mod` q = p - (p `div` q)*q
 
-
 -----------------------------------
 --- Methods
 -----------------------------------
 
 poly :: Monoid a => [a] -> Poly a
-poly [] = Poly [(mempty, mempty)]
-poly ls = Poly $ zip [0..] ls
+poly [] = Poly [(0, mempty)]
+poly ls = Poly . zip [0..] $ ls
 
 monomialP :: Int -> a -> Poly a
 monomialP d c
 	| d >= 0 = Poly [(d,c)]
 	| otherwise = Poly [(0,c)]
+
+xnP :: Ring a => Int -> Poly a
+xnP n = monomialP n one
 
 scalarP :: a -> Poly a
 scalarP c = Poly [(0,c)]
@@ -143,22 +144,27 @@ simplifyP (Poly xs) = Poly $ simplifyP' xs
 simplifyP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
 simplifyP' = filterP' . combineP'
 
-combineP (Poly xs) = Poly $ combineP' xs
+combineP :: (Monoid a, NumEq a) => Poly a -> Poly a
+combineP (Poly xs) = Poly . combineP' $ xs
 combineP' [] = []
 combineP' [x] = [x]
 combineP' (x@(n,a):y@(m,b):xs)
-	| n == m = combineP' $ (n, mappend a b):xs
+	| n == m = combineP' $ (n,mappend a b) : xs
 	| otherwise = x : combineP' (y:xs)
 
-filterP :: (Monoid a, NumEq a) => Poly a -> Poly a
-filterP (Poly xs) = Poly $ filterP' xs
+filterP :: (NumEq a, Monoid a) => Poly a -> Poly a
+filterP (Poly xs) = Poly . filterP' $ xs
 filterP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
-filterP' = filter (\(n,a) -> n == 0 || a /=~ mempty)
+filterP' = catchEmpty' . filter (\(n,a) -> n >= 0 && a /=~ mempty)
+
+catchEmpty' :: Monoid a => [(Int,a)] -> [(Int,a)]
+catchEmpty' xs
+	| length xs == 0 = [(0,mempty)]
+	| otherwise = xs
 
 sortP :: Poly a -> Poly a
-sortP (Poly xs) = Poly $ sortP' xs
-sortP' xs = sortBy (\x y -> compare (fst x) (fst y)) xs
-
+sortP (Poly xs) = Poly . sortP' $ xs
+sortP' = sortBy (\x y -> compare (fst x) (fst y))
 
 merge :: Monoid a => (a -> a-> a) -> Poly a -> Poly a -> Poly a
 merge' f p [] = p
