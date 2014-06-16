@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, OverloadedStrings #-}
 module Data.MathPrelude.Complex where
 
 import BasicPrelude

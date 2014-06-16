@@ -1,27 +1,28 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Data.MathPrelude.Ring(module Data.MathPrelude.Abelian, Ring(..), (^), product, Num(..), IntDom(..), Integral(..)) where
+module Data.MathPrelude.Ring(module Data.MathPrelude.Abelian, Ring(..), (^), product, Num(..), IntDom(..), Integral(..), ifThenElse) where
 
 import BasicPrelude
 import qualified Prelude as P
 
 import Data.MathPrelude.Abelian
+import Data.MathPrelude.PreludeNumConst
 
 class Abelian a => Ring a where
 	one :: a
 	(*) :: a -> a -> a
 	fromInteger :: Integer -> a
 
-	one = fromInteger 1
+	one = fromInteger oneInteger
 	fromInteger n
-		| n < 0       =  negate (fi (negate n))
-		| otherwise   =  fi n
+		| n < zeroInteger = negate (fi (negate n))
+		| otherwise = fi n
 			where
-				fi 0    =  zero
-				fi 1    =  one
 				fi n
+					| n =~ zeroInteger = zero
+					| n =~ oneInteger = one
 					| even n    = fin + fin
 					| otherwise = fin + fin + one
-						where fin = fi (n `P.div` 2)
+						where fin = fi (n `P.div` twoInteger)
 
 infixl 7 *
 
@@ -31,12 +32,12 @@ product = foldr (*) one
 (^) :: Ring a => a -> Int -> a
 (^) x n = product $ take n $ repeat x
 
-instance Ring Int where one = 1; (*) = (P.*)
-instance Ring Integer where one = 1; (*) = (P.*)
-instance Ring Int32 where one = 1; (*) = (P.*)
-instance Ring Int64 where one = 1; (*) = (P.*)
-instance Ring Float where one = 1; (*) = (P.*)
-instance Ring Double where one = 1; (*) = (P.*)
+instance Ring Int where one = oneInt; (*) = (P.*); fromInteger = P.fromInteger
+instance Ring Integer where one = oneInteger; (*) = (P.*); fromInteger = P.fromInteger
+instance Ring Int32 where one = oneInt32; (*) = (P.*); fromInteger = P.fromInteger
+instance Ring Int64 where one = oneInt64; (*) = (P.*); fromInteger = P.fromInteger
+instance Ring Float where one = oneFloat; (*) = (P.*); fromInteger = P.fromInteger
+instance Ring Double where one = oneDouble; (*) = (P.*); fromInteger = P.fromInteger
 
 class (Eq a, Show a, Ring a) => Num a  where
     abs, signum :: a -> a

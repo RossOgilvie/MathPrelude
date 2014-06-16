@@ -7,17 +7,14 @@ module MathPrelude
 import BasicPrelude
 import qualified Prelude as P
 
-import Data.MathPrelude.OverrideEQ
-import Data.MathPrelude.Monoid
-import Data.MathPrelude.Abelian
-import Data.MathPrelude.Ring
-import Data.MathPrelude.Field
-import Data.MathPrelude.EuclideanDomain
 import Data.MathPrelude.Polynomial
 import Data.MathPrelude.Complex
 import Data.MathPrelude.Module
 
+-- default (Integer, Double)
 
+-- fromInteger :: Integer -> Integer
+-- fromInteger = id
 
 ------------ fun stuff
 newtype Z2 = Z2 Integer deriving (Show)
@@ -50,15 +47,15 @@ instance Ring Z2 where
 
 -- arithmetic geometric mean
 --agm :: Complex Double -> Complex Double -> Complex Double
-agm :: (Field a, Floating a) => a -> a -> a
+agm :: Floating a => a -> a -> a
 agm a g = fst . head . dropWhile test . iterate next $ (a,g)
 	where
-		next (!a,!g) = ((a+g)/ fromInteger 2, sqrt (a*g))
+		next (!a,!g) = ((a+g)/ 2, sqrt (a*g))
 		test (!a,!g) = not $ a =~ g
 
 
-ellipticK ::(Field a, Floating a) => a -> a
-ellipticK k = (pi/fromInteger 2)/ agm (one-k) (one+k)
+ellipticK :: Floating a => a -> a
+ellipticK k = (pi/2)/ agm (one-k) (one+k)
 aperiod :: Double -> Complex Double
 -- aperiod :: (Ord a, Field a, Floating a) => a -> Complex a Double -> Complex Double
 aperiod r = (-4::Double) .* iu * (fromReal $ ellipticK (r ^ 2))
@@ -76,19 +73,19 @@ tau r = (aperiod r)/(bperiod r)
 
 
 -- adlaj's modified agm for elliptic integrals of the 2nd kind
-magm :: (Field a, Floating a) => a -> a -> a
+magm :: Floating a => a -> a -> a
 magm x y = (\(x,_,_) -> x) .head . dropWhile test . iterate next $ (x,y,zero)
 	where
 		root (x,y,z) = sqrt ((x-z)*(y-z))
-		nextx (x,y,_) = (x+y)/ fromInteger 2
+		nextx (x,y,_) = (x+y)/ 2
 		nexty p@(_,_,z) = z + root p
 		nextz p@(_,_,z) = z - root p
 		next p = (nextx p, nexty p, nextz p)
 		test (x,y,_) = not $ x =~ y
 
-ellipticE :: (Field a, Floating a) => a -> a
-ellipticE k = (pi/fromInteger 2) * (magm one k') / (agm one (sqrt k'))
-	where k' = one - k*k
+ellipticE :: Floating a => a -> a
+ellipticE k = (pi/ 2) * (magm 1 k') / (agm 1 k')
+	where k' = sqrt $ 1 - k^2
 
 
 

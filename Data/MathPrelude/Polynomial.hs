@@ -125,8 +125,8 @@ polyEval (Poly xs) pt = shift 0 xs
 			| k == n = a + (shift (k+1) ys)*pt
 			| otherwise = (shift (k+1) (y:ys))*pt
 
-termwiseP :: (Int -> a -> (Int,a)) -> Poly a -> Poly a
-termwiseP f (Poly xs) = Poly $ map (uncurry f) xs
+termwiseP :: (Ring a, NumEq a) => (Int -> a -> (Int,a)) -> Poly a -> Poly a
+termwiseP f (Poly xs) = Poly . sortSimplifyP' . map (uncurry f) $ xs
 
 -----------------------------------
 --- Internal Stuff

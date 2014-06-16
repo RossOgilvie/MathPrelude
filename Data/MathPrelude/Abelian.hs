@@ -19,9 +19,9 @@ class (NumEq a, Monoid a) => Abelian a where
 	(-) x y = x + negate y
 infixl 6  +, -
 
-instance Abelian Int where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
-instance Abelian Integer where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
-instance Abelian Int32 where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
-instance Abelian Int64 where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
-instance Abelian Float where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
-instance Abelian Double where zero = 0; (+) = (P.+); negate = P.negate; (-) = (P.-)
+instance Abelian Int where zero = mempty; (+) = (P.+); negate = P.negate; (-) = (P.-)
+instance Abelian Integer where zero = mempty; (+) = (P.+); negate = P.negate; (-) = (P.-)
+instance Abelian Int32 where zero = mempty; (+) = (P.+); negate = P.negate; (-) = (P.-)
+instance Abelian Int64 where zero = mempty; (+) = (P.+); negate = P.negate; (-) = (P.-)
+instance Abelian Float where zero = mempty; (+) = (P.+); negate = P.negate; (-) = (P.-)
+instance Abelian Double where zero = mempty; (+) = (P.+); negate = P.negate; (-) = (P.-)

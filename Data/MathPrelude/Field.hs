@@ -1,5 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Data.MathPrelude.Field (module Data.MathPrelude.Ring, Field(..), Fractional(..), Floating(..), Quotient(..), Rational, simplifyQ)  where
+module Data.MathPrelude.Field (module Data.MathPrelude.Ring, Field(..), Fractional(..), Floating(..), Quotient(..), Q, Rational, fromRational, simplifyQ)  where
 
 import BasicPrelude
 import qualified Prelude as P
@@ -15,11 +15,11 @@ import Data.MathPrelude.EuclideanDomain
 class IntDom a => Field a where
 	recip :: a -> a
 	(/) :: a -> a -> a
-	fromRational :: Rational -> a
+	fromQ :: Q -> a
 
 	recip x = one / x
 	(/) x y = x * recip y
-	fromRational (a :% b) = (fromInteger a) / (fromInteger b)
+	fromQ (a :% b) = (fromInteger a) / (fromInteger b)
 
 instance Field Float where recip = P.recip; (/) = (P./)
 instance Field Double where recip = P.recip; (/) = (P./)
@@ -100,7 +100,9 @@ instance Floating Double where
 ------------------------------
 
 data Quotient a = a :% a deriving Show
-type Rational = Quotient Integer
+type Q = Quotient Integer
+type Rational = P.Rational
+fromRational = P.fromRational
 
 ------------------------------
 --- Quotient - Instances
