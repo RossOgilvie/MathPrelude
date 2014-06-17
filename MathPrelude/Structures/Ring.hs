@@ -2,28 +2,56 @@
 module MathPrelude.Structures.Ring
 	( module MathPrelude.Structures.Abelian
 	, Ring(..)
+	, Num(..)
+	, IntDom(..)
 	, (^)
 	, product
 	, two
-	, Num(..)
-	, IntDom(..)
 	, ifThenElse
 	) where
 
+-----------------------------------
+--- Imports
+-----------------------------------
 import BasicPrelude
 import qualified Prelude as P
 
 import MathPrelude.Structures.Abelian
-import MathPrelude.Representations.PreludeNumConst
+import MathPrelude.Common.PreludeNumConst
 
+
+-----------------------------------
+--- Classes
+-----------------------------------
 class Abelian a => Ring a where
 	one :: a
 	(*) :: a -> a -> a
+	fromInteger :: Integer -> a
+
+	fromInteger n
+		| n < zeroInteger = negate (fi (negate n))
+		| otherwise = fi n
+			where
+				fi n
+					| n =~ zeroInteger = zero
+					| n =~ oneInteger = one
+					| even n    = fin + fin
+					| otherwise = fin + fin + one
+						where fin = fi (n `P.div` twoInteger)
 
 infixl 7 *
 
 
+class (Eq a, Show a, Ring a) => Num a  where
+    abs, signum :: a -> a
 
+
+class Ring a => IntDom a
+
+
+-----------------------------------
+--- Methods
+-----------------------------------
 product :: Ring a => [a] -> a
 product = foldr (*) one
 
@@ -33,24 +61,27 @@ product = foldr (*) one
 two :: Ring a => a
 two = one + one
 
+-----------------------------------
+--- Instances
+-----------------------------------
 
+instance Ring Integer where one = oneInteger; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Int where one = oneInt; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Int32 where one = oneInt32; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Int64 where one = oneInt64; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Float where one = oneFloat; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Double where one = oneDouble; (*) = (P.*); fromInteger = P.fromInteger;
 
+instance IntDom Integer
+instance IntDom Int
+instance IntDom Int32
+instance IntDom Int64
+instance IntDom Float
+instance IntDom Double
 
-class (Eq a, Show a, Ring a) => Num a  where
-    abs, signum :: a -> a
-
-
-
-
-class Ring a => IntDom a
-
-
-
-
-
-
-
-
-
-
-
+instance Num Integer where abs = P.abs; signum = P.signum
+instance Num Int where abs = P.abs; signum = P.signum
+instance Num Int32 where abs = P.abs; signum = P.signum
+instance Num Int64 where abs = P.abs; signum = P.signum
+instance Num Float where abs = P.abs; signum = P.signum
+instance Num Double where abs = P.abs; signum = P.signum

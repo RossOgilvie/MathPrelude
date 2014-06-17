@@ -9,12 +9,8 @@ import MathPrelude.Structures.Module
 import MathPrelude.Structures.Field
 import MathPrelude.Structures.EuclideanDomain
 
-import MathPrelude.Instances.Z
-import MathPrelude.Instances.Q
-import MathPrelude.Instances.R
-
-import MathPrelude.Representations.Ints
-import MathPrelude.Representations.Floats
+import MathPrelude.Common.Floating
+import MathPrelude.Common.CharZero
 
 -- import Test.QuickCheck((==>), Property, quickCheck, verboseCheck, Arbitrary(..), Gen)
 import Test.QuickCheck

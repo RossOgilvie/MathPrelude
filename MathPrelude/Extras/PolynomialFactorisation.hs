@@ -6,6 +6,7 @@ import qualified Prelude as P
 
 import MathPrelude.Structures.Polynomial
 import MathPrelude.Structures.Complex
+import MathPrelude.Common.Integral
 
 repeatedRoots :: (Field a, NumEq a) => Poly a -> Poly a
 repeatedRoots p = gcd p p'
@@ -48,7 +49,7 @@ factorPoly' (p,roots) = (p `div` fac, root : roots)
 polyDiff :: (Ring a, NumEq a) => Poly a -> Poly a
 polyDiff p = termwiseP polyDiff' p
 polyDiff' n x = (n-1, n' * x)
-		where n' = fromInteger $ fromIntegral n
+		where n' = fromInteger $ convInteger n
 
 
 -- (x,y) s.t. x*p + y*q = rhs

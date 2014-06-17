@@ -1,16 +1,67 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, OverloadedStrings #-}
-module MathPrelude.Structures.Complex where
+module MathPrelude.Structures.Complex
+	( Complex(..)
+	, iu, realPart, imagPart
+	, fromReal
+	, fromArg, arg
+	, fromPolar, toPolar
+	, conjugate, normsq, normsq'
+	) where
 
+-----------------------------------
+--- Imports
+-----------------------------------
 import BasicPrelude
 import qualified Prelude as P
 
 import MathPrelude.Structures.Field
 import MathPrelude.Structures.Module
+import MathPrelude.Common.Floating
+
 -----------------------------------
---- Complex
+--- Classes
 -----------------------------------
 
 data Complex a = a :+ a deriving (Eq)
+
+-----------------------------------
+--- Methods
+-----------------------------------
+
+iu :: Ring a => Complex a
+iu = zero :+ one
+realPart :: Complex a -> a
+realPart (x:+_) = x
+imagPart :: Complex a -> a
+imagPart (x:+_) = x
+
+fromReal :: Monoid a => a -> Complex a
+fromReal r = r :+ mempty
+fromArg :: Floating a => a -> Complex a
+fromArg x = (cos x) :+ (sin x)
+fromPolar :: (Ring a, Floating a) => a -> a -> Complex a
+fromPolar r t = r .* (fromArg t)
+toPolar ::  (Ord a, Field a, Floating a) => Complex a -> (a,a)
+toPolar z = (sqrt $ normsq' z, arg z)
+
+conjugate :: Abelian a => Complex a -> Complex a
+conjugate (x:+y) = (x:+ (negate y))
+normsq :: Ring a => Complex a -> Complex a
+normsq z = z * conjugate z
+normsq' :: Ring a => Complex a -> a
+normsq' = realPart . normsq
+
+arg :: (Ord a, Field a, Floating a) => Complex a -> a
+arg (x :+ y)
+	| x > zero = atan (y/x)
+	| nearZero x && y > zero = pi * half
+	| nearZero x && y < zero = negate $ pi * half
+	| nearZero x && nearZero y = zero
+	| x < zero && y > zero = atan (y/x) + pi
+	| x < zero && y < zero = atan (y/x) - pi
+	| x < zero && nearZero y = pi
+	| otherwise = zero
+
 
 -----------------------------------
 --- Instances
@@ -35,6 +86,7 @@ instance Abelian a => Abelian (Complex a) where
 instance Ring a => Ring (Complex a) where
 	one = one :+ zero
 	(*) (x:+y) (x':+y') = (x*x' - y*y') :+ (x*y' + x'*y)
+	fromInteger x = fromInteger x :+ zero
 
 instance IntDom a => IntDom (Complex a)
 
@@ -42,7 +94,7 @@ instance Field a => Field (Complex a) where
 	recip z@(x:+y) = (x/zz) :+ (negate y/zz)
 		where zz = realPart $ normsq z
 
-instance (NumEq a, Num a) => Num (Complex a) where
+instance Num a => Num (Complex a) where
 	abs = undefined
 	signum = undefined
 
@@ -85,42 +137,3 @@ instance NumEq a => NumEq (Complex a) where
 	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)
 	epsilon = epsilon :+ epsilon
 	nearZero (a:+b)= nearZero a && nearZero b
-
-
------------------------------------
---- Methods
------------------------------------
-
-iu :: Ring a => Complex a
-iu = zero :+ one
-realPart :: Complex a -> a
-realPart (x:+_) = x
-imagPart :: Complex a -> a
-imagPart (x:+_) = x
-
-fromReal :: Monoid a => a -> Complex a
-fromReal r = r :+ mempty
-fromArg :: Floating a => a -> Complex a
-fromArg x = (cos x) :+ (sin x)
-fromPolar :: (Ring a, Floating a) => a -> a -> Complex a
-fromPolar r t = r .* (fromArg t)
-toPolar ::  (Ord a, Field a, Floating a) => Complex a -> (a,a)
-toPolar z = (sqrt $ normsq' z, arg z)
-
-conjugate :: Abelian a => Complex a -> Complex a
-conjugate (x:+y) = (x:+ (negate y))
-normsq :: Ring a => Complex a -> Complex a
-normsq z = z * conjugate z
-normsq' :: Ring a => Complex a -> a
-normsq' = realPart . normsq
-
-arg :: (Ord a, Field a, Floating a) => Complex a -> a
-arg (x :+ y)
-	| x > zero = atan (y/x)
-	| nearZero x && y > zero = pi * half
-	| nearZero x && y < zero = negate $ pi * half
-	| nearZero x && nearZero y = zero
-	| x < zero && y > zero = atan (y/x) + pi
-	| x < zero && y < zero = atan (y/x) - pi
-	| x < zero && nearZero y = pi
-	| otherwise = zero

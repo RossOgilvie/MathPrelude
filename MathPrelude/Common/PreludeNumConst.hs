@@ -1,4 +1,4 @@
-module MathPrelude.Representations.PreludeNumConst where
+module MathPrelude.Common.PreludeNumConst where
 
 import Prelude(fromInteger, fromRational, Int, Integer, Float, Double, otherwise)
 import Data.Int (Int32, Int64)

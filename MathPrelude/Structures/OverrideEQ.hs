@@ -4,7 +4,7 @@ module MathPrelude.Structures.OverrideEQ where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Representations.PreludeNumConst
+import MathPrelude.Common.PreludeNumConst
 
 class NumEq a where
 	(=~) :: a -> a -> Bool

@@ -53,3 +53,11 @@ extEuclidAlg a b
 			(x,y) = extEuclidAlg b r
 
 
+-----------------------------------
+--- Instances
+-----------------------------------
+instance EuclideanDomain Integer where stdAssociate 	= P.abs; stdUnit = P.signum; divMod = P.divMod
+instance EuclideanDomain Int where stdAssociate 	= P.abs;stdUnit = P.signum;	divMod = P.divMod;
+instance EuclideanDomain Int32 where stdAssociate 	= P.abs; stdUnit = P.signum; divMod = P.divMod
+instance EuclideanDomain Int64 where stdAssociate 	= P.abs; stdUnit = P.signum; divMod = P.divMod
+

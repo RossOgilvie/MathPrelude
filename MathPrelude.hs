@@ -1,8 +1,13 @@
 {-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, BangPatterns#-}
 module MathPrelude
-	( module MathPrelude
-	, module BasicPrelude
-	)where
+	( module BasicPrelude
+	, module MathPrelude.Structures.Quotient
+	, module MathPrelude.Structures.Module
+	, module MathPrelude.Common.Integral
+	, module MathPrelude.Common.CharZero
+	, module MathPrelude.Common.Floating
+	, module MathPrelude.Common.Real
+	) where
 
 import BasicPrelude
 import qualified Prelude as P
@@ -10,13 +15,12 @@ import qualified Prelude as P
 import MathPrelude.Structures.Polynomial
 import MathPrelude.Structures.Complex
 import MathPrelude.Structures.Module
+import MathPrelude.Structures.Quotient
 
-import MathPrelude.Instances.Z
-import MathPrelude.Instances.Q
-import MathPrelude.Instances.R
-
-import MathPrelude.Representations.Ints
-import MathPrelude.Representations.Floats
+import MathPrelude.Common.Integral
+import MathPrelude.Common.CharZero
+import MathPrelude.Common.Floating
+import MathPrelude.Common.Real
 
 -- default (Integer, Double)
 
@@ -62,7 +66,7 @@ agm a g = fst . head . dropWhile test . iterate next $ (a,g)
 
 
 ellipticK :: Floating a => a -> a
-ellipticK k = (pi/two)/ agm (one-k) (one+k)
+ellipticK k = (pi/2)/ agm (1-k) (1+k)
 aperiod :: Double -> Complex Double
 -- aperiod :: (Ord a, Field a, Floating a) => a -> Complex a Double -> Complex Double
 aperiod r = (-4::Double) .* iu * (fromReal $ ellipticK (r ^ 2))
@@ -84,7 +88,7 @@ magm :: Floating a => a -> a -> a
 magm x y = (\(x,_,_) -> x) .head . dropWhile test . iterate next $ (x,y,zero)
 	where
 		root (x,y,z) = sqrt ((x-z)*(y-z))
-		nextx (x,y,_) = (x+y)/ two
+		nextx (x,y,_) = (x+y)/ 2
 		nexty p@(_,_,z) = z + root p
 		nextz p@(_,_,z) = z - root p
 		next p = (nextx p, nexty p, nextz p)
