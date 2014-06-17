@@ -1,11 +1,11 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, TypeFamilies #-}
-module Data.MathPrelude.Module where
+module MathPrelude.Structures.Module where
 
 import BasicPrelude
 
-import Data.MathPrelude.Ring
-import Data.MathPrelude.Abelian
-import Data.MathPrelude.Field
+import MathPrelude.Structures.Ring
+import MathPrelude.Structures.Abelian
+import MathPrelude.Structures.Field
 
 -----------------------------------
 --- Module

@@ -1,11 +1,11 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, OverloadedStrings #-}
-module Data.MathPrelude.Complex where
+module MathPrelude.Structures.Complex where
 
 import BasicPrelude
 import qualified Prelude as P
 
-import Data.MathPrelude.Field
-import Data.MathPrelude.Module
+import MathPrelude.Structures.Field
+import MathPrelude.Structures.Module
 -----------------------------------
 --- Complex
 -----------------------------------
@@ -52,6 +52,11 @@ instance Module m r => Module (Complex m) r where
 	scale r z = map (scale r) z
 
 
+half :: Field a => a
+half = recip $ one + one
+half' :: Field a => Complex a
+half' = fromReal $ half
+
 instance (Ord a, Field a, Floating a) => Floating (Complex a) where
 	pi = fromReal pi
 	exp (x:+y) = (exp x) .* (fromArg y)
@@ -60,27 +65,21 @@ instance (Ord a, Field a, Floating a) => Floating (Complex a) where
 	--(**) -- use default
 	sqrt z
 		| nearZero z = zero
-		| otherwise = z ** half
-			where half = fromReal $ recip $ fromInteger 2
+		| otherwise = z ** half'
 	--logBase -- use default
 	sin (x:+y) = ((sin x)*(cosh y)) :+ ((cos x)*(sinh y))
 	cos (x:+y) = ((cos x)*(cosh y)) :+ (negate $ (sin x)*(sinh y))
 	--tan  -- use default
 	asin z = (negate iu) * log (iu*z + sqrt(one - z*z))
-	acos z = half * pi - asin z
-		where half = fromReal $ recip $ fromInteger 2
-	atan z = half*iu*(log (one - iu*z) - log (one + iu*z))
-		where half = fromReal $ recip $ fromInteger 2
+	acos z = half' * pi - asin z
+	atan z = half' * iu * (log (one - iu*z) - log (one + iu*z))
 	atan2 x y
 		| nearZero x = zero
 		| otherwise = atan (y/x)
 	sinh (x:+y) = ((sinh x)*(cos y)) :+ ((cosh x)*(sin y))
 	cosh (x:+y) = ((cosh x)*(cos y)) :+ ((sinh x)*(sin y))
 	--tanh  -- use default
-	asinh z = log (z + sqrt(z*z + one))
-	acosh z = log (z + sqrt(z + one)*sqrt(z - one))
-	atanh z = half * log ((one + z)/(one - z))
-		where half = fromReal $ recip $ fromInteger 2
+	--ahyps -- use defaults
 
 instance NumEq a => NumEq (Complex a) where
 	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)
@@ -118,8 +117,8 @@ normsq' = realPart . normsq
 arg :: (Ord a, Field a, Floating a) => Complex a -> a
 arg (x :+ y)
 	| x > zero = atan (y/x)
-	| nearZero x && y > zero = pi/ fromInteger 2
-	| nearZero x && y < zero = negate $ pi/ fromInteger 2
+	| nearZero x && y > zero = pi * half
+	| nearZero x && y < zero = negate $ pi * half
 	| nearZero x && nearZero y = zero
 	| x < zero && y > zero = atan (y/x) + pi
 	| x < zero && y < zero = atan (y/x) - pi

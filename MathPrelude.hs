@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, BangPatterns#-}
+{-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, BangPatterns#-}
 module MathPrelude
 	( module MathPrelude
 	, module BasicPrelude
@@ -7,9 +7,16 @@ module MathPrelude
 import BasicPrelude
 import qualified Prelude as P
 
-import Data.MathPrelude.Polynomial
-import Data.MathPrelude.Complex
-import Data.MathPrelude.Module
+import MathPrelude.Structures.Polynomial
+import MathPrelude.Structures.Complex
+import MathPrelude.Structures.Module
+
+import MathPrelude.Instances.Z
+import MathPrelude.Instances.Q
+import MathPrelude.Instances.R
+
+import MathPrelude.Representations.Ints
+import MathPrelude.Representations.Floats
 
 -- default (Integer, Double)
 
@@ -50,12 +57,12 @@ instance Ring Z2 where
 agm :: Floating a => a -> a -> a
 agm a g = fst . head . dropWhile test . iterate next $ (a,g)
 	where
-		next (!a,!g) = ((a+g)/ 2, sqrt (a*g))
+		next (!a,!g) = ((a+g)/ two, sqrt (a*g))
 		test (!a,!g) = not $ a =~ g
 
 
 ellipticK :: Floating a => a -> a
-ellipticK k = (pi/2)/ agm (one-k) (one+k)
+ellipticK k = (pi/two)/ agm (one-k) (one+k)
 aperiod :: Double -> Complex Double
 -- aperiod :: (Ord a, Field a, Floating a) => a -> Complex a Double -> Complex Double
 aperiod r = (-4::Double) .* iu * (fromReal $ ellipticK (r ^ 2))
@@ -77,15 +84,15 @@ magm :: Floating a => a -> a -> a
 magm x y = (\(x,_,_) -> x) .head . dropWhile test . iterate next $ (x,y,zero)
 	where
 		root (x,y,z) = sqrt ((x-z)*(y-z))
-		nextx (x,y,_) = (x+y)/ 2
+		nextx (x,y,_) = (x+y)/ two
 		nexty p@(_,_,z) = z + root p
 		nextz p@(_,_,z) = z - root p
 		next p = (nextx p, nexty p, nextz p)
 		test (x,y,_) = not $ x =~ y
 
 ellipticE :: Floating a => a -> a
-ellipticE k = (pi/ 2) * (magm 1 k') / (agm 1 k')
-	where k' = sqrt $ 1 - k^2
+ellipticE k = (pi/ two) * (magm one k') / (agm one k')
+	where k' = sqrt $ one - k^two
 
 
 

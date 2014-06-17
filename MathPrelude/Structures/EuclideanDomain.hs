@@ -1,10 +1,15 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Data.MathPrelude.EuclideanDomain(module Data.MathPrelude.Ring, EuclideanDomain(..), gcd, extEuclidAlg) where
+module MathPrelude.Structures.EuclideanDomain
+	( module MathPrelude.Structures.Ring
+	, EuclideanDomain(..)
+	, gcd
+	, extEuclidAlg
+	) where
 
 import BasicPrelude
 import qualified Prelude as P
 
-import Data.MathPrelude.Ring
+import MathPrelude.Structures.Ring
 
 -----------------------------------
 --- EuclideanDomain
@@ -28,29 +33,6 @@ class IntDom a => EuclideanDomain a where
 	n `div` d       =  fst $ divMod n d
 	n `mod` d       =  snd $ divMod n d
 
------------------------------------
---- Instances
------------------------------------
-
-instance EuclideanDomain Integer where
-	stdAssociate 	= P.abs
-	stdUnit         = P.signum
-	divMod          = P.divMod
-
-instance EuclideanDomain Int where
-	stdAssociate 	= P.abs
-	stdUnit         = P.signum
-	divMod          = P.divMod
-
-instance EuclideanDomain Int32 where
-	stdAssociate 	= P.abs
-	stdUnit         = P.signum
-	divMod          = P.divMod
-
-instance EuclideanDomain Int64 where
-	stdAssociate 	= P.abs
-	stdUnit         = P.signum
-	divMod          = P.divMod
 
 -----------------------------------
 --- Methods

@@ -1,13 +1,20 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
-module Data.MathPrelude.Polynomial(module Data.MathPrelude.Field, module Data.MathPrelude.EuclideanDomain, module Data.MathPrelude.Module
+module MathPrelude.Structures.Polynomial(module MathPrelude.Structures.Field, module MathPrelude.Structures.EuclideanDomain, module MathPrelude.Structures.Module
 	, Poly, poly, polyEval, monomialP, xnP, scalarP, constP, leadingP, degreeP, termwiseP) where
 
 import BasicPrelude
 import qualified Prelude as P
 
-import Data.MathPrelude.Module
-import Data.MathPrelude.Field
-import Data.MathPrelude.EuclideanDomain
+import MathPrelude.Structures.Module
+import MathPrelude.Structures.Field
+import MathPrelude.Structures.EuclideanDomain
+
+import MathPrelude.Instances.Z
+import MathPrelude.Instances.Q
+import MathPrelude.Instances.R
+
+import MathPrelude.Representations.Ints
+import MathPrelude.Representations.Floats
 
 -- import Test.QuickCheck((==>), Property, quickCheck, verboseCheck, Arbitrary(..), Gen)
 import Test.QuickCheck
@@ -60,7 +67,6 @@ instance (Abelian a, NumEq a) => Abelian (Poly a) where
 
 instance (Ring a, NumEq a) => Ring (Poly a) where
 	one = poly [one]
-	fromInteger n = poly [fromInteger n]
 	(*) (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,b) <- ys ]
 
 instance (IntDom a, NumEq a) => IntDom (Poly a)
@@ -220,7 +226,7 @@ div_error p q = polyNorm $ p - (d*q + m)
 
 div_stats = do
 		gs <- sequence . take 2000 . repeat . generate $ (arbitrary :: Gen (Poly Double))
-		let diffs = map (logBase 10) . f $ gs :: [Double]
+		let diffs = map (logBase 10.0) . f $ gs :: [Double]
 		let (infs,others) = partition P.isInfinite diffs
 		let (nas,nis) = partition P.isNaN others
 		return $ "Exact: " ++ show (length infs) ++ ", NaNs: " ++ show (length nas) ++ ", Mean: " ++ show (mean nis) ++ ", StdDev: " ++ show (stdDev nis)
