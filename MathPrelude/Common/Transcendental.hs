@@ -1,5 +1,5 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Common.Floating where
+module MathPrelude.Common.Transcendental where
 
 ------------------------------
 --- Imports
@@ -12,7 +12,7 @@ import MathPrelude.Structures.Field
 ------------------------------
 --- Classes
 ------------------------------
-class Field a => Floating a where
+class Field a => Transcendental a where
 	pi                  :: a
 	exp, log, sqrt      :: a -> a
 	(**), logBase       :: a -> a -> a
@@ -35,7 +35,7 @@ class Field a => Floating a where
 ------------------------------
 --- Instances
 ------------------------------
-instance Floating Float where
+instance Transcendental Float where
 	pi = P.pi
 	exp = P.exp
 	sqrt = P.sqrt
@@ -56,7 +56,7 @@ instance Floating Float where
 	acosh = P.acosh
 	atanh = P.atanh
 
-instance Floating Double where
+instance Transcendental Double where
 	pi = P.pi
 	exp = P.exp
 	sqrt = P.sqrt

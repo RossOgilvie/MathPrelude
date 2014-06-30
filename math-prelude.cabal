@@ -10,23 +10,15 @@ license-file:        LICENSE
 author:              Ross Ogilvie
 maintainer:          ross@rossogilvie.id.au
 -- copyright:
-category:            Data
+category:            Math
 build-type:          Simple
 -- extra-source-files:
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     MathPrelude,
-                        Data.MathPrelude.Monoid,
-                        Data.MathPrelude.Abelian,
-                        Data.MathPrelude.Ring,
-                        Data.MathPrelude.Field,
-                        Data.MathPrelude.EuclideanDomain,
-                        Data.MathPrelude.Polynomial,
-                        Data.MathPrelude.Complex,
-                        Data.MathPrelude.Module
+  exposed-modules:     MathPrelude, MathPrelude.Extras.PolynomialFactorisation, MathPrelude.Structures.Polynomial, MathPrelude.Structures.Module, MathPrelude.Structures.Abelian, MathPrelude.Structures.Complex, MathPrelude.Structures.NumEq, MathPrelude.Structures.Quotient, MathPrelude.Structures.Ring, MathPrelude.Structures.Field, MathPrelude.Structures.EuclideanDomain, MathPrelude.Common.PreludeNumConst, MathPrelude.Common.Integral, MathPrelude.Common.Floating, MathPrelude.Common.CharZero, MathPrelude.Common.Real
   -- other-modules:
-  other-extensions:    NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances
-  build-depends:       base >=4.7 && <4.8, basic-prelude >=0.3 && <0.4
+  other-extensions:    RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, BangPatterns, TemplateHaskell, NoImplicitPrelude, OverloadedStrings, IncoherentInstances
+  build-depends:       base >=4.7 && <4.8, mathless-basic-prelude >=0.1, lens, QuickCheck
   -- hs-source-dirs:
   default-language:    Haskell2010

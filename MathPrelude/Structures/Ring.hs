@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE RebindableSyntax #-}
 module MathPrelude.Structures.Ring
 	( module MathPrelude.Structures.Abelian
 	, Ring(..)
@@ -45,6 +45,7 @@ infixl 7 *
 class (Eq a, Show a, Ring a) => Num a  where
     abs, signum :: a -> a
 
+-- instance Num a => P.Num a
 
 class Ring a => IntDom a
 
@@ -85,3 +86,6 @@ instance Num Int32 where abs = P.abs; signum = P.signum
 instance Num Int64 where abs = P.abs; signum = P.signum
 instance Num Float where abs = P.abs; signum = P.signum
 instance Num Double where abs = P.abs; signum = P.signum
+
+instance Ring a => Ring (Maybe a) where one = Just one; (*) = liftM2 (*); fromInteger x = Just (fromInteger x)
+instance IntDom a => IntDom (Maybe a)

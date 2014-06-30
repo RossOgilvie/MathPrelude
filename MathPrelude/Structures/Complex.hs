@@ -16,7 +16,7 @@ import qualified Prelude as P
 
 import MathPrelude.Structures.Field
 import MathPrelude.Structures.Module
-import MathPrelude.Common.Floating
+import MathPrelude.Common.Transcendental
 
 -----------------------------------
 --- Classes
@@ -33,15 +33,15 @@ iu = zero :+ one
 realPart :: Complex a -> a
 realPart (x:+_) = x
 imagPart :: Complex a -> a
-imagPart (x:+_) = x
+imagPart (_:+y) = y
 
 fromReal :: Monoid a => a -> Complex a
 fromReal r = r :+ mempty
-fromArg :: Floating a => a -> Complex a
+fromArg :: Transcendental a => a -> Complex a
 fromArg x = (cos x) :+ (sin x)
-fromPolar :: (Ring a, Floating a) => a -> a -> Complex a
+fromPolar :: (Ring a, Transcendental a) => a -> a -> Complex a
 fromPolar r t = r .* (fromArg t)
-toPolar ::  (Ord a, Field a, Floating a) => Complex a -> (a,a)
+toPolar ::  (Ord a, Field a, Transcendental a) => Complex a -> (a,a)
 toPolar z = (sqrt $ normsq' z, arg z)
 
 conjugate :: Abelian a => Complex a -> Complex a
@@ -51,7 +51,7 @@ normsq z = z * conjugate z
 normsq' :: Ring a => Complex a -> a
 normsq' = realPart . normsq
 
-arg :: (Ord a, Field a, Floating a) => Complex a -> a
+arg :: (Ord a, Field a, Transcendental a) => Complex a -> a
 arg (x :+ y)
 	| x > zero = atan (y/x)
 	| nearZero x && y > zero = pi * half
@@ -109,7 +109,7 @@ half = recip $ one + one
 half' :: Field a => Complex a
 half' = fromReal $ half
 
-instance (Ord a, Field a, Floating a) => Floating (Complex a) where
+instance (Ord a, Field a, Transcendental a) => Transcendental (Complex a) where
 	pi = fromReal pi
 	exp (x:+y) = (exp x) .* (fromArg y)
 	log z = (log r) :+ t

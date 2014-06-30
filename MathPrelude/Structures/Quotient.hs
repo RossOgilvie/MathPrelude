@@ -1,81 +1,80 @@
-{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE RebindableSyntax, OverloadedStrings #-}
 module MathPrelude.Structures.Quotient
-	( module MathPrelude.Structures.Field
-	, Quotient(..)
-	, numerator
-	, denominator
-	, simplifyQ
-	)  where
+  ( module MathPrelude.Structures.EuclideanDomain
+  , Quotient(..)
+  -- , Z2, Z3, z2, z3
+  , proj
+  , liftQ, liftQ2, liftQ2'
+  )  where
 
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Field
 import MathPrelude.Structures.EuclideanDomain
+import MathPrelude.Structures.Derivation
+
 
 ------------------------------
 --- Quotient
 ------------------------------
-data Quotient a = a :% a deriving Show
-type Ratio = Quotient
-
-numerator :: Quotient a -> a
-numerator (a :% b) = a
-denominator :: Quotient a -> a
-denominator (a :% b) = b
+data Quotient a = Quotient { modulus :: Maybe a, element :: a}
 
 ------------------------------
---- Quotient - Instances
+---- Methods
+------------------------------
+proj :: EuclideanDomain a => a -> a -> Quotient a
+proj m x = Quotient {modulus = Just m, element = x `mod` m}
+
+liftQ :: EuclideanDomain a => (a -> a) -> Quotient a -> Quotient a
+liftQ f (Quotient Nothing x) = Quotient Nothing $ f x
+liftQ f (Quotient (Just m) x) = proj m $ f x
+
+liftQ2' :: EuclideanDomain a => (a -> a -> b) -> Quotient a -> Quotient a -> b
+liftQ2' f (Quotient Nothing x)  (Quotient Nothing y)  = f x y
+liftQ2' f (Quotient Nothing x)  (Quotient (Just m) y) = f (x `mod` m) y
+liftQ2' f (Quotient (Just m) x) (Quotient Nothing y)  = f x (y `mod` m)
+liftQ2' f (Quotient (Just m) x) (Quotient (Just m') y)
+  | m =~ m' = f x y
+  | otherwise = error "non matching moduli"
+
+liftQ2 :: EuclideanDomain a => (a -> a -> a) -> Quotient a -> Quotient a -> Quotient a
+liftQ2 f (Quotient Nothing x)  (Quotient Nothing y)  =  Quotient Nothing $ f x y
+liftQ2 f (Quotient Nothing x)  (Quotient (Just m) y) = Quotient (Just m) $ f (x `mod` m) y
+liftQ2 f (Quotient (Just m) x) (Quotient Nothing y)  = Quotient (Just m) $ f x (y `mod` m)
+liftQ2 f (Quotient (Just m) x) (Quotient (Just m') y)
+  | m =~ m' = proj m $ f x y
+  | otherwise = error "non matching moduli"
+
+------------------------------
+---- Instances
 ------------------------------
 
-instance IntDom a => Monoid (Quotient a) where
-	mempty = zero :% one
-	mappend (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
+instance Show a => Show (Quotient a) where
+  show (Quotient Nothing x) = P.show x
+  show (Quotient (Just m) x) = P.show x ++ " (mod " ++ P.show m ++ ")"
 
-instance IntDom a => Abelian (Quotient a) where
-	--zero = zero :% one
-	--(+) (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
-	negate (x:%y) = negate x :% y
-	(-) (x:%y) (x':%y') = (x*y' - x'*y) :% (y*y')
+instance EuclideanDomain a => NumEq (Quotient a) where
+  (=~) = liftQ2' (=~)
+  epsilon = Quotient Nothing epsilon
+  nearZero (Quotient Nothing x) = nearZero x
+  nearZero (Quotient (Just m) x) = nearZero (x `mod` m)
 
-instance IntDom a => Ring (Quotient a) where
-	one = one :% one
-	(*) (x:%y) (x':%y') = (x*x') :% (y*y')
+instance (EuclideanDomain a, Eq a) => Eq (Quotient a) where
+  (==) = liftQ2' (==)
 
-instance IntDom a => IntDom (Quotient a)
+instance EuclideanDomain a => Monoid (Quotient a) where
+  mempty = Quotient Nothing mempty
+  mappend = liftQ2 mappend
 
-instance IntDom a => Field (Quotient a) where
-	recip (x :% y) = y :% x
-	(/) (x:%y) (x':%y') = (x*y') :% (y*x')
+instance EuclideanDomain a => Abelian (Quotient a) where
+  --zero = zero :% one
+  --(+) (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
+  negate = liftQ negate
+  -- (-) (x:%y) (x':%y') = (x*y' - x'*y) :% (y*y')
 
-instance (IntDom a, Eq a) => Eq (Quotient a) where
-	(==) p@(x:%_) q@(y:%_)
-		| x == zero && y == zero = True
-		| otherwise = (p-q) == zero
+instance EuclideanDomain a => Ring (Quotient a) where
+  one = Quotient Nothing one
+  (*) = liftQ2 (*)
 
-instance (IntDom a, NumEq a) => NumEq (Quotient a) where
-	(=~) p@(x:%_) q@(y:%_)
-		| x =~ zero && y =~ zero = True
-		| otherwise = (p-q) =~ zero
-	epsilon = epsilon :% one
-	nearZero q = q =~ zero
-
-instance (IntDom a, Ord a) => Ord (Quotient a) where
-	compare (x:%y) (x':%y') = parity' num yord y'ord
-		where
-			num = compare (x*y' - x'*y) zero
-			yord = compare y zero
-			y'ord = compare y' zero
-
-parity' :: Ordering -> Ordering -> Ordering -> Ordering
-parity' EQ _ _ = EQ
-parity' x y z
-	| y == z = x
-	| y /= z = opposite x
-		where
-			opposite LT = GT
-			opposite GT = LT
-
-simplifyQ :: EuclideanDomain a => Quotient a -> Quotient a
-simplifyQ (p:%q) = (p `div` g) :% (q `div` g)
-	where g = gcd p q
+instance (Derivation a, EuclideanDomain a) => Derivation (Quotient  a) where
+  derive = liftQ derive

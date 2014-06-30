@@ -23,5 +23,5 @@ ifThenElse t a b
 	| t = a
 	| otherwise = b
 
-f1em5 = 1e-5 :: Float
-d1em10 = 1e-10 :: Double
+epsFloat = 1e-5 :: Float
+epsDouble = 1e-10 :: Double

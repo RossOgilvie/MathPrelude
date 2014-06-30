@@ -3,6 +3,7 @@ module MathPrelude.Common.Integral
 	( Integral(..)
 	, fromIntegral98
 	, toIntegral98
+	, fromIntegral
 	) where
 
 -----------------------------------
@@ -18,9 +19,6 @@ import MathPrelude.Structures.Ring
 -----------------------------------
 class Ring a => Integral a where
 	toInteger :: a -> Integer
-	convInteger :: Integral b => a -> b
-
-	convInteger =  fromInteger . toInteger
 
 -----------------------------------
 --- Methods
@@ -29,6 +27,9 @@ fromIntegral98 :: (P.Integral a, Integral b) => a -> b
 fromIntegral98 = fromInteger . P.fromIntegral
 toIntegral98 :: (Integral a, P.Integral b) => a -> b
 toIntegral98 = P.fromIntegral . toInteger
+
+fromIntegral :: (Integral a, Ring b) => a -> b
+fromIntegral =  fromInteger . toInteger
 
 -----------------------------------
 --- Instances

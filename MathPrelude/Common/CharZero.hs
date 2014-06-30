@@ -16,13 +16,13 @@ import BasicPrelude
 import qualified Prelude as P
 import qualified Data.Ratio as Ratio98
 
-import MathPrelude.Structures.Quotient
+import MathPrelude.Structures.Ratio
 import MathPrelude.Common.Integral
 
 ------------------------------
 --- Classes
 ------------------------------
-type Rational = Quotient Integer
+type Rational = Ratio Integer
 
 class CharZero a where
 	fromRational' :: Rational -> a
@@ -48,9 +48,9 @@ fromRational98 x = Ratio98.numerator x :% Ratio98.denominator x
 ------------------------------
 --- Instances
 ------------------------------
-instance Integral a => CharZero (Quotient a) where
+instance Integral a => CharZero (Ratio a) where
 	 fromRational' (x :% y) = (fromInteger x) :% (fromInteger y)
-instance Integral a => Q (Quotient a) where
+instance Integral a => Q (Ratio a) where
 	 toRational (x :% y) = (toInteger x) :% (toInteger y)
 
 

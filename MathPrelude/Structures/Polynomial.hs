@@ -1,6 +1,10 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Structures.Polynomial(module MathPrelude.Structures.Field, module MathPrelude.Structures.EuclideanDomain, module MathPrelude.Structures.Module
-	, Poly, poly, polyEval, monomialP, xnP, scalarP, constP, leadingP, degreeP, termwiseP) where
+	, Poly, poly, polyEval
+	, monomialP, xnP, scalarP, constP
+	, leadingP, degreeP
+	, termwiseP, toList
+	) where
 
 import BasicPrelude
 import qualified Prelude as P
@@ -8,12 +12,10 @@ import qualified Prelude as P
 import MathPrelude.Structures.Module
 import MathPrelude.Structures.Field
 import MathPrelude.Structures.EuclideanDomain
+import MathPrelude.Structures.Derivation
 
-import MathPrelude.Common.Floating
-import MathPrelude.Common.CharZero
-
--- import Test.QuickCheck((==>), Property, quickCheck, verboseCheck, Arbitrary(..), Gen)
-import Test.QuickCheck
+-- import MathPrelude.Common.Floating
+-- import MathPrelude.Common.CharZero
 
 -----------------------------------
 --- Poly
@@ -130,6 +132,14 @@ polyEval (Poly xs) pt = shift 0 xs
 termwiseP :: (Ring a, NumEq a) => (Int -> a -> (Int,a)) -> Poly a -> Poly a
 termwiseP f (Poly xs) = Poly . sortSimplifyP' . map (uncurry f) $ xs
 
+toList :: Monoid a => Poly a -> [a]
+toList (Poly xs) = toList' xs 0
+toList' :: Monoid a => [(Int, a)] -> Int -> [a]
+toList' [] _ = []
+toList' l@((n,x):xs) k
+	| n == k = x : toList' xs (k+1)
+	| otherwise = mempty : toList' l (k+1)
+
 -----------------------------------
 --- Internal Stuff
 -----------------------------------
@@ -182,78 +192,3 @@ removeTerm d (Poly xs) = Poly $ filter (\(n,_) -> n /= d) xs
 
 shiftPower :: Int -> Poly a -> Poly a
 shiftPower d (Poly xs) = Poly $ map (\(n,a) -> (n + d,a)) xs
-
-
------------------------------------
---- QuickCheck
------------------------------------
-
-instance (Monoid a, Arbitrary a) => Arbitrary (Poly a) where
-	arbitrary = do
-		ls <- arbitrary -- :: Gen [a]
-		return $ poly ls
-
--- polyNorm p = sqrt . sum . map (^2) . map snd $ ls
-polyNorm p = maximum . map P.abs . map snd $ ls
-	where
-		Poly ls = p
-
-prop_add_assc p q r = (p+q)+r =~ p + (q+r)
-prop_add_identity p = p+zero =~ p
-prop_add_inverse p = p - p =~ zero
-prop_add_comm p q = p + q =~ q + p
-
-prop_mul_assc p q r = (p*q)*r =~ p*(q*r)
-prop_mul_identity p = p*one =~ p
-prop_mul_inverse p =
-	p /=~ zero ==> p * recip p =~ one
-prop_mul_comm p q = p * q =~ q * p
-
-prop_dist p q r = p * (q + r) =~ p*q + p*r
-
-prop_div :: Poly Double -> Poly Double -> Property
-prop_div p q =
-	q /=~ zero ==> p =~ (d*q + m)
-		where (d,m) = divMod p q
-
-div_error :: Poly Double -> Poly Double -> Double
-div_error p q = polyNorm $ p - (d*q + m)
-	where (d,m) = divMod p q
-
-div_stats = do
-		gs <- sequence . take 2000 . repeat . generate $ (arbitrary :: Gen (Poly Double))
-		let diffs = map (logBase 10.0) . f $ gs :: [Double]
-		let (infs,others) = partition P.isInfinite diffs
-		let (nas,nis) = partition P.isNaN others
-		return $ "Exact: " ++ show (length infs) ++ ", NaNs: " ++ show (length nas) ++ ", Mean: " ++ show (mean nis) ++ ", StdDev: " ++ show (stdDev nis)
--- 		return gs
-		where
-			f [] = []
-			f [_] = []
-			f (x:y:xs) = div_error x y : f xs
-
-mean l = (sum l) / P.fromIntegral (length l)
-stdDev l = sqrt . (/n) . sum . map d $ l
-	where
-		n = P.fromIntegral . length $ l
-		m = mean l
-		d x = (x-m)^2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

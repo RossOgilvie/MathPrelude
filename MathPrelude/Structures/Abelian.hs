@@ -1,6 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 module MathPrelude.Structures.Abelian
-	( module MathPrelude.Structures.OverrideEQ
+	( module MathPrelude.Structures.NumEq
 	, Abelian(..)
 	, sum) where
 
@@ -10,7 +10,7 @@ module MathPrelude.Structures.Abelian
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.OverrideEQ
+import MathPrelude.Structures.NumEq
 import MathPrelude.Common.PreludeNumConst
 
 -----------------------------------
@@ -56,3 +56,8 @@ instance Abelian Float where zero = mempty; (+) = (P.+); negate = P.negate; (-) 
 instance Monoid Double where mempty = zeroDouble; mappend = (P.+)
 instance Abelian Double where zero = mempty; (+) = (P.+); negate = P.negate; (-) = (P.-)
 
+instance Abelian a => Abelian (Maybe a) where
+	zero = Just zero
+	(+) = liftM2 (+)
+	(-) = liftM2 (-)
+	negate = liftM negate

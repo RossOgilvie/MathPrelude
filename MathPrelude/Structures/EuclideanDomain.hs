@@ -61,3 +61,8 @@ instance EuclideanDomain Int where stdAssociate 	= P.abs;stdUnit = P.signum;	div
 instance EuclideanDomain Int32 where stdAssociate 	= P.abs; stdUnit = P.signum; divMod = P.divMod
 instance EuclideanDomain Int64 where stdAssociate 	= P.abs; stdUnit = P.signum; divMod = P.divMod
 
+instance EuclideanDomain a => EuclideanDomain (Maybe a) where
+	stdAssociate = liftM stdAssociate
+	stdUnit = liftM stdUnit
+	div = liftM2 div
+	mod = liftM2 mod
