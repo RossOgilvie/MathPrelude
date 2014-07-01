@@ -34,16 +34,17 @@ newtons f f' x0 = converge (=~) $ iterate (newton_step f f') x0
 
 linearPolyWithRoot c = poly [negate c, one]
 
+factorPoly p = map (findRoot p) (factorPoly' p)
 
 -- Durand–Kerner method
-factorPoly p = factorPoly' (stdAssociate p) initPts
+factorPoly' p = factorPoly'' (stdAssociate p) initPts
 	where
 		deg = degreeP p
 		omega = primitiveRoot deg
 		offset = fromPolar (polyRootBound p) 1 -- roots of unity have pi*k/n args, and arg pi*k/n + 1 is never real
 		initPts = map (offset *) . map (omega^) $ [1..deg]
 
-factorPoly' p pts = converge (=~) . iterate (dkStep p []) $ pts
+factorPoly'' p pts = converge (=~) . iterate (dkStep p []) $ pts
 
 type PCD = Poly (Complex Double)
 type CD = Complex Double
