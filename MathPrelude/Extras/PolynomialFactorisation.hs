@@ -9,14 +9,15 @@ import MathPrelude.Structures.Complex
 import MathPrelude.Structures.Derivation
 import MathPrelude.Common.Integral
 
-repeatedRoots :: (Field a, NumEq a) => Poly a -> Poly a
-repeatedRoots p = gcd p p'
-	where p' = polyDiff p
+polyRootBound :: Poly (Complex Double) -> Double
+polyRootBound p = min opt1 opt2
+	where
+		(x:xs) = map norm . reverse $ toList p
+		opt1 = 1 + (maximum xs)/x
+		opt2 = max 1 ((sum xs)/x)
 
-squareFree p = p `div` repeatedRoots p
-
-initSearchPt = 10 :+ 10 :: Complex Double
-findRoot p = newtons (polyEval p) (polyEval p') initSearchPt
+findRoot :: Poly (Complex Double) -> Complex Double -> Complex Double
+findRoot p x0 = newtons (evalP p) (evalP p') x0
 	where p' = polyDiff p
 
 converge :: (a -> a -> Bool) -> [a] -> a
@@ -31,21 +32,50 @@ newton_step f f' x = x - (f x / f' x)
 newtons f f' x0 = converge (=~) $ iterate (newton_step f f') x0
 --newtons f f' x0 = take 10 $ iterate (newton_step f f') x0
 
-linearPoly c = poly [negate c, one]
+linearPolyWithRoot c = poly [negate c, one]
 
-factorPoly p
-	| n == 0 = []
-	| otherwise = uniqueFacs ++ factorPoly rr
-		where
-			uniqueFacs = snd $ head $ drop n $ iterate factorPoly' (psf,[])
-			psf = squareFree p
-			rr = repeatedRoots p
-			n = degreeP psf
 
-factorPoly' (p,roots) = (p `div` fac, root : roots)
+-- Durand–Kerner method
+factorPoly p = factorPoly' (stdAssociate p) initPts
 	where
-		root = findRoot p
-		fac = linearPoly root
+		deg = degreeP p
+		omega = primitiveRoot deg
+		offset = fromPolar (polyRootBound p) 1 -- roots of unity have pi*k/n args, and arg pi*k/n + 1 is never real
+		initPts = map (offset *) . map (omega^) $ [1..deg]
+
+factorPoly' p pts = converge (=~) . iterate (dkStep p []) $ pts
+
+type PCD = Poly (Complex Double)
+type CD = Complex Double
+-- step through the list, taking from the front after, recomputing and putting onto the front of before
+-- then in the final step, reverse the list to preserve the ordering
+dkStep :: PCD -> [CD] -> [CD] -> [CD]
+dkStep p before [] = reverse before
+dkStep p before (old:after) = dkStep p (new : before) after
+	where
+		new = old - (evalP p old)/denom
+		denom = product $ map (old -) (before++after)
+
+-- 	where
+-- 		uniqueFacs = snd $ head $ drop n $ iterate factorPoly' (psf,[])
+-- 		psf = squareFree p
+-- 		rr = repeatedRoots p
+-- 		n = degreeP psf
+--
+-- factorPoly' p
+-- 	| degree rr == 0 = factorPoly'' p p
+-- 	where
+-- 		rr = gcd p (derive p)
+--
+-- -- Factor a squarefree poly q.
+-- -- the original poly is p, q is squarefree
+-- factorPoly'' p q
+
+factorRoot p x
+	| evalP p x /=~ 0 = (p,0)
+	| otherwise = (p', n+1)
+			where (p', n) = factorRoot (p `div` linearPolyWithRoot x) x
+
 
 instance Ring a => Derivation (Poly a) where
 	derive = polyDiff

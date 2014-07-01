@@ -1,8 +1,8 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Structures.Polynomial(module MathPrelude.Structures.Field, module MathPrelude.Structures.EuclideanDomain, module MathPrelude.Structures.Module
-	, Poly, poly, polyEval
-	, monomialP, xnP, scalarP, constP
-	, leadingP, degreeP
+	, Poly, poly, evalP
+	, monomialP, xnP, scalarP, fromFactorsP
+	, constP, leadingP, degreeP
 	, termwiseP, toList
 	) where
 
@@ -109,6 +109,9 @@ xnP n = monomialP n one
 scalarP :: a -> Poly a
 scalarP c = Poly [(0,c)]
 
+fromFactorsP :: Ring a => [a] -> Poly a
+fromFactorsP ls = product . map (\l -> poly [-l,1]) $ ls
+
 
 constP :: Monoid a => Poly a -> a
 constP (Poly ((n,a):xs)) = if n == 0 then a else mempty
@@ -121,8 +124,8 @@ degreeP :: Poly a -> Int
 degreeP (Poly []) = 0
 degreeP (Poly xs) = fst . head . reverse $ xs
 
-polyEval :: Ring a => Poly a -> a -> a
-polyEval (Poly xs) pt = shift 0 xs
+evalP :: Ring a => Poly a -> a -> a
+evalP (Poly xs) pt = shift 0 xs
 	where
 		shift _ [] = zero
 		shift k (y@(n,a):ys)

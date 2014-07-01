@@ -3,9 +3,9 @@ module MathPrelude.Structures.Complex
 	( Complex(..)
 	, iu, realPart, imagPart
 	, fromReal
-	, fromArg, arg
+	, fromArg, arg, primitiveRoot
 	, fromPolar, toPolar
-	, conjugate, normsq, normsq'
+	, conjugate, normsq, normsq', norm
 	) where
 
 -----------------------------------
@@ -17,6 +17,7 @@ import qualified Prelude as P
 import MathPrelude.Structures.Field
 import MathPrelude.Structures.Module
 import MathPrelude.Common.Transcendental
+import MathPrelude.Common.Integral
 
 -----------------------------------
 --- Classes
@@ -50,6 +51,8 @@ normsq :: Ring a => Complex a -> Complex a
 normsq z = z * conjugate z
 normsq' :: Ring a => Complex a -> a
 normsq' = realPart . normsq
+norm :: (Ring a, Transcendental a) => Complex a -> a
+norm = sqrt . realPart . normsq
 
 arg :: (Ord a, Field a, Transcendental a) => Complex a -> a
 arg (x :+ y)
@@ -62,7 +65,8 @@ arg (x :+ y)
 	| x < zero && nearZero y = pi
 	| otherwise = zero
 
-
+primitiveRoot :: Int -> Complex Double
+primitiveRoot n = fromArg (2*pi/fromIntegral n)
 -----------------------------------
 --- Instances
 -----------------------------------
