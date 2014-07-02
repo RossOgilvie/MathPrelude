@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Structures.Polynomial(module MathPrelude.Structures.Field, module MathPrelude.Structures.EuclideanDomain, module MathPrelude.Structures.Module
 	, Poly, poly, evalP
 	, monomialP, xnP, scalarP, fromFactorsP
@@ -65,7 +65,7 @@ instance (Abelian a, NumEq a) => Abelian (Poly a) where
 
 instance (Ring a, NumEq a) => Ring (Poly a) where
 	one = poly [one]
-	(*) (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,b) <- ys ]
+	(*) = old_mul
 
 instance (IntDom a, NumEq a) => IntDom (Poly a)
 
@@ -77,18 +77,41 @@ instance Module m r => Module (Poly m) r where
 instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
 	stdUnit p = monomialP 0 (leadingP p)
 	stdAssociate p = p /. leadingP p
-	div p q = Poly $ div' p q
-		where
-			div' p q
-				| d < 0 = [(0,mempty)]
-				| d == 0 = [(0, factor)]
-				| otherwise = div' r q ++ [(d, factor)]
-					where
-						dp = degreeP p
-						d = dp - degreeP q
-						factor = leadingP p / leadingP q
-						r = removeTerm dp $ p - shiftPower d (factor .* q)
-	p `mod` q = p - (p `div` q)*q
+	-- div = old_div
+	-- p `mod` q = p - (p `div` q)*q
+	divMod = new_divMod
+-----------------------------------
+--- Routines
+-----------------------------------
+old_mul (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,b) <- ys ]
+
+old_div p q = Poly $ div' p q
+	where
+		div' p q
+			| d < 0 = [(0,mempty)]
+			| d == 0 = [(0, factor)]
+			| otherwise = div' r q ++ [(d, factor)]
+				where
+					dp = degreeP p
+					d = dp - degreeP q
+					factor = leadingP p / leadingP q
+					r = removeTerm dp $ p - shiftPower d (factor .* q)
+
+-- new_divMod :: (Field a, Module (Poly a) a) => Poly a -> Poly a -> (Poly a, Poly a)
+new_divMod p q = (Poly (combineP' d), m)
+	where
+		(d,m) = div' p q
+		-- div' :: Field a => Poly a -> Poly a -> ([(Int,a)],Poly a)
+		div' p q
+			| deg < 0 = ([(0,mempty)], p)
+			| deg == 0 = ([(0, factor)], r)
+			| otherwise = (p' ++ [(deg, factor)], r')
+				where
+					dp = degreeP p
+					deg = dp - degreeP q
+					factor = leadingP p / leadingP q
+					r = removeTerm dp $ p - shiftPower deg (filterP $ factor .* q)
+					(p',r') = div' r q
 
 -----------------------------------
 --- Methods
@@ -170,7 +193,9 @@ combineP' (x@(n,a):y@(m,b):xs)
 filterP :: (NumEq a, Monoid a) => Poly a -> Poly a
 filterP (Poly xs) = Poly . filterP' $ xs
 filterP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
-filterP' = catchEmpty' . filter (\(n,a) -> n >= 0 && a /=~ mempty)
+filterP' ls = catchEmpty' . filter crit $ ls
+	where
+		crit (n,a) = n >= 0 && not (nearZero a)
 
 catchEmpty' :: Monoid a => [(Int,a)] -> [(Int,a)]
 catchEmpty' xs

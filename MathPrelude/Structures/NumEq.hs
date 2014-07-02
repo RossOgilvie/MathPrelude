@@ -24,7 +24,10 @@ instance NumEq Int32 where	(=~) = (==); epsilon = zeroInt32; nearZero = (==zeroI
 instance NumEq Int64 where	(=~) = (==); epsilon = zeroInt64; nearZero = (==zeroInt64)
 instance NumEq Integer where	(=~) = (==); epsilon = zeroInteger; nearZero = (==zeroInteger)
 
-instance NumEq Float where (=~) x y = nearZero $ P.abs (x P.- y); epsilon = epsFloat; nearZero a = P.abs a <= epsilon
+instance NumEq Float where
+	(=~) x y = nearZero $ P.abs (x P.- y)
+	epsilon = epsFloat
+	nearZero a = P.abs a <= epsilon
 instance NumEq Double where
 	(=~) x y = P.abs (x P.- y) <= epsilon P.* P.maximum [oneDouble, P.abs x, P.abs y]
 	epsilon = epsDouble

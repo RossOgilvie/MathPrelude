@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, OverloadedStrings #-}
 module MathPrelude.Structures.Ring
 	( module MathPrelude.Structures.Abelian
 	, Ring(..)
@@ -57,7 +57,29 @@ product :: Ring a => [a] -> a
 product = foldr (*) one
 
 (^) :: Ring a => a -> Int -> a
-(^) x n = product $ take n $ repeat x
+(^) x n
+	| n < 0 = error "negative power"
+	| n == 0 = one
+	| otherwise = product $ zipWith f (intToBinary n) powers
+		where
+			powers = iterate (\a -> a*a) x
+			f True x = x
+			f False _ = one
+
+
+intToBinary :: Int -> [Bool]
+intToBinary n = reverse $ intToBinary' n powers
+	where
+		powers = reverse $ takeWhile (<= n) twopowers
+
+intToBinary' _ [] = []
+intToBinary' n (x:xs)
+	| n >= x = True : intToBinary' (n-x) xs
+	| otherwise = False : intToBinary' n xs
+
+twopowers = 1 : map (*2) twopowers
+
+
 
 two :: Ring a => a
 two = one + one

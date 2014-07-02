@@ -34,23 +34,59 @@ instance Arbitrary a => Arbitrary (Complex a) where
 prop_construct xs = not (null xs) ==> (toList . poly) xs == xs
 prop_destruct p = (poly . toList) p == p
 
+type PD = Poly Double
+prop_add_assc :: PD -> PD -> PD -> Bool
 prop_add_assc p q r = (p+q)+r =~ p + (q+r)
+prop_add_identity :: PD -> Bool
 prop_add_identity p = p+zero =~ p
+prop_add_inverse :: PD -> Bool
 prop_add_inverse p = p - p =~ zero
+prop_add_comm :: PD -> PD -> Bool
 prop_add_comm p q = p + q =~ q + p
 
+prop_mul_assc :: PD -> PD -> PD -> Bool
 prop_mul_assc p q r = (p*q)*r =~ p*(q*r)
+prop_mul_identity :: PD -> Bool
 prop_mul_identity p = p*one =~ p
-prop_mul_inverse p =
-	p /=~ zero ==> p * recip p =~ one
+prop_mul_comm :: PD -> PD -> Bool
 prop_mul_comm p q = p * q =~ q * p
 
-prop_dist p q r = p * (q + r) =~ p*q + p*r
+prop_dist :: PD -> PD -> PD -> Property
+prop_dist p q r = collect (degreeP p) $ p * (q + r) =~ p*q + p*r
 
-prop_div :: Poly Double -> Poly Double -> Property
+prop_gen_dist p qs = collect (length qs) $ p * sum qs =~ sum (map (p*) qs)
+	where types = p :: PD
+
+-- prop_div :: Poly Double -> Poly Double -> Property
 prop_div p q =
-	q /=~ zero ==> p =~ (d*q + m)
-		where (d,m) = divMod p q
+	q /=~ zero ==>
+		collect (degreeP p, degreeP q) $
+		p =~ (d*q + m)
+	where
+		(d,m) = divMod p q
+		types = p :: PD
+
+prop_gcd p q =
+	p /=~ zero ==>
+	q /=~ zero ==>
+		collect (degreeP g) $ mod p g =~ 0
+	where
+		g = gcd p q
+		types = p :: PD
+
+
+
+
+
+
+
+
+
+------------------------------------------
+---- Statistically testing division
+------------------------------------------
+
+
 
 -- polyNorm p = sqrt . sum . map (^2) . map snd $ ls
 polyNormAbs :: Poly Double -> Double
@@ -71,6 +107,10 @@ div_make_pairs (x:y:xs) = (x, d*y + m) : div_make_pairs xs
 	where (d,m) = divMod x y
 
 div_stats_size = 2000
+
+div_make_data_pairs = do
+	polys <- div_make_data div_stats_size
+	return $ div_make_pairs polys
 
 -- div_make_stats :: IO ()
 div_make_abs_stats = do
@@ -95,18 +135,26 @@ div_stats_raw :: IO Text
 div_stats_raw = do
 	(_,infs,nas,good) <- div_make_abs_stats
 	return $ "Exact: " ++ show (length infs) ++ ", NaNs: " ++ show (length nas) ++ ", Mean: " ++ show (mean good) ++ ", StdDev: " ++ show (stdDev good)
---
--- -- <= epsilon P.* P.maximum [oneDouble, P.abs x, P.abs y]
---
-div_stats_abs_bucket :: IO [(Double,Int)]
+
+div_stats_pass_fail = do
+	polys <- div_make_data div_stats_size
+	let pairs = div_make_pairs polys
+	let test = map (uncurry (=~)) pairs
+	let (p,f) = partition id $ test
+	print $ "pass:" ++ show (length p) ++ ", fail: " ++ show (length f)
+	-- sequence_ . map putStrLn . map (\(d,n) -> show d ++ ": " ++ show n) $ datums
+
+-- div_stats_abs_bucket :: IO [(Double,Int)]
 div_stats_abs_bucket = do
 	(_,_,_,good) <- div_make_abs_stats
-	return $ grouping . map fromInteger . sort . map floor $ good
+	let datums = grouping . map fromInteger . sort . map floor $ good :: [(Double,Int)]
+	sequence_ . map putStrLn . map (\(d,n) -> show d ++ ": " ++ show n) $ datums
 
-div_stats_rel_bucket :: IO [(Double,Int)]
+-- div_stats_rel_bucket :: IO [(Double,Int)]
 div_stats_rel_bucket = do
 	(_,_,_,good) <- div_make_rel_stats
-	return $ grouping . map fromInteger . sort . map floor $ good
+	let datums = grouping . map fromInteger . sort . map floor $ good :: [(Double,Int)]
+	sequence_ . map putStrLn . map (\(d,n) -> show d ++ ": " ++ show n) $ datums
 
 
 grouping l = grouping' (zip l (repeat 1))
@@ -132,3 +180,10 @@ prop_factor_root x p n =
 	evalP p x /=~ 0 ==>
 	snd (factorRoot (y^n *p) x) == n
 	where y = linearPolyWithRoot x
+
+
+c = 31.793125588403605 :+ 0.0 :: Complex Double
+y = linearPolyWithRoot c :: Poly (Complex Double)
+powers_test = takeWhile (=~0) . map (\p -> evalP p c) . map (y^) $ [1..]
+division_test p = takeWhile (=~p) . map (test p) $ [1..]
+test q n = (!!(n-1)) . iterate (`div` q) $ (q^n)

@@ -16,7 +16,7 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     MathPrelude, MathPrelude.Extras.PolynomialFactorisation, MathPrelude.Structures.Polynomial, MathPrelude.Structures.Module, MathPrelude.Structures.Abelian, MathPrelude.Structures.Complex, MathPrelude.Structures.NumEq, MathPrelude.Structures.Quotient, MathPrelude.Structures.Ring, MathPrelude.Structures.Field, MathPrelude.Structures.EuclideanDomain, MathPrelude.Common.PreludeNumConst, MathPrelude.Common.Integral, MathPrelude.Common.Floating, MathPrelude.Common.CharZero, MathPrelude.Common.Real
+  exposed-modules:     MathPrelude, MathPrelude.Extras.PolynomialFactorisation, MathPrelude.Structures.Polynomial, MathPrelude.Structures.Module, MathPrelude.Structures.Abelian, MathPrelude.Structures.Complex, MathPrelude.Structures.NumEq, MathPrelude.Structures.Quotient, MathPrelude.Structures.Ring, MathPrelude.Structures.Field, MathPrelude.Structures.EuclideanDomain, MathPrelude.Common.PreludeNumConst, MathPrelude.Common.Integral, MathPrelude.Common.Transcendental, MathPrelude.Common.CharZero, MathPrelude.Common.Real
   -- other-modules:
   other-extensions:    RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, BangPatterns, TemplateHaskell, NoImplicitPrelude, OverloadedStrings, IncoherentInstances
   build-depends:       base >=4.7 && <4.8, mathless-basic-prelude >=0.1, lens, QuickCheck
