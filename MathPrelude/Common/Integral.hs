@@ -31,6 +31,11 @@ toIntegral98 = P.fromIntegral . toInteger
 fromIntegral :: (Integral a, Ring b) => a -> b
 fromIntegral =  fromInteger . toInteger
 
+even :: Integral a => a -> Bool
+even = P.even . toInteger
+odd :: Integral a => a -> Bool
+odd = P.odd . toInteger
+
 -----------------------------------
 --- Instances
 -----------------------------------

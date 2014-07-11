@@ -30,16 +30,8 @@ instance Functor Poly where
 	fmap f (Poly xs) = Poly (map (map f) xs)
 
 instance (Show a, Ring a) => Show (Poly a) where
-	show (Poly xs) = s
-		where
-			show_m (n,x)
-				| n == 0 = P.show x
-				| n == 1 && (x =~ one) = "x"
-				| n == 1 = P.show x ++ "x"
-				| x =~ one = "x^" ++ P.show n
-				| otherwise = P.show x ++ "x^" ++ P.show n
-			s' = intercalate " + " . map show_m $ xs
-			s = if s' /= "" then s' else "0"
+	show = refined_show
+	-- show = guts
 
 instance Eq a => Eq (Poly a) where
 	(==) (Poly xs) (Poly ys) = xs == ys
@@ -54,6 +46,11 @@ instance NumEq a => NumEq (Poly a) where
 			tripEq _ _ = False
 	epsilon = scalarP epsilon
 	nearZero (Poly xs) = and . map (nearZero . snd) $ xs
+	(>>~) (Poly os) (Poly xs) = and . map (smallL os') $ xs'
+		where
+			os' = map snd os
+			xs' = map snd xs
+
 
 instance (Monoid a, NumEq a) => Monoid (Poly a) where
 	mempty = monomialP 0 mempty
@@ -65,7 +62,7 @@ instance (Abelian a, NumEq a) => Abelian (Poly a) where
 
 instance (Ring a, NumEq a) => Ring (Poly a) where
 	one = poly [one]
-	(*) = old_mul
+	(*) = mul
 
 instance (IntDom a, NumEq a) => IntDom (Poly a)
 
@@ -80,10 +77,11 @@ instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
 	-- div = old_div
 	-- p `mod` q = p - (p `div` q)*q
 	divMod = new_divMod
+
 -----------------------------------
 --- Routines
 -----------------------------------
-old_mul (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,b) <- ys ]
+mul (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,b) <- ys ]
 
 old_div p q = Poly $ div' p q
 	where
@@ -112,6 +110,15 @@ new_divMod p q = (Poly (combineP' d), m)
 					factor = leadingP p / leadingP q
 					r = removeTerm dp $ p - shiftPower deg (filterP $ factor .* q)
 					(p',r') = div' r q
+
+refined_show p = if refined_show' p /= "" then refined_show' p else "0"
+refined_show' (Poly xs) = intercalate " + " . map show_m $ xs
+show_m (n,x)
+	| n == 0 = P.show x
+	| n == 1 && (x =~ one) = "x"
+	| n == 1 = P.show x ++ "x"
+	| x =~ one = "x^" ++ P.show n
+	| otherwise = P.show x ++ "x^" ++ P.show n
 
 -----------------------------------
 --- Methods
@@ -170,7 +177,7 @@ toList' l@((n,x):xs) k
 --- Internal Stuff
 -----------------------------------
 
-guts (Poly xs) = show xs
+guts (Poly xs) = P.show xs
 
 sortSimplifyP :: (Monoid a, NumEq a) => Poly a -> Poly a
 sortSimplifyP (Poly xs) = Poly $ sortSimplifyP' xs

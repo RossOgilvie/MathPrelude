@@ -76,8 +76,8 @@ instance Functor Complex where
 
 instance (Show a, NumEq a, Monoid a)  => Show (Complex a) where
 	show (x :+ y)
-		| y =~ mempty = P.show x
-		| x =~ mempty = P.show y ++ "i"
+		| x >>~ y = P.show x
+		| y >>~ x = P.show y ++ "i"
 		| otherwise = "(" ++ P.show x ++ "+" ++ P.show y ++ "i)"
 
 instance Monoid a => Monoid (Complex a) where
@@ -141,3 +141,5 @@ instance NumEq a => NumEq (Complex a) where
 	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)
 	epsilon = epsilon :+ epsilon
 	nearZero (a:+b)= nearZero a && nearZero b
+	(>>~) (x:+y) (a:+b) = m >>~ a && m >>~ b
+		where m = leastSmall [x,y]

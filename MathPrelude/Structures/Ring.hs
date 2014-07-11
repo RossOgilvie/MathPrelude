@@ -18,6 +18,7 @@ import qualified Prelude as P
 
 import MathPrelude.Structures.Abelian
 import MathPrelude.Common.PreludeNumConst
+-- import MathPrelude.Common.Integral(even)
 
 
 -----------------------------------
@@ -35,7 +36,7 @@ class Abelian a => Ring a where
 				fi n
 					| n =~ zeroInteger = zero
 					| n =~ oneInteger = one
-					| even n    = fin + fin
+					| P.even n    = fin + fin
 					| otherwise = fin + fin + one
 						where fin = fi (n `P.div` twoInteger)
 

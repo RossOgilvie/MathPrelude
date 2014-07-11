@@ -1,10 +1,20 @@
 {-# LANGUAGE RebindableSyntax #-}
 module MathPrelude.Structures.Logic
-	( implies, xor
+	( P.not, (P.&&), (P.||)
+	, L.and, L.or
+	, implies, xor
 	) where
 
 import BasicPrelude
 import qualified Prelude as P
+import qualified Data.List as L
+
+-- not = P.not
+-- (&&) = (P.&&)
+-- (||) = (P.||)
+--
+-- and = L.and
+-- or = L.or
 
 implies :: Bool -> Bool -> Bool
 implies True True = True

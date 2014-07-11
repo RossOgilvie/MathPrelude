@@ -54,11 +54,10 @@ instance (IntDom a, Eq a) => Eq (Ratio a) where
 		| otherwise = (p-q) == zero
 
 instance (IntDom a, NumEq a) => NumEq (Ratio a) where
-	(=~) p@(x:%_) q@(y:%_)
-		| x =~ zero && y =~ zero = True
-		| otherwise = (p-q) =~ zero
+	(=~) (x:%y) (x':%y') = smallL [x,y,x',y'] (x*y' - x'*y)
 	epsilon = epsilon :% one
-	nearZero q = q =~ zero
+	nearZero = (>>~) zero
+	(>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
 
 instance (IntDom a, Ord a) => Ord (Ratio a) where
 	compare (x:%y) (x':%y') = parity' num yord y'ord

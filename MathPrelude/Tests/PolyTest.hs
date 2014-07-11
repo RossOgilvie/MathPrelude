@@ -69,7 +69,7 @@ prop_div p q =
 prop_gcd p q =
 	p /=~ zero ==>
 	q /=~ zero ==>
-		collect (degreeP g) $ mod p g =~ 0
+		collect (degreeP g) $ small q (mod p g)
 	where
 		g = gcd p q
 		types = p :: PD
@@ -185,5 +185,9 @@ prop_factor_root x p n =
 c = 31.793125588403605 :+ 0.0 :: Complex Double
 y = linearPolyWithRoot c :: Poly (Complex Double)
 powers_test = takeWhile (=~0) . map (\p -> evalP p c) . map (y^) $ [1..]
-division_test p = takeWhile (=~p) . map (test p) $ [1..]
-test q n = (!!(n-1)) . iterate (`div` q) $ (q^n)
+inf_division_test p = takeWhile (=~p) . map (division_test p) $ [1..]
+division_test q n = (!!(n-1)) . iterate (`div` q) $ (q^n)
+prop_division_test p =
+	p /=~ 0 ==>
+		collect (degreeP p) $
+		division_test p 10 =~ p

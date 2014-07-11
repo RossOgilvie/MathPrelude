@@ -41,12 +41,12 @@ class IntDom a => EuclideanDomain a where
 gcd :: EuclideanDomain a => a -> a -> a
 gcd a b = stdAssociate $ gcd' a b
 gcd' a b
-	| b =~ zero = a
+	| a >>~ b = a
 	| otherwise = gcd' b (a `mod` b)
 
 extEuclidAlg :: (EuclideanDomain a, NumEq a) => a -> a -> (a,a)
 extEuclidAlg a b
-	| r =~ zero = (zero,one)
+	| b >>~ r = (zero,one)
 	| otherwise = (y, x - (y * q))
 		where
 			(q,r) = a `divMod` b

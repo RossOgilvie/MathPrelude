@@ -2,7 +2,6 @@
 module MathPrelude.Structures.Quotient
   ( module MathPrelude.Structures.EuclideanDomain
   , Quotient(..)
-  -- , Z2, Z3, z2, z3
   , proj
   , liftQ, liftQ2, liftQ2'
   )  where
@@ -58,6 +57,7 @@ instance EuclideanDomain a => NumEq (Quotient a) where
   epsilon = Quotient Nothing epsilon
   nearZero (Quotient Nothing x) = nearZero x
   nearZero (Quotient (Just m) x) = nearZero (x `mod` m)
+  (>>~) = liftQ2' (>>~)
 
 instance (EuclideanDomain a, Eq a) => Eq (Quotient a) where
   (==) = liftQ2' (==)
