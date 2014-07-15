@@ -2,7 +2,7 @@
 module MathPrelude.Structures.EuclideanDomain
 	( module MathPrelude.Structures.Ring
 	, EuclideanDomain(..)
-	, gcd
+	, gcd, gcd'
 	, extEuclidAlg
 	) where
 

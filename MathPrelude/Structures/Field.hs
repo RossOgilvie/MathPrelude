@@ -1,7 +1,8 @@
-{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE RebindableSyntax #-}
 module MathPrelude.Structures.Field
 	( module MathPrelude.Structures.Ring
 	, Field(..)
+	, half
 	)  where
 
 import BasicPrelude
@@ -21,6 +22,12 @@ class IntDom a => Field a where
 	(/) x y = x * recip y
 
 
+------------------------------
+--- Methods
+------------------------------
+
+half :: Field a => a
+half = recip 2
 
 ------------------------------
 --- Instances

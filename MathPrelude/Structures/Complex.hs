@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, OverloadedStrings #-}
+{-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, OverloadedStrings #-}
 module MathPrelude.Structures.Complex
 	( Complex(..)
 	, iu, realPart, imagPart
@@ -108,8 +108,6 @@ instance Module m r => Module (Complex m) r where
 	scale r z = map (scale r) z
 
 
-half :: Field a => a
-half = recip $ one + one
 half' :: Field a => Complex a
 half' = fromReal $ half
 

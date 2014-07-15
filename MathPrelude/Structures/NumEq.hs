@@ -48,6 +48,7 @@ big :: NumEq a => a -> a -> Bool
 big = flip (>>~)
 
 leastSmall :: NumEq a => [a] -> a
+leastSmall [] = epsilon
 leastSmall (x:xs)
 	| or (map (big x) xs) = leastSmall xs
 	| otherwise = x

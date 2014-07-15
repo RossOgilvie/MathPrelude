@@ -1,9 +1,12 @@
 {-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
-module MathPrelude.Structures.Polynomial(module MathPrelude.Structures.Field, module MathPrelude.Structures.EuclideanDomain, module MathPrelude.Structures.Module
+module MathPrelude.Structures.Polynomial
+	( module MathPrelude.Structures.Field
+	, module MathPrelude.Structures.EuclideanDomain
+	, module MathPrelude.Structures.Module
 	, Poly, poly, evalP
 	, monomialP, xnP, scalarP, fromFactorsP
 	, constP, leadingP, degreeP
-	, termwiseP, toList
+	, termwiseP, toListP
 	) where
 
 import BasicPrelude
@@ -14,7 +17,7 @@ import MathPrelude.Structures.Field
 import MathPrelude.Structures.EuclideanDomain
 import MathPrelude.Structures.Derivation
 
--- import MathPrelude.Common.Floating
+import MathPrelude.Common.Integral
 -- import MathPrelude.Common.CharZero
 
 -----------------------------------
@@ -78,6 +81,22 @@ instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
 	-- p `mod` q = p - (p `div` q)*q
 	divMod = new_divMod
 
+instance (Ring a, Derivation a) => Derivation (Poly a) where
+	derive pp@(Poly p) = map derive pp + (Poly $ polyDiff' p)
+		where
+			polyDiff' [] = []
+			polyDiff' ((n, x):ps)
+				| n /= 0 = (n-1, n' * x): polyDiff' ps
+				| otherwise = polyDiff' ps
+				where n' = fromIntegral n
+
+instance Field a => Integration (Poly a) where
+	integrate (Poly p) = Poly $ polyInt' p
+		where
+			polyInt' [] = []
+			polyInt' ((n, x):ps) = (n-1, x / n') : polyInt' ps
+				where n' = fromIntegral n
+
 -----------------------------------
 --- Routines
 -----------------------------------
@@ -111,7 +130,8 @@ new_divMod p q = (Poly (combineP' d), m)
 					r = removeTerm dp $ p - shiftPower deg (filterP $ factor .* q)
 					(p',r') = div' r q
 
-refined_show p = if refined_show' p /= "" then refined_show' p else "0"
+refined_show p = if s /= "" then "(" ++ s ++ ")" else "0"
+	where s = refined_show' p
 refined_show' (Poly xs) = intercalate " + " . map show_m $ xs
 show_m (n,x)
 	| n == 0 = P.show x
@@ -165,8 +185,8 @@ evalP (Poly xs) pt = shift 0 xs
 termwiseP :: (Ring a, NumEq a) => (Int -> a -> (Int,a)) -> Poly a -> Poly a
 termwiseP f (Poly xs) = Poly . sortSimplifyP' . map (uncurry f) $ xs
 
-toList :: Monoid a => Poly a -> [a]
-toList (Poly xs) = toList' xs 0
+toListP :: Monoid a => Poly a -> [a]
+toListP (Poly xs) = toList' xs 0
 toList' :: Monoid a => [(Int, a)] -> Int -> [a]
 toList' [] _ = []
 toList' l@((n,x):xs) k

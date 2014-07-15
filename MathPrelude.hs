@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, BangPatterns#-}
+-- {-# LANGUAGE RebindableSyntax, #-}
 module MathPrelude
 	( module BasicPrelude
 	, module MathPrelude.Structures.Logic

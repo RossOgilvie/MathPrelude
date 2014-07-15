@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE RebindableSyntax #-}
 module MathPrelude.Structures.Derivation where
 
 import BasicPrelude
@@ -10,7 +10,6 @@ class Derivation r where
 
 class Integration r where
   integrate :: r -> r
-
 
 -----------------------------------
 --- Instances
