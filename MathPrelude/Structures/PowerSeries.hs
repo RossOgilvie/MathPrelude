@@ -17,6 +17,7 @@ import MathPrelude.Structures.Polynomial
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Transcendental
 import MathPrelude.Extras.Sequence
+import MathPrelude.Extras.Evaluable
 
 
 -----------------------------------
@@ -76,6 +77,9 @@ instance Ring a => Derivation (PS a) where
 
 instance Field a => Integration (PS a) where
   integrate (PS p) = PS $ 0 : zipWith (/) p (map fromInteger [1..])
+
+instance Ring a => Evaluable (PS a) a where
+  eval = evalPS
 
 -----------------------------------
 --- Routines

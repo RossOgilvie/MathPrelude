@@ -34,6 +34,7 @@ import MathPrelude.Structures.Field
 import MathPrelude.Structures.Module
 
 import MathPrelude.Structures.Polynomial
+import MathPrelude.Structures.PowerSeries
 import MathPrelude.Structures.Complex
 import MathPrelude.Structures.Ratio
 import MathPrelude.Structures.Quotient
@@ -47,6 +48,13 @@ import MathPrelude.Common.CharZero
 import MathPrelude.Common.Transcendental
 import MathPrelude.Common.Real
 
+import MathPrelude.Extras.Combinatorics
 import MathPrelude.Extras.EllipticIntegrals
+import MathPrelude.Extras.Evaluable
+import MathPrelude.Extras.Integration
+import MathPrelude.Extras.NewtonsMethod
 import MathPrelude.Extras.NumberRings
+import MathPrelude.Extras.Path
 import MathPrelude.Extras.PolynomialFactorisation
+import MathPrelude.Extras.Projective
+import MathPrelude.Extras.Sequence

@@ -1,4 +1,4 @@
-{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, UndecidableInstances #-}
 module MathPrelude.Structures.Ratio
 	( module MathPrelude.Structures.Field
 	, Ratio(..)
@@ -13,6 +13,7 @@ import qualified Prelude as P
 import MathPrelude.Structures.Field
 import MathPrelude.Structures.EuclideanDomain
 import MathPrelude.Structures.Derivation
+import MathPrelude.Extras.Evaluable
 
 ------------------------------
 --- Ratio
@@ -68,6 +69,9 @@ instance (IntDom a, Ord a) => Ord (Ratio a) where
 
 instance (Derivation a, Ring a) => Derivation (Ratio a) where
 	derive (x:%y) = (derive x * y - x * derive y) :% (y^2)
+
+instance (Field b, Evaluable a b) => Evaluable (Ratio a) b where
+	eval (p:%q) = \x -> (p$$x) / (q$$x)
 
 parity' :: Ordering -> Ordering -> Ordering -> Ordering
 parity' EQ _ _ = EQ

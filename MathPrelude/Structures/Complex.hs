@@ -15,9 +15,11 @@ import BasicPrelude
 import qualified Prelude as P
 
 import MathPrelude.Structures.Field
+import MathPrelude.Structures.Derivation
 import MathPrelude.Structures.Module
 import MathPrelude.Common.Transcendental
 import MathPrelude.Common.Integral
+import MathPrelude.Common.CharZero
 
 -----------------------------------
 --- Classes
@@ -102,11 +104,15 @@ instance Num a => Num (Complex a) where
 	abs = undefined
 	signum = undefined
 
+instance (Monoid a, CharZero a) => CharZero (Complex a) where
+	fromRational' = fromReal . fromRational'
 -- instance Ring s => Module (Complex s) s where
 -- 	scale r (x :+ y) = (r*x) :+ (r*y)
 instance Module m r => Module (Complex m) r where
 	scale r z = map (scale r) z
 
+instance Derivation a => Derivation (Complex a) where
+	derive (x:+y) = (derive x) :+ (derive y)
 
 half' :: Field a => Complex a
 half' = fromReal $ half

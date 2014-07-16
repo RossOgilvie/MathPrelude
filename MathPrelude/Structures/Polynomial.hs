@@ -3,7 +3,9 @@ module MathPrelude.Structures.Polynomial
 	( module MathPrelude.Structures.Field
 	, module MathPrelude.Structures.EuclideanDomain
 	, module MathPrelude.Structures.Module
-	, Poly, poly, evalP
+	, module MathPrelude.Extras.Evaluable
+	, Poly, poly
+	-- , evalP
 	, monomialP, xnP, scalarP, fromFactorsP
 	, constP, leadingP, degreeP
 	, termwiseP, toListP
@@ -16,7 +18,7 @@ import MathPrelude.Structures.Module
 import MathPrelude.Structures.Field
 import MathPrelude.Structures.EuclideanDomain
 import MathPrelude.Structures.Derivation
-
+import MathPrelude.Extras.Evaluable
 import MathPrelude.Common.Integral
 -- import MathPrelude.Common.CharZero
 
@@ -96,6 +98,9 @@ instance Field a => Integration (Poly a) where
 			polyInt' [] = []
 			polyInt' ((n, x):ps) = (n-1, x / n') : polyInt' ps
 				where n' = fromIntegral n
+
+instance Ring a => Evaluable (Poly a) a where
+	eval = evalP
 
 -----------------------------------
 --- Routines

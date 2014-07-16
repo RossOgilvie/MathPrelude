@@ -22,13 +22,13 @@ import MathPrelude.Extras.NewtonsMethod
 polyRootBound :: Poly (Complex Double) -> Double
 polyRootBound p = min opt1 opt2
 	where
-		(x:xs) = map norm . reverse $ toList p
+		(x:xs) = map norm . reverse $ toListP p
 		opt1 = 1 + (maximum xs)/x
 		opt2 = max 1 ((sum xs)/x)
 
 -- use newtons method to find a root
 findRoot :: Poly (Complex Double) -> Complex Double -> Complex Double
-findRoot p x0 = newtons (evalP p) (evalP p') x0
+findRoot p x0 = newtons (p$$) (p'$$) x0
 	where p' = derive p
 
 w :: Poly (Complex Double)
@@ -60,7 +60,7 @@ rootOrder p x = length . takeWhile (flip isRoot x) . take (degreeP p) . iterate 
 -- rootOrder p x = iterate derive $ p
 
 isRoot :: Ring a => Poly a -> a -> Bool
-isRoot p x = smallL (toList p) $ evalP p x
+isRoot p x = smallL (toListP p) $ eval p x
 linearPolyWithRoot c = poly [negate c, one]
 
 --------------------------
@@ -86,7 +86,7 @@ dkStep :: Poly (Complex Double) -> [Complex Double] -> [Complex Double] -> [Comp
 dkStep p before [] = reverse before
 dkStep p before (old:after) = dkStep p (new : before) after
 	where
-		new = old - (evalP p old)/denom
+		new = old - (p $$ old)/denom
 		denom = product $ map (old -) (before++after)
 
 ----------------------------------
