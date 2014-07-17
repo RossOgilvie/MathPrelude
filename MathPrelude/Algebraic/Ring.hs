@@ -1,13 +1,12 @@
 {-# LANGUAGE RebindableSyntax, OverloadedStrings #-}
-module MathPrelude.Structures.Ring
-	( module MathPrelude.Structures.Abelian
+module MathPrelude.Algebraic.Ring
+	( module MathPrelude.Algebraic.Abelian
 	, Ring(..)
 	, Num(..)
 	, IntDom(..)
 	, (^)
 	, product
-	, two
-	, ifThenElse
+	-- , two
 	) where
 
 -----------------------------------
@@ -16,7 +15,7 @@ module MathPrelude.Structures.Ring
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Abelian
+import MathPrelude.Algebraic.Abelian
 import MathPrelude.Common.PreludeNumConst
 -- import MathPrelude.Common.Integral(even)
 
@@ -52,7 +51,7 @@ class Ring a => IntDom a
 
 
 -----------------------------------
---- Methods
+-- Methods
 -----------------------------------
 product :: Ring a => [a] -> a
 product = foldr (*) one
@@ -64,8 +63,9 @@ product = foldr (*) one
 	| otherwise = product $ zipWith f (intToBinary n) powers
 		where
 			powers = iterate (\a -> a*a) x
-			f True x = x
-			f False _ = one
+			f b x = if b then x else one
+			-- f True x = x
+			-- f False _ = one
 
 
 intToBinary :: Int -> [Bool]
@@ -80,10 +80,8 @@ intToBinary' n (x:xs)
 
 twopowers = 1 : map (*2) twopowers
 
-
-
-two :: Ring a => a
-two = one + one
+-- two :: Ring a => a
+-- two = one + one
 
 -----------------------------------
 --- Instances

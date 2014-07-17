@@ -1,6 +1,6 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Structures.Field
-	( module MathPrelude.Structures.Ring
+module MathPrelude.Algebraic.Field
+	( module MathPrelude.Algebraic.Ring
 	, Field(..)
 	, half
 	)  where
@@ -8,7 +8,7 @@ module MathPrelude.Structures.Field
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Ring
+import MathPrelude.Algebraic.Ring
 
 ------------------------------
 --- Classes

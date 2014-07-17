@@ -6,10 +6,10 @@ module MathPrelude.Extras.Integration
   ) where
 
 import BasicPrelude
-import MathPrelude.Structures.Field
-import MathPrelude.Extras.Sequence
--- import MathPrelude.Structures.Complex
-import MathPrelude.Structures.Module
+import MathPrelude.Algebraic.Field
+import MathPrelude.Common.Convergence
+-- import MathPrelude.Constructions.Complex
+import MathPrelude.Algebraic.Module
 -- import MathPrelude.Common.Transcendental
 
 

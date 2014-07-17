@@ -1,5 +1,5 @@
 {-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances #-}
-module MathPrelude.Extras.Projective
+module MathPrelude.Constructions.Projective
   ( Proj
   , fromField
   , crossRatio
@@ -8,11 +8,11 @@ module MathPrelude.Extras.Projective
 
 import BasicPrelude
 import qualified Prelude as P
-import MathPrelude.Structures.Field
-import MathPrelude.Structures.Derivation
-import MathPrelude.Structures.Complex
-import MathPrelude.Common.CharZero
-import MathPrelude.Extras.Evaluable
+import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.Derivation
+import MathPrelude.Constructions.Complex
+import MathPrelude.Common.Rational
+import MathPrelude.Classes.Evaluable
 
 
 data Proj a = Elem a | Zero a | Infty a
@@ -28,7 +28,7 @@ crossRatio x y z w = (x-z)/(y-z)*(x-w)/(y-w)
 
 data MobiusT a = MobiusT a a a a deriving Show
 
-instance Field a => Evaluable (MobiusT a) a where
+instance Field a => Evaluable (MobiusT a) a a where
   eval (MobiusT a b c d) = \z -> (a*z + b)/(c*z + d)
 
 instance Show a => Show (Proj a) where

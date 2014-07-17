@@ -10,12 +10,12 @@ module MathPrelude.Extras.PolynomialFactorisation
 
 import BasicPrelude
 
-import MathPrelude.Structures.Polynomial
-import MathPrelude.Structures.Complex
-import MathPrelude.Structures.Derivation
+import MathPrelude.Constructions.Polynomial
+import MathPrelude.Constructions.Complex
+import MathPrelude.Classes.Derivation
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Transcendental
-import MathPrelude.Extras.Sequence
+import MathPrelude.Common.Convergence
 import MathPrelude.Extras.NewtonsMethod
 
 -- all the roots of a poly lie in this circle

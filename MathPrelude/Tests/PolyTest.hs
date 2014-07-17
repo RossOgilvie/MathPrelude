@@ -4,14 +4,14 @@ module MathPrelude.Tests.PolyTest() where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Polynomial
+import MathPrelude.Constructions.Polynomial
 import MathPrelude.Extras.PolynomialFactorisation
 
 import MathPrelude.Common.Transcendental
 import MathPrelude.Common.Real
-import MathPrelude.Common.CharZero
-import MathPrelude.Structures.Complex
-import MathPrelude.Structures.Derivation
+import MathPrelude.Common.Rational
+import MathPrelude.Constructions.Complex
+import MathPrelude.Classes.Derivation
 
 import Test.QuickCheck
 

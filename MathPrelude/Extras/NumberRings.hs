@@ -1,6 +1,6 @@
 {-# LANGUAGE RebindableSyntax, OverloadedStrings, GeneralizedNewtypeDeriving #-}
 module MathPrelude.Extras.NumberRings
-  ( module MathPrelude.Structures.Quotient
+  ( module MathPrelude.Constructions.Quotient
   , Z2(..), z2
   , Z3(..), z3
   , Z4(..), z4
@@ -15,11 +15,11 @@ module MathPrelude.Extras.NumberRings
   )  where
 
 import BasicPrelude
-import MathPrelude.Structures.Quotient
-import MathPrelude.Structures.Polynomial
-import MathPrelude.Common.CharZero
--- import MathPrelude.Structures.Complex
--- import MathPrelude.Structures.Module
+import MathPrelude.Constructions.Quotient
+import MathPrelude.Constructions.Polynomial
+import MathPrelude.Common.Rational
+-- import MathPrelude.Constructions.Complex
+-- import MathPrelude.Algebraic.Module
 -- import MathPrelude.Common.Transcendental
 
 findRecip m z = fst $ extEuclidAlg z m

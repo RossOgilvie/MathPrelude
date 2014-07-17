@@ -4,10 +4,10 @@ module MathPrelude.Tests.DerivationTest where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Derivation
-import MathPrelude.Structures.Ring
-import MathPrelude.Structures.Polynomial
-import MathPrelude.Structures.Quotient
+import MathPrelude.Classes.Derivation
+import MathPrelude.Algebraic.Ring
+import MathPrelude.Constructions.Polynomial
+import MathPrelude.Constructions.Quotient
 
 -- import MathPrelude.Common.Floating
 import MathPrelude.Extras.PolynomialFactorisation

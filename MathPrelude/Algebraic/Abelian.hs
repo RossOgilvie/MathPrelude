@@ -1,6 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module MathPrelude.Structures.Abelian
-	( module MathPrelude.Structures.NumEq
+module MathPrelude.Algebraic.Abelian
+	( module MathPrelude.Classes.NumEq
 	, Abelian(..)
 	, zero
 	, (+)
@@ -12,7 +12,7 @@ module MathPrelude.Structures.Abelian
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.NumEq
+import MathPrelude.Classes.NumEq
 import MathPrelude.Common.PreludeNumConst
 
 -----------------------------------

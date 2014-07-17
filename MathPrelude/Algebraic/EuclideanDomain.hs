@@ -1,6 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module MathPrelude.Structures.EuclideanDomain
-	( module MathPrelude.Structures.Ring
+module MathPrelude.Algebraic.EuclideanDomain
+	( module MathPrelude.Algebraic.Ring
 	, EuclideanDomain(..)
 	, gcd, gcd'
 	, extEuclidAlg
@@ -9,7 +9,7 @@ module MathPrelude.Structures.EuclideanDomain
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Ring
+import MathPrelude.Algebraic.Ring
 
 -----------------------------------
 --- EuclideanDomain

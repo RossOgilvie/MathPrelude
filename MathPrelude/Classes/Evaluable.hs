@@ -1,18 +1,18 @@
 {-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, FunctionalDependencies #-}
-module MathPrelude.Extras.Evaluable
+module MathPrelude.Classes.Evaluable
   ( Evaluable(..)
   , ($$)
   ) where
 
 import BasicPrelude
 
-class Evaluable a b | a -> b where
-  eval :: a -> b -> b
+class Evaluable a b c | a b -> c where
+  eval :: a -> b -> c
 
-($$) :: Evaluable a b => a -> b -> b
+($$) :: Evaluable a b c => a -> b -> c
 ($$) = eval
 
 infixr 9 $$
 
-instance Evaluable (a->a) a where
+instance Evaluable (a->a) a a where
   eval = ($)

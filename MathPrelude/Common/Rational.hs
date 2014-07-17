@@ -1,5 +1,5 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Common.CharZero
+module MathPrelude.Common.Rational
 	( Rational
 	, CharZero(..)
 	, Q(..)
@@ -16,7 +16,7 @@ import BasicPrelude
 import qualified Prelude as P
 import qualified Data.Ratio as Ratio98
 
-import MathPrelude.Structures.Ratio
+import MathPrelude.Constructions.Ratio
 import MathPrelude.Common.Integral
 
 ------------------------------

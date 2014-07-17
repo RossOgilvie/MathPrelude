@@ -1,5 +1,5 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Structures.Norm where
+module MathPrelude.Classes.Norm where
 
 import BasicPrelude
 import qualified Prelude as P

@@ -4,11 +4,11 @@ module MathPrelude.Extras.Path
   ) where
 
 import BasicPrelude
-import MathPrelude.Structures.Field
-import MathPrelude.Structures.Module
+import MathPrelude.Algebraic.Field
+import MathPrelude.Algebraic.Module
 import MathPrelude.Extras.Integration
-import MathPrelude.Structures.Complex
-import MathPrelude.Common.CharZero
+import MathPrelude.Constructions.Complex
+import MathPrelude.Common.Rational
 import MathPrelude.Common.Transcendental
 
 data Path a = Path {path :: Double -> a, start :: Double, end :: Double}

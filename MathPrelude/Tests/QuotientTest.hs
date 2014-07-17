@@ -4,10 +4,10 @@ module MathPrelude.Tests.QuotientTest() where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Quotient
+import MathPrelude.Constructions.Quotient
 
 import MathPrelude.Common.Floating
-import MathPrelude.Common.CharZero
+import MathPrelude.Common.Rational
 
 import Test.QuickCheck
 

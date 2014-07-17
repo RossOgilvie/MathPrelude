@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 import BasicPrelude
-import MathPrelude.Structures.NumEq
+import MathPrelude.Classes.NumEq
 import Test.QuickCheck
 
 commutative :: NumEq a => (b -> b -> a) -> b -> b -> Bool

@@ -1,22 +1,18 @@
 -- {-# LANGUAGE RebindableSyntax, #-}
 module MathPrelude
 	( module BasicPrelude
-	, module MathPrelude.Structures.Logic
-	, module MathPrelude.Structures.NumEq
+	, module MathPrelude.Classes.NumEq
 
-	, module MathPrelude.Structures.Abelian
-	, module MathPrelude.Structures.Ring
-	, module MathPrelude.Structures.EuclideanDomain
-	, module MathPrelude.Structures.Field
-	-- , module MathPrelude.Structures.Module
+	, module MathPrelude.Algebraic.Logic
+	, module MathPrelude.Algebraic.Abelian
+	, module MathPrelude.Algebraic.Ring
+	, module MathPrelude.Algebraic.EuclideanDomain
+	, module MathPrelude.Algebraic.Field
 
-	-- , module MathPrelude.Structures.Polynomial
-	-- , module MathPrelude.Structures.Complex
-	, module MathPrelude.Structures.Ratio
-	-- , module MathPrelude.Structures.Quotient
+	, module MathPrelude.Constructions.Ratio
 
 	, module MathPrelude.Common.Integral
-	, module MathPrelude.Common.CharZero
+	, module MathPrelude.Common.Rational
 	, module MathPrelude.Common.Transcendental
 	, module MathPrelude.Common.Real
 	) where
@@ -24,37 +20,37 @@ module MathPrelude
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Logic
-import MathPrelude.Structures.NumEq
+import MathPrelude.Classes.NumEq
+import MathPrelude.Classes.Derivation
+import MathPrelude.Classes.Evaluable
+import MathPrelude.Classes.Norm
 
-import MathPrelude.Structures.Abelian
-import MathPrelude.Structures.Ring
-import MathPrelude.Structures.EuclideanDomain
-import MathPrelude.Structures.Field
-import MathPrelude.Structures.Module
+import MathPrelude.Algebraic.Logic
+import MathPrelude.Algebraic.Abelian
+import MathPrelude.Algebraic.Ring
+import MathPrelude.Algebraic.EuclideanDomain
+import MathPrelude.Algebraic.Field
+import MathPrelude.Algebraic.Module
 
-import MathPrelude.Structures.Polynomial
-import MathPrelude.Structures.PowerSeries
-import MathPrelude.Structures.Complex
-import MathPrelude.Structures.Ratio
-import MathPrelude.Structures.Quotient
+import MathPrelude.Constructions.Complex
+import MathPrelude.Constructions.Polynomial
+import MathPrelude.Constructions.PowerSeries
+import MathPrelude.Constructions.Projective
+import MathPrelude.Constructions.Quotient
+import MathPrelude.Constructions.Ratio
 
-import MathPrelude.Structures.Derivation
-import MathPrelude.Structures.Norm
-
-import MathPrelude.Common.PreludeNumConst
 import MathPrelude.Common.Integral
-import MathPrelude.Common.CharZero
-import MathPrelude.Common.Transcendental
+import MathPrelude.Common.Convergence
+import MathPrelude.Common.PreludeNumConst
+import MathPrelude.Common.Rational
 import MathPrelude.Common.Real
+import MathPrelude.Common.Transcendental
 
 import MathPrelude.Extras.Combinatorics
+import MathPrelude.Extras.DifferentialEqns
 import MathPrelude.Extras.EllipticIntegrals
-import MathPrelude.Extras.Evaluable
 import MathPrelude.Extras.Integration
 import MathPrelude.Extras.NewtonsMethod
 import MathPrelude.Extras.NumberRings
 import MathPrelude.Extras.Path
 import MathPrelude.Extras.PolynomialFactorisation
-import MathPrelude.Extras.Projective
-import MathPrelude.Extras.Sequence

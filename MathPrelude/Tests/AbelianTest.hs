@@ -4,7 +4,7 @@ module MathPrelude.Tests.AbelianTest where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Abelian
+import MathPrelude.Algebraic.Abelian
 import Test.QuickCheck
 
 prop_assoc a b c = (a + b) + c =~ a + (b + c)

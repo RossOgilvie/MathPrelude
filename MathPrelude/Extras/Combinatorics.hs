@@ -4,9 +4,9 @@ module MathPrelude.Extras.Combinatorics
   ) where
 
 import BasicPrelude
-import MathPrelude.Structures.Ring
--- import MathPrelude.Structures.Complex
--- import MathPrelude.Structures.Module
+import MathPrelude.Algebraic.Ring
+-- import MathPrelude.Constructions.Complex
+-- import MathPrelude.Algebraic.Module
 -- import MathPrelude.Common.Transcendental
 
 factorial :: Integer -> Integer

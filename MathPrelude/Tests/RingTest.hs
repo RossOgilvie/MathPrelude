@@ -4,7 +4,7 @@ module MathPrelude.Tests.RingTest where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Ring
+import MathPrelude.Algebraic.Ring
 import MathPrelude.Tests.Laws as Laws
 import Test.QuickCheck
 
@@ -29,7 +29,7 @@ propPowerCascade      x i j  =  i>=0 && j>=0 ==> Laws.rightCascade (*) (^) x i j
 propPowerProduct      x i j  =  i>=0 && j>=0 ==> Laws.homomorphism (x^) (+) (*) i j
 propPowerDistributive i x y  =  i>=0 ==> Laws.leftDistributive (^) (*) i x y
 
-{- | Commutativity need not be satisfied by all instances of 'MathPrelude.Structures.Ring.Ring'. -}
+{- | Commutativity need not be satisfied by all instances of 'MathPrelude.Algebraic.Ring.Ring'. -}
 propCommutative :: (NumEq a, Ring a) => a -> a -> Bool
 
 propCommutative  =  Laws.commutative (*)

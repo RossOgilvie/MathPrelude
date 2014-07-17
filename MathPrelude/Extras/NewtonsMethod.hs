@@ -4,8 +4,8 @@ module MathPrelude.Extras.NewtonsMethod
   ) where
 
 import BasicPrelude
-import MathPrelude.Structures.Field
-import MathPrelude.Extras.Sequence
+import MathPrelude.Algebraic.Field
+import MathPrelude.Common.Convergence
 
 newton_step f f' x = x - (f x / f' x)
 

@@ -1,6 +1,6 @@
 module MathPrelude.Common.PreludeNumConst where
 
-import Prelude(fromInteger, fromRational, Int, Integer, Float, Double, otherwise)
+import Prelude(fromInteger, fromRational, Int, Integer, Float, Double)
 import Data.Int (Int32, Int64)
 
 zeroInt = 0 :: Int
@@ -18,10 +18,6 @@ oneFloat = 1 :: Float
 oneDouble = 1 :: Double
 
 twoInteger = 2 :: Integer
-
-ifThenElse t a b
-	| t = a
-	| otherwise = b
 
 epsFloat = 1e-5 :: Float
 epsDouble = 1e-10 :: Double

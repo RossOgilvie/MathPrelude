@@ -1,11 +1,11 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances #-}
-module MathPrelude.Structures.Module where
+module MathPrelude.Algebraic.Module where
 
 import BasicPrelude
 
-import MathPrelude.Structures.Ring
-import MathPrelude.Structures.Abelian
-import MathPrelude.Structures.Field
+import MathPrelude.Algebraic.Ring
+import MathPrelude.Algebraic.Abelian
+import MathPrelude.Algebraic.Field
 
 -----------------------------------
 --- Module
@@ -27,6 +27,9 @@ class (Abelian m, Ring s) => Module m s where
 instance Ring r => Module r r where
   scale r s = r*s
 
+-- instance Ring r => Module r Integer where
+-- 	scale n r = fromInteger n * r
+
 -----------------------------------
 --- Vector Space
 -----------------------------------
@@ -46,7 +49,3 @@ instance Ring r => Module r r where
 (./) k v = scale (recip k) v
 (/.) :: (Field k, Module v k) => v -> k -> v
 (/.) = flip (./)
-
-
-
-

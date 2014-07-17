@@ -1,6 +1,6 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Structures.NumEq
-	( module MathPrelude.Structures.Logic
+module MathPrelude.Classes.NumEq
+	( module MathPrelude.Algebraic.Logic
 	, NumEq(..)
 	, smallL, leastSmall
 	, (<<~), big
@@ -10,7 +10,7 @@ where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Logic
+import MathPrelude.Algebraic.Logic
 import MathPrelude.Common.PreludeNumConst
 
 -----------------------------------

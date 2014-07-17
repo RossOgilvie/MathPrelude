@@ -1,12 +1,12 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Extras.Sequence
+module MathPrelude.Common.Convergence
   ( maybeConverge
   , converge
   , converges
   ) where
 
 import BasicPrelude
-import MathPrelude.Structures.NumEq
+import MathPrelude.Classes.NumEq
 import qualified Data.Maybe as M
 
 maybeConverge :: (a -> a -> Bool) -> [a] -> Maybe a

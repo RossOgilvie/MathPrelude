@@ -1,8 +1,8 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Structures.Derivation where
+module MathPrelude.Classes.Derivation where
 
 import BasicPrelude
-import MathPrelude.Structures.Abelian
+import MathPrelude.Algebraic.Abelian
 -- import qualified Prelude as P
 
 class Derivation r where

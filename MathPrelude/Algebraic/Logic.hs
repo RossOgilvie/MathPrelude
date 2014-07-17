@@ -1,8 +1,9 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Structures.Logic
+module MathPrelude.Algebraic.Logic
 	( P.not, (P.&&), (P.||)
 	, L.and, L.or
 	, implies, xor
+	, ifThenElse
 	) where
 
 import BasicPrelude
@@ -27,3 +28,8 @@ xor True True = False
 xor True False = True
 xor False True = True
 xor False False = False
+
+ifThenElse :: Bool -> a -> a -> a
+ifThenElse t a b
+	| t = a
+	| otherwise = b

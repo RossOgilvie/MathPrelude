@@ -10,7 +10,7 @@ import qualified Prelude as P
 
 import qualified GHC.Float as GF
 
-import MathPrelude.Structures.Ring
+import MathPrelude.Algebraic.Ring
 import MathPrelude.Common.Integral
 
 ------------------------------

@@ -12,7 +12,7 @@ module MathPrelude.Common.Integral
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Ring
+import MathPrelude.Algebraic.Ring
 
 -----------------------------------
 --- Classes

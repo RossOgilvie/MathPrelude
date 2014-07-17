@@ -7,7 +7,7 @@ module MathPrelude.Common.Transcendental where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Structures.Field
+import MathPrelude.Algebraic.Field
 
 ------------------------------
 --- Classes
@@ -25,12 +25,12 @@ class Field a => Transcendental a where
 	logBase b x = log x / log b
 	x ** y = exp ( y * log x )
 	tan x = sin x / cos x
-	sinh x = (exp x - exp (negate x)) / two
-	cosh x = (exp x + exp (negate x)) / two
+	sinh x = (exp x - exp (negate x)) / 2
+	cosh x = (exp x + exp (negate x)) / 2
 	tanh x = sinh x / cosh x
-	asinh x = log (x + sqrt(x*x  + one))
-	acosh x = log (x + sqrt(x*x  - one))
-	atanh x = log ((one + x)/(one - x)) / two
+	asinh x = log (x + sqrt(x*x  + 1))
+	acosh x = log (x + sqrt(x*x  - 1))
+	atanh x = log ((1 + x)/(1 - x)) / 2
 
 ------------------------------
 --- Instances
