@@ -54,3 +54,5 @@ import MathPrelude.Extras.NewtonsMethod
 import MathPrelude.Extras.NumberRings
 import MathPrelude.Extras.Path
 import MathPrelude.Extras.PolynomialFactorisation
+import MathPrelude.Extras.Primes
+import MathPrelude.Extras.SpecialFunc

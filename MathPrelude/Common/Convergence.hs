@@ -3,9 +3,11 @@ module MathPrelude.Common.Convergence
   ( maybeConverge
   , converge
   , converges
+  , partialSums
   ) where
 
 import BasicPrelude
+import MathPrelude.Algebraic.Abelian
 import MathPrelude.Classes.NumEq
 import qualified Data.Maybe as M
 
@@ -23,3 +25,7 @@ converge xs
   | M.isJust x' = M.fromJust x'
   | otherwise = last xs
   where x' = maybeConverge (=~) xs
+
+partialSums :: Monoid a => [a] -> [a]
+partialSums ls = tail ps
+  where ps = zero : zipWith (+) ps ls

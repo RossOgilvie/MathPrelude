@@ -4,6 +4,8 @@ module MathPrelude.Common.Integral
 	, fromIntegral98
 	, toIntegral98
 	, fromIntegral
+	, even
+	, odd
 	) where
 
 -----------------------------------
@@ -17,7 +19,7 @@ import MathPrelude.Algebraic.Ring
 -----------------------------------
 --- Classes
 -----------------------------------
-class Ring a => Integral a where
+class (Ring a, Enum a) => Integral a where
 	toInteger :: a -> Integer
 
 -----------------------------------

@@ -1,18 +1,19 @@
 {-# LANGUAGE RebindableSyntax #-}
 module MathPrelude.Extras.DifferentialEqns
-  (
-  -- module MathPrelude.Constructions.Complex
-  -- agm
-  -- , ellipticK
-  -- , ellipticE
+  ( module MathPrelude.Constructions.PowerSeries
+  , firstODE
+  , secondODE
+  , expPS
+  , sinPS, cosPS, tanPS
   ) where
 
 ----------------------------------
 -- Imports
 ----------------------------------
 import BasicPrelude
-import MathPrelude.Algebraic.Field
 import MathPrelude.Constructions.PowerSeries
+import MathPrelude.Extras.Combinatorics
+import MathPrelude.Common.Integral
 ----------------------------------
 -- Methods
 ----------------------------------
@@ -25,8 +26,8 @@ firstODE f y0 =
     PS y' = f y
   in y
 
-secODE :: Field a => (PS a -> PS a -> PS a) -> a -> a -> PS a
-secODE f y0 y0' =
+secondODE :: Field a => (PS a -> PS a -> PS a) -> a -> a -> PS a
+secondODE f y0 y0' =
   let
     y = defIntegrate y0 y'
     y' = defIntegrate y0' y''
@@ -39,4 +40,13 @@ expPS :: PS Double
 expPS = firstODE id 1
 
 sinPS :: PS Double
-sinPS = secODE (\y _ -> - y) 0 1
+sinPS = secondODE (\y _ -> - y) 0 1
+
+cosPS :: PS Double
+cosPS = secondODE (\y _ -> - y) 1 0
+
+tanPS :: PS Double
+tanPS = sinPS / cosPS
+
+hypergeometricPS :: Field a => a -> a -> a -> PS a
+hypergeometricPS a b c = fromGenFunc ((\n -> pochhammer a n * pochhammer b n/pochhammer c n/ fromInteger (factorial n)).fromIntegral)

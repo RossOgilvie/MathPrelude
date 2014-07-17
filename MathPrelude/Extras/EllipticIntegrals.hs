@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax, OverloadedStrings, BangPatterns #-}
+{-# LANGUAGE RebindableSyntax, BangPatterns #-}
 module MathPrelude.Extras.EllipticIntegrals
   (
   -- module MathPrelude.Constructions.Complex

@@ -1,8 +1,7 @@
 {-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Constructions.PowerSeries
   ( module MathPrelude.Algebraic.Field
-  , module MathPrelude.Algebraic.EuclideanDomain
-  , module MathPrelude.Algebraic.Module
+  , module MathPrelude.Classes.Evaluable
   , PS(..)
   , fromListPS ,toListPS
   , scalarPS, monomialPS, constPS
@@ -20,7 +19,6 @@ import qualified Prelude as P
 
 import MathPrelude.Algebraic.Module
 import MathPrelude.Algebraic.Field
-import MathPrelude.Algebraic.EuclideanDomain
 import MathPrelude.Classes.Derivation
 import MathPrelude.Constructions.Polynomial
 
@@ -67,11 +65,8 @@ evalPS :: Ring a => PS a -> a -> a
 evalPS ps = converge . drop ps_tail_fudge . partialSumsPS ps
 
 partialSumsPS :: Ring a => PS a -> a -> [a]
-partialSumsPS (PS xs) pt = partialSumsPS' 0 xs pt 0
-partialSumsPS' _ [] _ total = repeat total
-partialSumsPS' n (x:xs) pt total = current : partialSumsPS' (n+1) xs pt current
-  where current = total + x*pt^n
-
+partialSumsPS (PS xs) pt = partialSums $ zipWith (*) xs powers
+  where powers = iterate (pt*) 1
 
 toPoly :: Monoid a => Int -> PS a -> Poly a
 toPoly n = poly . take n . toListPS
@@ -130,23 +125,15 @@ instance IntDom a => IntDom (PS a)
 instance Module m r => Module (PS m) r where
   scale r p = map (scale r) p
 
-instance (Field a, NumEq a) => EuclideanDomain (PS a) where
-  stdUnit = scalarPS . constPS
-  stdAssociate p = p /. constPS p
-  -- div = old_div
-  -- p `mod` q = p - (p `div` q)*q
-  -- divMod = new_divMod
-  divMod = undefined
-
+instance (Field a, NumEq a) => Field (PS a) where
+  (/) = division
 
 -----------------------------------
 --- Routines
 -----------------------------------
 mul (PS xs) (PS ys) = PS $ mul' xs ys 0
 
-mul' xs ys n
-  | lx + ly > n+1 = cauchy : mul' xs ys (n+1)
-  | otherwise = []
+mul' xs ys n = cauchy : mul' xs ys (n+1)
   where
     xs' = take (n+1) xs
     ys' = take (n+1) ys
@@ -154,6 +141,29 @@ mul' xs ys n
     ly = length ys'
     ys'' = replicate (n+1 - ly) zero ++ reverse ys'
     cauchy = sum $ zipWith (*) xs' ys''
+
+-- the correct power is calculated here
+division :: Field a => PS a -> PS a -> PS a
+division (PS xs) (PS ys) = if deg_xs >= deg_ys then result else error "Power series division impossible: would result in negative powers."
+  where
+    deg_xs = length . takeWhile nearZero $ xs
+    deg_ys = length . takeWhile nearZero $ ys
+    xs' = drop deg_xs xs ++ repeat 0
+    ys' = drop deg_ys ys ++ repeat 0
+    result = shiftPower (deg_xs - deg_ys) $ PS $ division' xs' ys'
+
+-- this builds the resultant list
+division' :: Field a => [a] -> [a] -> [a]
+division' xs ys = zs
+  where
+    y = head ys
+    ys' = tail ys
+    listTaker :: [b] -> [[b]]
+    listTaker ls = zipWith take [0..] (repeat ls)
+    zss = listTaker zs
+    yss = map reverse $ listTaker ys'
+    cauchys = map sum $ zipWith (zipWith (*)) zss yss
+    zs = zipWith (\xn cn -> (xn - cn)/y) xs cauchys
 
 liftPS2 :: (a -> a -> a) -> PS a -> PS a -> PS a
 liftPS2 f (PS xs) (PS ys) = PS $ liftPS2' f xs ys
@@ -203,7 +213,7 @@ guts (PS xs) = P.show xs
 --     front = take d xs
 --     back = if length front == d then zero:drop (d+1) xs else []
 --
--- shiftPower :: Monoid a => Int -> PS a -> PS a
--- shiftPower d (PS xs)
---   | d < 0 = PS $ drop d xs
---   | otherwise = PS $ replicate d zero ++ xs
+shiftPower :: Monoid a => Int -> PS a -> PS a
+shiftPower d (PS xs)
+  | d < 0 = PS $ drop d xs
+  | otherwise = PS $ replicate d zero ++ xs

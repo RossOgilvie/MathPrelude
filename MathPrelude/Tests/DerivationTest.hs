@@ -12,7 +12,7 @@ import MathPrelude.Constructions.Quotient
 -- import MathPrelude.Common.Floating
 import MathPrelude.Extras.PolynomialFactorisation
 import MathPrelude.Tests.PolyTest
-import MathPrelude.Tests.QuotientTest
+import MathPrelude.Tests.RatioTest
 
 import Test.QuickCheck
 
@@ -36,15 +36,15 @@ allTypes1 x = sequence_
     , quickCheck (x :: Double -> Bool)
     ]
 
-allTypes1 :: (forall a. (Derivation a, Abelian a) => a -> Bool) -> IO ()
-allTypes1 x = sequence_
-    [ quickCheck (x :: Integer -> Bool)
-    , quickCheck (x :: Int -> Bool)
-    , quickCheck (x :: Int32 -> Bool)
-    , quickCheck (x :: Int64 -> Bool)
-    , quickCheck (x :: Float -> Bool)
-    , quickCheck (x :: Double -> Bool)
-    ]
+-- allTypes1 :: (forall a. (Derivation a, Abelian a) => a -> Bool) -> IO ()
+-- allTypes1 x = sequence_
+--     [ quickCheck (x :: Integer -> Bool)
+--     , quickCheck (x :: Int -> Bool)
+--     , quickCheck (x :: Int32 -> Bool)
+--     , quickCheck (x :: Int64 -> Bool)
+--     , quickCheck (x :: Float -> Bool)
+--     , quickCheck (x :: Double -> Bool)
+--     ]
 
 prop_leibniz_poly :: Poly Double -> Poly Double -> Bool
 prop_leibniz_poly = prop_leibniz
