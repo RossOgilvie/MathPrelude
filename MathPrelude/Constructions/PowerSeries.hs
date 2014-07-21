@@ -112,9 +112,10 @@ instance Monoid a => Monoid (PS a) where
   mempty = scalarPS mempty
   mappend = liftPS2 mappend
 
-instance Abelian a => Abelian (PS a) where
+instance Group a => Group (PS a) where
   negate = map negate
   (-) p q = mappend p (negate q)
+instance Abelian a => Abelian (PS a) where
 
 instance Ring a => Ring (PS a) where
   one = scalarPS one

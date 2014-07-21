@@ -100,10 +100,11 @@ instance Ring a => Monoid (Proj a) where
   mappend (Elem _) (Infty b) = Infty b
   mappend (Infty b) (Elem _) = Infty b
 
-instance Ring a => Abelian (Proj a) where
+instance Ring a => Group (Proj a) where
   negate (Zero a) = Zero (negate a)
   negate (Elem a) = Elem (negate a)
   negate (Infty a) = Infty (negate a)
+instance Ring a => Abelian (Proj a)
 
 instance Ring a => Ring (Proj a) where
   one = Elem one

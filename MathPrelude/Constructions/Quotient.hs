@@ -66,11 +66,12 @@ instance EuclideanDomain a => Monoid (Quotient a) where
   mempty = Quotient Nothing mempty
   mappend = liftQ2 mappend
 
-instance EuclideanDomain a => Abelian (Quotient a) where
+instance EuclideanDomain a => Group (Quotient a) where
   --zero = zero :% one
   --(+) (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
   negate = liftQ negate
   -- (-) (x:%y) (x':%y') = (x*y' - x'*y) :% (y*y')
+instance EuclideanDomain a => Abelian (Quotient a) where
 
 instance EuclideanDomain a => Ring (Quotient a) where
   one = Quotient Nothing one

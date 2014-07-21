@@ -1,6 +1,7 @@
-{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE NoImplicitPrelude, UnicodeSyntax #-}
 module MathPrelude.Algebraic.Abelian
 	( module MathPrelude.Classes.NumEq
+	, Group(..)
 	, Abelian(..)
 	, zero
 	, (+)
@@ -18,78 +19,71 @@ import MathPrelude.Common.PreludeNumConst
 -----------------------------------
 --- Classes
 -----------------------------------
-class (NumEq a, Monoid a) => Abelian a where
-	-- zero :: a
-	-- (+) :: a -> a -> a
+class (NumEq a, Monoid a) => Group a where
+
 	negate :: a -> a
 	(-) :: a -> a -> a
 
-	-- zero = mempty
-	-- (+) = (<>)
 	negate x = zero - x
-	(-) x y = x + negate y
+	(-) x y = x <> negate y
 
-infixl 6  +, -
+class Group a ⇒ Abelian a
+
+infixl 6 -
 
 -----------------------------------
 --- Methods
 -----------------------------------
-sum :: Monoid a => [a] -> a
-sum = foldr mappend mempty
+(+) :: Abelian a => a -> a -> a
+(+) = (<>)
+infixl 6 +
 
 zero :: Monoid a => a
 zero = mempty
 
-(+) :: Monoid a => a -> a -> a
-(+) = (<>)
+sum :: Monoid a => [a] -> a
+sum = foldr mappend mempty
 
 -----------------------------------
 --- Instances
 -----------------------------------
 instance Monoid Integer where mempty = zeroInteger; mappend = (P.+)
-instance Abelian Integer where
-	-- zero = mempty;
-	-- (+) = (P.+);
+instance Group Integer where
 	negate = P.negate;
 	(-) = (P.-)
+instance Abelian Integer
 
 instance Monoid Int where mempty = zeroInt; mappend = (P.+)
-instance Abelian Int where
-	-- zero = mempty;
-	-- (+) = (P.+);
+instance Group Int where
 	negate = P.negate;
 	(-) = (P.-)
+instance Abelian Int
 
 instance Monoid Int32 where mempty = zeroInt32; mappend = (P.+)
-instance Abelian Int32 where
-	-- zero = mempty;
-	-- (+) = (P.+);
+instance Group Int32 where
 	negate = P.negate;
 	(-) = (P.-)
+instance Abelian Int32
 
 instance Monoid Int64 where mempty = zeroInt64; mappend = (P.+)
-instance Abelian Int64 where
-	-- zero = mempty;
-	-- (+) = (P.+);
+instance Group Int64 where
 	negate = P.negate;
 	(-) = (P.-)
+instance Abelian Int64
 
 instance Monoid Float where mempty = zeroFloat; mappend = (P.+)
-instance Abelian Float where
-	-- zero = mempty;
-	-- (+) = (P.+);
+instance Group Float where
 	negate = P.negate;
 	(-) = (P.-)
+instance Abelian Float
 
 instance Monoid Double where mempty = zeroDouble; mappend = (P.+)
-instance Abelian Double where
-	-- zero = mempty;
-	-- (+) = (P.+);
+instance Group Double where
 	negate = P.negate;
 	(-) = (P.-)
+instance Abelian Double
 
-instance Abelian a => Abelian (Maybe a) where
-	-- zero = Just zero
-	-- (+) = liftM2 (+)
+instance Group a => Group (Maybe a) where
 	(-) = liftM2 (-)
 	negate = liftM negate
+instance Abelian a ⇒ Abelian (Maybe a)

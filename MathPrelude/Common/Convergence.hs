@@ -28,4 +28,4 @@ converge xs
 
 partialSums :: Monoid a => [a] -> [a]
 partialSums ls = tail ps
-  where ps = zero : zipWith (+) ps ls
+  where ps = zero : zipWith (<>) ps ls

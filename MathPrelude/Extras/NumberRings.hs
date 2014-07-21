@@ -27,7 +27,8 @@ findRecip m z = fst $ extEuclidAlg z m
 newtype Z2 = Z2 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z2 z = Z2 $ proj 2 z
@@ -37,7 +38,8 @@ instance Field Z2 where recip (Z2 z) = z2 $ findRecip 2 (element z)
 newtype Z3 = Z3 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z3 z = Z3 $ proj 3 z
@@ -47,7 +49,8 @@ instance Field Z3 where recip (Z3 z) = z3 $ findRecip 3 (element z)
 newtype Z4 = Z4 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z4 z = Z4 $ proj 4 z
@@ -55,7 +58,8 @@ z4 z = Z4 $ proj 4 z
 newtype Z5 = Z5 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z5 z = Z5 $ proj 5 z
@@ -65,7 +69,8 @@ instance Field Z5 where recip (Z5 z) = z5 $ findRecip 5 (element z)
 newtype Z6 = Z6 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z6 z = Z6 $ proj 6 z
@@ -73,7 +78,8 @@ z6 z = Z6 $ proj 6 z
 newtype Z7 = Z7 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z7 z = Z7 $ proj 7 z
@@ -83,7 +89,8 @@ instance Field Z7 where recip (Z7 z) = z7 $ findRecip 7 (element z)
 newtype Z8 = Z8 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z8 z = Z8 $ proj 8 z
@@ -91,7 +98,8 @@ z8 z = Z8 $ proj 8 z
 newtype Z9 = Z9 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z9 z = Z9 $ proj 9 z
@@ -99,7 +107,8 @@ z9 z = Z9 $ proj 9 z
 newtype Z10 = Z10 (Quotient Integer) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 z10 z = Z10 $ proj 10 z
@@ -107,7 +116,8 @@ z10 z = Z10 $ proj 10 z
 newtype Qr2 = Qr2 (Quotient (Poly Rational)) deriving
   ( Show, NumEq
   , Monoid
-  , Abelian
+  , Group
+	, Abelian
   , Ring
   )
 r2poly :: Poly Rational
