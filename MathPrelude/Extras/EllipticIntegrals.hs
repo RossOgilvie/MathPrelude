@@ -19,17 +19,20 @@ import MathPrelude.Common.Transcendental
 -----------------------------------
 --- Methods
 -----------------------------------
--- arithmetic geometric mean
+-- | The arithmetic geometric mean.
+-- <https://en.wikipedia.org/wiki/Arithmetic%E2%80%93geometric_mean Wikipedia>
 agm :: Transcendental a => a -> a -> a
 agm a g = fst . head . dropWhile test . iterate next $ (a,g)
   where
     next (!a,!g) = ((a+g)/ 2, sqrt (a*g))
     test (!a,!g) = not $ a =~ g
 
+-- | The complete elliptic integral of the first kind. The argument is the modulus k.
+-- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_first_kind Wikipedia>
 ellipticK :: Transcendental a => a -> a
 ellipticK k = (pi/2)/ agm (1-k) (1+k)
 
--- adlaj's modified agm for elliptic integrals of the 2nd kind
+-- | Adlaj's modified agm for elliptic integrals of the 2nd kind
 magm :: Transcendental a => a -> a -> a
 magm x y = (\(x,_,_) -> x) .head . dropWhile test . iterate next $ (x,y,zero)
   where
@@ -40,6 +43,8 @@ magm x y = (\(x,_,_) -> x) .head . dropWhile test . iterate next $ (x,y,zero)
     next p = (nextx p, nexty p, nextz p)
     test (x,y,_) = not $ x =~ y
 
+-- | The complete elliptic integral of the second kind. The argument is the modulus k.
+-- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_second_kind Wikipedia>
 ellipticE :: Transcendental a => a -> a
 ellipticE k = (pi/ 2) * (magm 1 k') / (agm 1 k')
   where k' = sqrt $ 1 - k^2
