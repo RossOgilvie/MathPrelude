@@ -16,6 +16,8 @@ import qualified Prelude as P
 
 import MathPrelude.Algebraic.Ring
 
+-- import qualified GHC.Integer.Type as GHC
+
 -----------------------------------
 --- Classes
 -----------------------------------
@@ -45,3 +47,21 @@ instance Integral Integer where toInteger = id
 instance Integral Int where toInteger = P.toInteger
 instance Integral Int32 where toInteger = P.toInteger
 instance Integral Int64 where toInteger = P.toInteger
+
+-----------------------------------
+-- Rerwite Rules -- for great justice!
+-----------------------------------
+
+-- try not to inline these functions until the last phase (phases count down), so the rewrite rule can come into effect
+{-# INLINE [0] fromIntegral98 #-}
+{-# RULES "fromIntegral98/a->a" fromIntegral98 = id #-}
+
+{-# INLINE [0] toIntegral98 #-}
+{-# RULES "toIntegral98/a->a" toIntegral98 = id #-}
+
+{-# INLINE [0] fromIntegral #-}
+{-# RULES "fromIntegral/a->a" fromIntegral = id #-}
+-- {-# RULES "fromIntegral/integerToInt" fromIntegral = GHC.integerToInt #-}
+-- {-# RULES "fromIntegral/smallInteger" fromIntegral = GHC.smallInteger #-}
+-- {-# RULES "fromIntegral/integerToInt64" fromIntegral = GHC.integerToInt64 #-}
+-- {-# RULES "fromIntegral/int64ToInteger" fromIntegral = GHC.int64ToInteger #-}
