@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax, OverloadedStrings #-}
+{-# LANGUAGE RebindableSyntax, OverloadedStrings, UnicodeSyntax #-}
 module MathPrelude.Algebraic.Ring
 	( module MathPrelude.Algebraic.Abelian
 	, Ring(..)
@@ -110,3 +110,8 @@ instance Num Double where abs = P.abs; signum = P.signum
 
 instance Ring a => Ring (Maybe a) where one = Just one; (*) = liftM2 (*); fromInteger x = Just (fromInteger x)
 instance IntDom a => IntDom (Maybe a)
+
+instance Ring b ⇒ Ring (a → b) where
+	one = const one
+	(*) f g x = (f x) * (g x)
+instance IntDom b ⇒ IntDom (a → b)

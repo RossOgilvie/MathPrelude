@@ -87,3 +87,11 @@ instance Group a => Group (Maybe a) where
 	(-) = liftM2 (-)
 	negate = liftM negate
 instance Abelian a ⇒ Abelian (Maybe a)
+
+-- instance Monoid b ⇒ Monoid (a→b) where
+-- 	mempty = const mempty
+-- 	mappend f g x = mappend (f x) (g x)
+instance NumEq b ⇒ NumEq (a→b) where
+instance Group b ⇒ Group (a→b) where
+	negate f x = negate (f x)
+instance Abelian b ⇒ Abelian (a→b)

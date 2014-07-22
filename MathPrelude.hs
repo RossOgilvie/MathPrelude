@@ -48,7 +48,7 @@ import MathPrelude.Common.Transcendental
 
 import MathPrelude.Extras.Combinatorics
 import MathPrelude.Extras.DifferentialEqns
-import MathPrelude.Extras.EllipticIntegrals
+import MathPrelude.Extras.EllipticFunctions
 import MathPrelude.Extras.Integration
 import MathPrelude.Extras.NewtonsMethod
 import MathPrelude.Extras.NumberRings
