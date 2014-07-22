@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Common.Real where
 
 ------------------------------
@@ -6,7 +6,6 @@ module MathPrelude.Common.Real where
 ------------------------------
 import BasicPrelude
 import qualified Prelude as P
-
 
 import qualified GHC.Float as GF
 
@@ -16,32 +15,39 @@ import MathPrelude.Common.Integral
 ------------------------------
 --- Classes
 ------------------------------
-
+-- | A class representing real numbers. The canonical representation is sadly the 'Double'.
 class Real a where
-	fromDouble :: Double -> a
-	toDouble :: a -> Double
-	convReal :: Real b => a -> b
+	-- | Marshall a Double
+	fromDouble ∷ Double → a
+	-- | Export a Double
+	toDouble ∷ a → Double
+	-- | Convert between any two real types.
+	convReal ∷ Real b ⇒ a → b
 
-	truncate, round, ceiling, floor :: Integral b => a -> b
+	-- Recover an integral type by rounding.
+	truncate, round, ceiling, floor ∷ Integral b ⇒ a → b
 
 	convReal = fromDouble . toDouble
 	truncate = floor
 	floor x = ceiling x - one
-	ceiling x = floor x + one
+	ceiling x = truncate x + one
 
+	{-# MINIMAL fromDouble, toDouble, round, (floor | ceiling | truncate) #-}
 
-class Real a => RealFrac a
+-- | A compatibility class.
+class Real a ⇒ RealFrac a
 
-class Real a => RealFloat a where
-	floatRadix          :: a -> Integer
-	floatDigits         :: a -> Int
-	floatRange          :: a -> (Int,Int)
-	decodeFloat         :: a -> (Integer,Int)
-	encodeFloat         :: Integer -> Int -> a
-	exponent            :: a -> Int
-	significand         :: a -> a
-	scaleFloat          :: Int -> a -> a
-	isNaN, isInfinite, isDenormalized, isNegativeZero, isIEEE :: a -> Bool
+-- | A class containing all the operations that examine parts of floating point numbers. Same as the prelude's version, but without atan2.
+class Real a ⇒ RealFloat a where
+	floatRadix          ∷ a → Integer
+	floatDigits         ∷ a → Int
+	floatRange          ∷ a → (Int,Int)
+	decodeFloat         ∷ a → (Integer,Int)
+	encodeFloat         ∷ Integer → Int → a
+	exponent            ∷ a → Int
+	significand         ∷ a → a
+	scaleFloat          ∷ Int → a → a
+	isNaN, isInfinite, isDenormalized, isNegativeZero, isIEEE ∷ a → Bool
 
 ------------------------------
 --- Methods

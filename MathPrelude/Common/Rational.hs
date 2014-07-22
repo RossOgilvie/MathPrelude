@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Common.Rational
 	( Rational
 	, CharZero(..)
@@ -22,35 +22,49 @@ import MathPrelude.Common.Integral
 ------------------------------
 --- Classes
 ------------------------------
+-- | The canonical version of a rational number.
 type Rational = Ratio Integer
 
+-- | The only morphisms of field are injections. Thus there is a map from the rationals to a field if and only if the field has characteristic zero (ie it contains a subfield equal to the rationals).
 class CharZero a where
-	fromRational' :: Rational -> a
+	-- | Convert from a 'Rational' number to an element of the field. The prime is because the function fromRational must be defined on the prelude's Rational type, and is a reserved name.
+	fromRational' ∷ Rational → a
 
-class CharZero a => Q a where
-	toRational :: a -> Rational
-	convRational :: a -> a
+	{-# MINIMAL fromRational' #-}
+
+-- | This class asserts that the field is not only characteristic zero, but is infact isomorphic to the rationals. Thus we can convert back and forth between the two types.
+class CharZero a ⇒ Q a where
+	-- | Convert back into a canonical 'Rational'
+	toRational ∷ a → Rational
+	-- | Convert between any two machine representations of the rationals.
+	convRational ∷ Q b ⇒ a → b
 	convRational = fromRational' . toRational
 
-class CharZero a => Fractional a
+	{-# MINIMAL toRational #-}
+
+-- | For backwards compatibility with the prelude's Fractional class, that roughly corresponds to the above.
+class CharZero a ⇒ Fractional a
 
 ------------------------------
 --- Methods
 ------------------------------
-fromRational :: CharZero a => P.Rational -> a
+-- | Used to marshall numeric literals into types. Must be defined on prelude's rational type. Needed to use expresions such as 0.5 if RebindaleSyntax is enabled.
+fromRational ∷ CharZero a ⇒ P.Rational → a
 fromRational x = fromRational' (Ratio98.numerator x :% Ratio98.denominator x)
 
-toRational98 :: Rational -> P.Rational
+-- | Helper function to go between the prelude's and our rational types
+toRational98 ∷ Rational → P.Rational
 toRational98 x = numerator x Ratio98.% denominator x
-fromRational98 :: P.Rational -> Rational
+-- | Helper function to go between the prelude's and our rational types
+fromRational98 ∷ P.Rational → Rational
 fromRational98 x = Ratio98.numerator x :% Ratio98.denominator x
 
 ------------------------------
 --- Instances
 ------------------------------
-instance Integral a => CharZero (Ratio a) where
+instance Integral a ⇒ CharZero (Ratio a) where
 	 fromRational' (x :% y) = (fromInteger x) :% (fromInteger y)
-instance Integral a => Q (Ratio a) where
+instance Integral a ⇒ Q (Ratio a) where
 	 toRational (x :% y) = (toInteger x) :% (toInteger y)
 
 

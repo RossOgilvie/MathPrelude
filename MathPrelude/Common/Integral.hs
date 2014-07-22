@@ -1,9 +1,10 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Common.Integral
 	( Integral(..)
 	, fromIntegral98
 	, toIntegral98
 	, fromIntegral
+	-- * Misc
 	, even
 	, odd
 	) where
@@ -21,23 +22,30 @@ import MathPrelude.Algebraic.Ring
 -----------------------------------
 --- Classes
 -----------------------------------
-class (Ring a, Enum a) => Integral a where
-	toInteger :: a -> Integer
+-- | This class describes types that can be transformed into the canonical integer type Integer. All rings already have a map from Integer, and these should be inverses.
+class (Ring a, Enum a) ⇒ Integral a where
+	-- | Convert to Integer
+	toInteger ∷ a → Integer
 
 -----------------------------------
 --- Methods
 -----------------------------------
-fromIntegral98 :: (P.Integral a, Integral b) => a -> b
+-- | Convert from a Prelude defined Integral type to our Integral
+fromIntegral98 ∷ (P.Integral a, Integral b) ⇒ a → b
 fromIntegral98 = fromInteger . P.fromIntegral
-toIntegral98 :: (Integral a, P.Integral b) => a -> b
+-- | Convert from our Integral type to the Prelude defined Integral type.
+toIntegral98 ∷ (Integral a, P.Integral b) ⇒ a → b
 toIntegral98 = P.fromIntegral . toInteger
 
-fromIntegral :: (Integral a, Ring b) => a -> b
+-- | Convert any integral to an element of any ring.
+fromIntegral ∷ (Integral a, Ring b) ⇒ a → b
 fromIntegral =  fromInteger . toInteger
 
-even :: Integral a => a -> Bool
+-- | Test whether an integral is even.
+even ∷ Integral a ⇒ a → Bool
 even = P.even . toInteger
-odd :: Integral a => a -> Bool
+-- | Test whether an integral is odd.
+odd ∷ Integral a ⇒ a → Bool
 odd = P.odd . toInteger
 
 -----------------------------------
@@ -54,13 +62,13 @@ instance Integral Int64 where toInteger = P.toInteger
 
 -- try not to inline these functions until the last phase (phases count down), so the rewrite rule can come into effect
 {-# INLINE [0] fromIntegral98 #-}
-{-# RULES "fromIntegral98/a->a" fromIntegral98 = id #-}
+{-# RULES "fromIntegral98/a→a" fromIntegral98 = id #-}
 
 {-# INLINE [0] toIntegral98 #-}
-{-# RULES "toIntegral98/a->a" toIntegral98 = id #-}
+{-# RULES "toIntegral98/a→a" toIntegral98 = id #-}
 
 {-# INLINE [0] fromIntegral #-}
-{-# RULES "fromIntegral/a->a" fromIntegral = id #-}
+{-# RULES "fromIntegral/a→a" fromIntegral = id #-}
 -- {-# RULES "fromIntegral/integerToInt" fromIntegral = GHC.integerToInt #-}
 -- {-# RULES "fromIntegral/smallInteger" fromIntegral = GHC.smallInteger #-}
 -- {-# RULES "fromIntegral/integerToInt64" fromIntegral = GHC.integerToInt64 #-}

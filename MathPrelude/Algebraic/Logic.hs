@@ -31,7 +31,7 @@ xor True False = True
 xor False True = True
 xor False False = False
 
--- | Exactly what you expect. This is required since the rebindable syntax extention overrides this as well, and without it "if-then-else" syntax won't work.
+-- | Exactly what you expect. This is required since the rebindable syntax extension overrides this as well, and without it "if-then-else" syntax won't work.
 ifThenElse ∷ Bool → a → a → a
 ifThenElse t a b
 	| t = a

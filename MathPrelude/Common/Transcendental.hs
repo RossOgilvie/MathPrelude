@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Common.Transcendental where
 
 ------------------------------
@@ -12,18 +12,30 @@ import MathPrelude.Algebraic.Field
 ------------------------------
 --- Classes
 ------------------------------
-class Field a => Transcendental a where
-	pi                  :: a
-	exp, log, sqrt      :: a -> a
-	(**), logBase       :: a -> a -> a
-	sin, cos, tan       :: a -> a
-	asin, acos, atan    :: a -> a
-	atan2								:: a -> a -> a
-	sinh, cosh, tanh    :: a -> a
-	asinh, acosh, atanh :: a -> a
+-- | A class containg the simply transcendental functions, also known as the elementary transcendental functions.
+class Field a ⇒ Transcendental a where
+	-- | Everyone's favourite constant.
+	pi                  ∷ a
+	-- | The core functions. No specification about branch cuts.
+	exp, log, sqrt      ∷ a → a
+	-- | The generalised exponetiation operation (c.f. '^').
+	(**)   					    ∷ a → a → a
+	-- | The logarithm in the specified base. The base is the first argument.
+	logBase 			      ∷ a → a → a
+	-- | Standard trigonometry functions.
+	sin, cos, tan       ∷ a → a
+	-- | Inverse trigonometry functions, also known as sin^-1 or arcsin, etc.
+	asin, acos, atan    ∷ a → a
+	-- | atan x y = atan (y/x), but well defined when x is zero.
+	atan2								∷ a → a → a
+	-- | Hyperbolic trig functions.
+	sinh, cosh, tanh    ∷ a → a
+	-- | Inverse hyperbolic trig functions.
+	asinh, acosh, atanh ∷ a → a
 
-	logBase b x = log x / log b
+	sqrt x = x ** (recip 2)
 	x ** y = exp ( y * log x )
+	logBase b x = log x / log b
 	tan x = sin x / cos x
 	sinh x = (exp x - exp (negate x)) / 2
 	cosh x = (exp x + exp (negate x)) / 2
@@ -31,6 +43,8 @@ class Field a => Transcendental a where
 	asinh x = log (x + sqrt(x*x  + 1))
 	acosh x = log (x + sqrt(x*x  - 1))
 	atanh x = log ((1 + x)/(1 - x)) / 2
+
+	{-# MINIMAL pi, exp, log, sin, cos, asin, acos, atan, atan2 #-}
 
 ------------------------------
 --- Instances
