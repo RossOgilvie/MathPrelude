@@ -2,7 +2,7 @@
 module MathPrelude.Classes.Derivation where
 
 import BasicPrelude
-import MathPrelude.Algebraic.Abelian
+import MathPrelude.Algebraic.Group
 -- import qualified Prelude as P
 
 class Derivation r where

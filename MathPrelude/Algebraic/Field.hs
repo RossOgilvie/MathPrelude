@@ -14,19 +14,25 @@ import MathPrelude.Algebraic.Ring
 --- Classes
 ------------------------------
 
-class IntDom a => Field a where
-	recip :: a -> a
-	(/) :: a -> a -> a
+-- | A field is an integral domain where every non zero element has a multiplicative inverse (a reciprocal). Behaviour is unspeicifed if you divide by zero.
+class IntDom a ⇒ Field a where
+	-- | The reciprocal of an element
+	recip ∷ a → a
+	-- | Divide one element by another
+	(/) ∷ a → a → a
 
 	recip x = one / x
 	(/) x y = x * recip y
+
+	{-# MINIMAL recip | (/) #-}
 
 
 ------------------------------
 --- Methods
 ------------------------------
 
-half :: Field a => a
+-- | A convenient helper. half = 0.5 = 1/2 = recip 2
+half ∷ Field a ⇒ a
 half = recip 2
 
 ------------------------------

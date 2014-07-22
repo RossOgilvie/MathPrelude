@@ -4,7 +4,7 @@ module MathPrelude
 	, module MathPrelude.Classes.NumEq
 
 	, module MathPrelude.Algebraic.Logic
-	, module MathPrelude.Algebraic.Abelian
+	, module MathPrelude.Algebraic.Group
 	, module MathPrelude.Algebraic.Ring
 	, module MathPrelude.Algebraic.EuclideanDomain
 	, module MathPrelude.Algebraic.Field
@@ -26,7 +26,7 @@ import MathPrelude.Classes.Evaluable
 import MathPrelude.Classes.Norm
 
 import MathPrelude.Algebraic.Logic
-import MathPrelude.Algebraic.Abelian
+import MathPrelude.Algebraic.Group
 import MathPrelude.Algebraic.Ring
 import MathPrelude.Algebraic.EuclideanDomain
 import MathPrelude.Algebraic.Field

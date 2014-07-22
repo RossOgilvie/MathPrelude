@@ -1,5 +1,5 @@
-{-# LANGUAGE NoImplicitPrelude, UnicodeSyntax #-}
-module MathPrelude.Algebraic.Abelian
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+module MathPrelude.Algebraic.Group
 	( module MathPrelude.Classes.NumEq
 	, Group(..)
 	, Abelian(..)
@@ -19,29 +19,35 @@ import MathPrelude.Common.PreludeNumConst
 -----------------------------------
 --- Classes
 -----------------------------------
-class (NumEq a, Monoid a) => Group a where
-
-	negate :: a -> a
-	(-) :: a -> a -> a
+-- | This class defines a group. It extends the monoid structure by allowing negation. Minimal definition is either 'negate' or '-'
+class (NumEq a, Monoid a) ⇒ Group a where
+	negate ∷ a → a
+	(-) ∷ a → a → a
 
 	negate x = zero - x
 	(-) x y = x <> negate y
 
-class Group a ⇒ Abelian a
+	{-# MINIMAL negate | (-)  #-}
 
 infixl 6 -
+
+-- | This class blesses a group to say that it is abelian. Abelian groups are ones with a commutative operation.
+class Group a ⇒ Abelian a
 
 -----------------------------------
 --- Methods
 -----------------------------------
-(+) :: Abelian a => a -> a -> a
+-- | Provides a synonym for the group operation, that may only be used if the group has been declared abelian.
+(+) ∷ Abelian a ⇒ a → a → a
 (+) = (<>)
 infixl 6 +
 
-zero :: Monoid a => a
+-- | Provides a synonym for the group identity.
+zero ∷ Monoid a ⇒ a
 zero = mempty
 
-sum :: Monoid a => [a] -> a
+-- | Fold a list together with the monoid operation.
+sum ∷ Monoid a ⇒ [a] → a
 sum = foldr mappend mempty
 
 -----------------------------------
@@ -83,7 +89,7 @@ instance Group Double where
 	(-) = (P.-)
 instance Abelian Double
 
-instance Group a => Group (Maybe a) where
+instance Group a ⇒ Group (Maybe a) where
 	(-) = liftM2 (-)
 	negate = liftM negate
 instance Abelian a ⇒ Abelian (Maybe a)

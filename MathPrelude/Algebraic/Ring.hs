@@ -1,6 +1,6 @@
-{-# LANGUAGE RebindableSyntax, OverloadedStrings, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings #-}
 module MathPrelude.Algebraic.Ring
-	( module MathPrelude.Algebraic.Abelian
+	( module MathPrelude.Algebraic.Group
 	, Ring(..)
 	, Num(..)
 	, IntDom(..)
@@ -15,7 +15,7 @@ module MathPrelude.Algebraic.Ring
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Abelian
+import MathPrelude.Algebraic.Group
 import MathPrelude.Common.PreludeNumConst
 -- import MathPrelude.Common.Integral(even)
 
@@ -23,10 +23,14 @@ import MathPrelude.Common.PreludeNumConst
 -----------------------------------
 --- Classes
 -----------------------------------
-class Abelian a => Ring a where
-	one :: a
-	(*) :: a -> a -> a
-	fromInteger :: Integer -> a
+-- | A ring is an abelian group with a multiplication operation that distributes over addition. This operation has an identity element. The is always a homomorphism from the ring of integers to any ring R, given by repeated addition (\n → 1 + .... + 1 or (-1) + ... + (-1)), (alternatively, a ring is just a Z-module).
+class Abelian a ⇒ Ring a where
+	-- | The identity element
+	one ∷ a
+	-- | The multiplication operation
+	(*) ∷ a → a → a
+	-- | Push an integer into the ring.
+	fromInteger ∷ Integer → a
 
 	fromInteger n
 		| n < zeroInteger = negate (fi (negate n))
@@ -39,36 +43,41 @@ class Abelian a => Ring a where
 					| otherwise = fin + fin + one
 						where fin = fi (n `P.div` twoInteger)
 
+	{-# MINIMAL one, (*) #-}
+
 infixl 7 *
 
+-- | A compatibility class to replace the Prelude Num class.
+class (Eq a, Show a, Ring a) ⇒ Num a  where
+    abs, signum ∷ a → a
 
-class (Eq a, Show a, Ring a) => Num a  where
-    abs, signum :: a -> a
+-- instance Num a ⇒ P.Num a
 
--- instance Num a => P.Num a
-
-class Ring a => IntDom a
+-- | An integral domain is a ring with the property that non-zero elements multiply to give non-zero elements. Another way to say this is that there are no zero divisors. This is equivalent to the cancellation law holding.
+class Ring a ⇒ IntDom a
 
 
 -----------------------------------
 -- Methods
 -----------------------------------
-product :: Ring a => [a] -> a
+-- | Fold a list together multiplicatively
+product ∷ Ring a ⇒ [a] → a
 product = foldr (*) one
 
-(^) :: Ring a => a -> Int -> a
+-- | Take the repeated product of an element of the ring. eg a^3 = a*a*a. Throws an error on negative powers.
+(^) ∷ Ring a ⇒ a → Int → a
 (^) x n
 	| n < 0 = error "negative power"
 	| n == 0 = one
 	| otherwise = product $ zipWith f (intToBinary n) powers
 		where
-			powers = iterate (\a -> a*a) x
+			powers = iterate (\a → a*a) x
 			f b x = if b then x else one
 			-- f True x = x
 			-- f False _ = one
 
-
-intToBinary :: Int -> [Bool]
+-- | converts an int to a list of binary digits. True= 1, False = 0
+intToBinary ∷ Int → [Bool]
 intToBinary n = reverse $ intToBinary' n powers
 	where
 		powers = reverse $ takeWhile (<= n) twopowers
@@ -78,9 +87,10 @@ intToBinary' n (x:xs)
 	| n >= x = True : intToBinary' (n-x) xs
 	| otherwise = False : intToBinary' n xs
 
+-- | The powers of 2
 twopowers = 1 : map (*2) twopowers
 
--- two :: Ring a => a
+-- two ∷ Ring a ⇒ a
 -- two = one + one
 
 -----------------------------------
@@ -108,8 +118,8 @@ instance Num Int64 where abs = P.abs; signum = P.signum
 instance Num Float where abs = P.abs; signum = P.signum
 instance Num Double where abs = P.abs; signum = P.signum
 
-instance Ring a => Ring (Maybe a) where one = Just one; (*) = liftM2 (*); fromInteger x = Just (fromInteger x)
-instance IntDom a => IntDom (Maybe a)
+instance Ring a ⇒ Ring (Maybe a) where one = Just one; (*) = liftM2 (*); fromInteger x = Just (fromInteger x)
+instance IntDom a ⇒ IntDom (Maybe a)
 
 instance Ring b ⇒ Ring (a → b) where
 	one = const one
