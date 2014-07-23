@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Classes.NumEq
 	( module MathPrelude.Algebraic.Logic
 	, NumEq(..)
@@ -16,13 +16,19 @@ import MathPrelude.Common.PreludeNumConst
 -----------------------------------
 --- Class
 -----------------------------------
+-- | A class providing comparison operations for numeric types.
 class NumEq a where
-	(=~) :: a -> a -> Bool
-	(/=~) :: a -> a -> Bool
+	-- | Numerically equal. Reduces to (==) for exact types, but useful for say Doubles
+	(=~) ∷ a → a → Bool
+	-- | Numericall not equal
+	(/=~) ∷ a → a → Bool
 
-	epsilon :: a
-	nearZero :: a -> Bool
-	(>>~) :: a -> a -> Bool
+	-- | The tolerance permitted by '=~'
+	epsilon ∷ a
+	-- | Test where a value s approximately zero (to within tolerance)
+	nearZero ∷ a → Bool
+	-- | Test whether something is small, compared to another value. Think >> in mathematics. For exact types, the reference magnitude is ignored. 1e20 >>~ 1 = True.
+	(>>~) ∷ a → a → Bool
 
 	(=~) x y = not $ (/=~) x y
 	(/=~) x y = not $ (=~) x y
@@ -34,20 +40,25 @@ infixl 4 >>~
 -----------------------------------
 --- Methods
 -----------------------------------
-small :: NumEq a => a -> a -> Bool
+-- | A function name for '>>~'
+small ∷ NumEq a ⇒ a → a → Bool
 small = (>>~)
 
-smallL :: NumEq a => [a] -> a -> Bool
+-- | Test whether a value is small compared to the values in a list.
+smallL ∷ NumEq a ⇒ [a] → a → Bool
 smallL ls x = small (leastSmall ls) x
 
-(<<~) :: NumEq a => a -> a -> Bool
+-- | A flip of '<<~'
+(<<~) ∷ NumEq a ⇒ a → a → Bool
 (<<~) = flip (>>~)
 infixl 4 <<~
 
-big :: NumEq a => a -> a -> Bool
+-- | A flip of 'small'
+big ∷ NumEq a ⇒ a → a → Bool
 big = flip (>>~)
 
-leastSmall :: NumEq a => [a] -> a
+-- | Find the smallest value in a list, in the sense that it is big compared to no other elements.
+leastSmall ∷ NumEq a ⇒ [a] → a
 leastSmall [] = epsilon
 leastSmall (x:xs)
 	| or (map (big x) xs) = leastSmall xs
@@ -94,19 +105,19 @@ instance NumEq Double where
 		| otherwise = P.abs a P./ P.abs o <= epsilon
 
 
-instance NumEq a => NumEq [a] where
+instance NumEq a ⇒ NumEq [a] where
 	(=~) x y = length x == length y && (and $ zipWith (=~) x y)
 	epsilon = [epsilon]
 	nearZero xs = and . map nearZero $ xs
 	(>>~) os xs = and . map (smallL os) $ xs
 
-instance (NumEq a, NumEq b) => NumEq (a,b) where
+instance (NumEq a, NumEq b) ⇒ NumEq (a,b) where
 	(a,b) =~ (c,d) = a =~ c && b =~ d
 	epsilon = (epsilon,epsilon)
 	nearZero (a,b) = nearZero a && nearZero b
 	(>>~) (o1,o2) (a,b) = (>>~) o1 a && (>>~) o2 b
 
-instance NumEq a => NumEq (Maybe a) where
+instance NumEq a ⇒ NumEq (Maybe a) where
 	(=~) (Just x) (Just y) = x =~ y
 	(=~) Nothing Nothing = True
 	(=~) _ _ = False

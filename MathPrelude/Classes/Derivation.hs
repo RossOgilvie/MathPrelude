@@ -1,15 +1,18 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Classes.Derivation where
 
 import BasicPrelude
 import MathPrelude.Algebraic.Group
 -- import qualified Prelude as P
 
+-- | A class representing derivable types.
+-- Should replace with Kmett's AD
 class Derivation r where
-  derive :: r -> r
+  derive ∷ r → r
 
+-- | A class representing integrable types.
 class Integration r where
-  integrate :: r -> r
+  integrate ∷ r → r
 
 -----------------------------------
 --- Instances

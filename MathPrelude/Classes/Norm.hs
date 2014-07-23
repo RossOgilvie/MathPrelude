@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Classes.Norm where
 
 import BasicPrelude
@@ -7,9 +7,10 @@ import qualified Prelude as P
 -- import MathPrelude.Common.PreludeNumConst
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Real
---
+
+-- | A class for norms. BROKEN/NEEDS SERIOUS THOUGHT AND REVISION
 class Norm a where
-  norm :: Real b => a -> b
+  norm ∷ Real b ⇒ a → b
 
 
 instance Norm Int where
