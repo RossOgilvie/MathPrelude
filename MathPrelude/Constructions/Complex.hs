@@ -1,6 +1,7 @@
-{-# LANGUAGE RebindableSyntax, OverloadedStrings, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, UndecidableInstances #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, UndecidableInstances #-}
 module MathPrelude.Constructions.Complex
 	( Complex(..)
+	, display
 	, iu, realPart, imagPart
 	, fromReal
 	, fromArg, arg, primitiveRoot
@@ -14,6 +15,8 @@ module MathPrelude.Constructions.Complex
 import BasicPrelude
 import qualified Prelude as P
 
+import Data.Complex(Complex(..))
+
 import MathPrelude.Algebraic.Field
 import MathPrelude.Classes.Derivation
 import MathPrelude.Classes.Evaluable
@@ -26,38 +29,56 @@ import MathPrelude.Common.Rational
 --- Classes
 -----------------------------------
 
-data Complex a = a :+ a deriving (Eq)
+-- data LazyComplex a = a :+~ a deriving (Eq)
 
 -----------------------------------
 --- Methods
 -----------------------------------
+-- | Display a complex number bracketed in the common notational form.
+display ∷ (Show a, NumEq a, Monoid a) ⇒ Complex a → Text
+display (x :+ y)
+	| x >>~ y = show x
+	| y >>~ x = show y ++ "i"
+	| otherwise = "(" ++ show x ++ "+" ++ show y ++ "i)"
 
-iu :: Ring a => Complex a
+-- | The imaginary unit, ie 0:+1.
+iu ∷ Ring a ⇒ Complex a
 iu = zero :+ one
-realPart :: Complex a -> a
+-- | The real part of a complex number.
+realPart ∷ Complex a → a
 realPart (x:+_) = x
-imagPart :: Complex a -> a
+-- | The imaginary part of a complex number.
+imagPart ∷ Complex a → a
 imagPart (_:+y) = y
 
-fromReal :: Monoid a => a -> Complex a
+-- | Contruct a complex number from a real one.
+fromReal ∷ Monoid a ⇒ a → Complex a
 fromReal r = r :+ mempty
-fromArg :: Transcendental a => a -> Complex a
+-- | Construct a unit norm complex from its argument.
+fromArg ∷ Transcendental a ⇒ a → Complex a
 fromArg x = (cos x) :+ (sin x)
-fromPolar :: (Ring a, Transcendental a) => a -> a -> Complex a
+-- | Construct a complex number from its polar representation (r,θ).
+fromPolar ∷ (Ring a, Transcendental a) ⇒ a → a → Complex a
 fromPolar r t = r .* (fromArg t)
-toPolar ::  (Ord a, Field a, Transcendental a) => Complex a -> (a,a)
+-- | Export a complex number to its polar representation (r,θ).
+toPolar ∷  (Ord a, Field a, Transcendental a) ⇒ Complex a → (a,a)
 toPolar z = (sqrt $ normsq' z, arg z)
 
-conjugate :: Abelian a => Complex a -> Complex a
+-- | Take the conjugate of a complex number, ie negate the imaginary part
+conjugate ∷ Abelian a ⇒ Complex a → Complex a
 conjugate (x:+y) = (x:+ (negate y))
-normsq :: Ring a => Complex a -> Complex a
+-- | Take the square of the norm of a complex number, expressed a (purely real) complex number
+normsq ∷ Ring a ⇒ Complex a → Complex a
 normsq z = z * conjugate z
-normsq' :: Ring a => Complex a -> a
+-- | Take the square of the norm of a complex number, expressed a real number
+normsq' ∷ Ring a ⇒ Complex a → a
 normsq' = realPart . normsq
-norm :: (Ring a, Transcendental a) => Complex a -> a
+-- | Take the norm of a complex number, expressed a real number, ie sqrt 'normsq''
+norm ∷ (Ring a, Transcendental a) ⇒ Complex a → a
 norm = sqrt . realPart . normsq
 
-arg :: (Ord a, Field a, Transcendental a) => Complex a -> a
+-- | Compute the argument of a complex numer. The range is from -pi to pi. Arg 0 = 0. Arg (-x:+0) = pi.
+arg ∷ (Ord a, Field a, Transcendental a) ⇒ Complex a → a
 arg (x :+ y)
 	| x > zero = atan (y/x)
 	| nearZero x && y > zero = pi * half
@@ -68,7 +89,8 @@ arg (x :+ y)
 	| x < zero && nearZero y = pi
 	| otherwise = zero
 
-primitiveRoot :: Int -> Complex Double
+-- | Compute the primitive nth root of unity with least argument.
+primitiveRoot ∷ Int → Complex Double
 primitiveRoot n = fromArg (2*pi/fromIntegral n)
 
 
@@ -78,18 +100,12 @@ primitiveRoot n = fromArg (2*pi/fromIntegral n)
 
 instance Functor Complex where
 	fmap f (x :+ y) = f x :+ f y
-instance (Show a, NumEq a, Monoid a)  => Show (Complex a) where
-	show (x :+ y)
-		| x >>~ y = P.show x
-		| y >>~ x = P.show y ++ "i"
-		| otherwise = "(" ++ P.show x ++ "+" ++ P.show y ++ "i)"
 
-
-instance Derivation a => Derivation (Complex a) where
+instance Derivation a ⇒ Derivation (Complex a) where
 	derive (x:+y) = (derive x) :+ (derive y)
-instance Evaluable a b c => Evaluable (Complex a) b (Complex c) where
+instance Evaluable a b c ⇒ Evaluable (Complex a) b (Complex c) where
 	eval (x:+y) p = (eval x p) :+ (eval y p)
-instance NumEq a => NumEq (Complex a) where
+instance NumEq a ⇒ NumEq (Complex a) where
 	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)
 	epsilon = epsilon :+ epsilon
 	nearZero (a:+b)= nearZero a && nearZero b
@@ -97,37 +113,37 @@ instance NumEq a => NumEq (Complex a) where
 		where m = leastSmall [x,y]
 
 
-instance Monoid a => Monoid (Complex a) where
+instance Monoid a ⇒ Monoid (Complex a) where
 	mempty = mempty :+ mempty
 	mappend (x:+y) (x':+y') = mappend x x' :+ mappend y y'
-instance Group a => Group (Complex a) where
+instance Group a ⇒ Group (Complex a) where
 	negate (x:+y) = negate x :+ negate y
-instance Abelian a => Abelian (Complex a) where
-instance Ring a => Ring (Complex a) where
+instance Abelian a ⇒ Abelian (Complex a) where
+instance Ring a ⇒ Ring (Complex a) where
 	one = one :+ zero
 	(*) (x:+y) (x':+y') = (x*x' - y*y') :+ (x*y' + x'*y)
 	fromInteger x = fromInteger x :+ zero
-instance IntDom a => IntDom (Complex a)
-instance Field a => Field (Complex a) where
+instance IntDom a ⇒ IntDom (Complex a)
+instance Field a ⇒ Field (Complex a) where
 	recip z@(x:+y) = (x/zz) :+ (negate y/zz)
 		where zz = normsq' z
-instance Module m r => Module (Complex m) r where
+instance Module m r ⇒ Module (Complex m) r where
 	scale r z = map (scale r) z
 
-instance Num a => Num (Complex a) where
+instance Num a ⇒ Num (Complex a) where
 	abs = undefined
 	signum = undefined
 
-instance (Monoid a, CharZero a) => CharZero (Complex a) where
+instance (Monoid a, CharZero a) ⇒ CharZero (Complex a) where
 	fromRational' = fromReal . fromRational'
--- instance Ring s => Module (Complex s) s where
+-- instance Ring s ⇒ Module (Complex s) s where
 -- 	scale r (x :+ y) = (r*x) :+ (r*y)
 
 
-half' :: Field a => Complex a
+half' ∷ Field a ⇒ Complex a
 half' = fromReal $ half
 
-instance (Ord a, Field a, Transcendental a) => Transcendental (Complex a) where
+instance (Ord a, Field a, Transcendental a) ⇒ Transcendental (Complex a) where
 	pi = fromReal pi
 	exp (x:+y) = (exp x) .* (fromArg y)
 	log z = (log r) :+ t

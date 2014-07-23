@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Constructions.Polynomial
 	( module MathPrelude.Algebraic.Field
 	, module MathPrelude.Algebraic.EuclideanDomain
@@ -28,50 +28,58 @@ import MathPrelude.Common.Rational
 -----------------------------------
 --- Poly
 -----------------------------------
+-- | A sparse representation of polynomials.
 data Poly a = Poly [(Int,a)] deriving (Eq)
 
 
 -----------------------------------
 --- Methods
 -----------------------------------
-
-poly :: Monoid a => [a] -> Poly a
+-- | Construct a polynomial from its list of coefficients.
+poly ∷ Monoid a ⇒ [a] → Poly a
 poly [] = Poly [(0, mempty)]
 poly ls = Poly . zip [0..] $ ls
 
-monomialP :: Int -> a -> Poly a
+-- | Contruct a monomial with the specified degree and coefficient.
+monomialP ∷ Int → a → Poly a
 monomialP d c
 	| d >= 0 = Poly [(d,c)]
 	| otherwise = Poly [(0,c)]
 
-xnP :: Ring a => Int -> Poly a
+-- | Construct a monic monomial with the specified degree.
+xnP ∷ Ring a ⇒ Int → Poly a
 xnP n = monomialP n one
 
-scalarP :: a -> Poly a
+-- | Embed a scalar into the ring of polynomials.
+scalarP ∷ a → Poly a
 scalarP c = Poly [(0,c)]
 
-fromFactorsP :: Ring a => [a] -> Poly a
-fromFactorsP ls = product . map (\l -> poly [-l,1]) $ ls
+-- | Construct a monic polynomial with the specified roots (counting multiplicities).
+fromFactorsP ∷ Ring a ⇒ [a] → Poly a
+fromFactorsP ls = product . map (\l → poly [-l,1]) $ ls
 
-
-constP :: Monoid a => Poly a -> a
+-- | Extract the constant coeffiecient of a polynomial.
+constP ∷ Monoid a ⇒ Poly a → a
 constP (Poly ((n,a):xs)) = if n == 0 then a else mempty
 
-leadingP :: Ring a => Poly a -> a
+-- | Extract the leading coeffiecient of a polynomial.
+leadingP ∷ Ring a ⇒ Poly a → a
 leadingP (Poly []) = one
 leadingP (Poly xs) = snd . head . reverse $ xs
 
-degreeP :: Poly a -> Int
+-- | Extract the degree of the polynomial.
+degreeP ∷ Poly a → Int
 degreeP (Poly []) = 0
 degreeP (Poly xs) = fst . head . reverse $ xs
 
-
-termwiseP :: (Ring a, NumEq a) => (Int -> a -> (Int,a)) -> Poly a -> Poly a
+-- | Apply a function termwise to a polynomial, acting potentially on its degree and coefficient.
+termwiseP ∷ (Ring a, NumEq a) ⇒ (Int → a → (Int,a)) → Poly a → Poly a
 termwiseP f (Poly xs) = Poly . sortSimplifyP' . map (uncurry f) $ xs
 
-toListP :: Monoid a => Poly a -> [a]
+-- | Extract the list of coefficients of the polynomial.
+toListP ∷ Monoid a ⇒ Poly a → [a]
 toListP (Poly xs) = toList' xs 0
-toList' :: Monoid a => [(Int, a)] -> Int -> [a]
+toList' ∷ Monoid a ⇒ [(Int, a)] → Int → [a]
 toList' [] _ = []
 toList' l@((n,x):xs) k
 	| n == k = x : toList' xs (k+1)
@@ -82,7 +90,8 @@ toList' l@((n,x):xs) k
 -----------------------------------
 --- Routines
 -----------------------------------
-evalP :: Ring a => Poly a -> a -> a
+-- | Evaluate a polynomial at a point.
+evalP ∷ Ring a ⇒ Poly a → a → a
 evalP (Poly xs) pt = shift 0 xs
 	where
 		shift _ [] = zero
@@ -90,7 +99,8 @@ evalP (Poly xs) pt = shift 0 xs
 			| k == n = a + (shift (k+1) ys)*pt
 			| otherwise = (shift (k+1) (y:ys))*pt
 
-mul :: Ring a => Poly a -> Poly a -> Poly a
+-- | Multiply two polys.
+mul ∷ Ring a ⇒ Poly a → Poly a → Poly a
 mul (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,b) <- ys ]
 
 -- old_div p q = Poly $ div' p q
@@ -105,11 +115,11 @@ mul (Poly xs) (Poly ys) = sortSimplifyP $ Poly [ (n + m, a*b) | (n,a) <- xs, (m,
 -- 					factor = leadingP p / leadingP q
 -- 					r = removeTerm dp $ p - shiftPower d (factor .* q)
 
--- new_divMod :: (Field a, Module (Poly a) a) => Poly a -> Poly a -> (Poly a, Poly a)
+-- | calculate the divMod of two polys.
 new_divMod p q = (Poly (combineP' d), m)
 	where
 		(d,m) = div' p q
-		-- div' :: Field a => Poly a -> Poly a -> ([(Int,a)],Poly a)
+		-- div' ∷ Field a ⇒ Poly a → Poly a → ([(Int,a)],Poly a)
 		div' p q
 			| deg < 0 = ([(0,mempty)], p)
 			| deg == 0 = ([(0, factor)], r)
@@ -121,10 +131,11 @@ new_divMod p q = (Poly (combineP' d), m)
 					r = removeTerm dp $ p - shiftPower deg (filterP $ factor .* q)
 					(p',r') = div' r q
 
-refined_show p = if s /= "" then "(" ++ s ++ ")" else "0"
-	where s = refined_show' p
-refined_show' (Poly xs) = intercalate " + " . map show_m $ xs
-show_m (n,x)
+-- | A better show functions, using conventions and a dummy variable "x"
+display p = if s /= "" then "(" ++ s ++ ")" else "0"
+	where s = display' p
+display' (Poly xs) = intercalate " + " . map display_m $ xs
+display_m (n,x)
 	| n == 0 = P.show x
 	| n == 1 && (x =~ one) = "x"
 	| n == 1 = P.show x ++ "x"
@@ -138,14 +149,14 @@ show_m (n,x)
 instance Functor Poly where
 	fmap f (Poly xs) = Poly (map (map f) xs)
 
-instance (Show a, Ring a) => Show (Poly a) where
-	show = refined_show
+instance (Show a, Ring a) ⇒ Show (Poly a) where
+	show = display
 	-- show = guts
 
--- instance Eq a => Eq (Poly a) where
+-- instance Eq a ⇒ Eq (Poly a) where
 -- 	(==) (Poly xs) (Poly ys) = xs == ys
 
-instance NumEq a => NumEq (Poly a) where
+instance NumEq a ⇒ NumEq (Poly a) where
 	(=~) (Poly xs') (Poly ys') = tripEq xs' ys'
 		where
 			tripEq [] [] = True
@@ -160,7 +171,7 @@ instance NumEq a => NumEq (Poly a) where
 			os' = map snd os
 			xs' = map snd xs
 
-instance (Ring a, Derivation a) => Derivation (Poly a) where
+instance (Ring a, Derivation a) ⇒ Derivation (Poly a) where
 	derive pp@(Poly p) = map derive pp + (Poly $ polyDiff' p)
 		where
 			polyDiff' [] = []
@@ -168,59 +179,63 @@ instance (Ring a, Derivation a) => Derivation (Poly a) where
 				| n /= 0 = (n-1, n' * x): polyDiff' ps
 				| otherwise = polyDiff' ps
 				where n' = fromIntegral n
-instance Field a => Integration (Poly a) where
+instance Field a ⇒ Integration (Poly a) where
 	integrate (Poly p) = Poly $ polyInt' p
 		where
 			polyInt' [] = []
 			polyInt' ((n, x):ps) = (n-1, x / n') : polyInt' ps
 				where n' = fromIntegral n
-instance Ring a => Evaluable (Poly a) a a where
+instance Ring a ⇒ Evaluable (Poly a) a a where
 	eval = evalP
 
 
-instance (Monoid a, NumEq a) => Monoid (Poly a) where
+instance (Monoid a, NumEq a) ⇒ Monoid (Poly a) where
 	mempty = monomialP 0 mempty
 	mappend p q = filterP $ merge mappend p q
-instance (Group a, NumEq a) => Group (Poly a) where
+instance (Group a, NumEq a) ⇒ Group (Poly a) where
 	negate = map negate
 	(-) p q = mappend p (negate q)
-instance (Abelian a, NumEq a) => Abelian (Poly a)
-instance (Ring a, NumEq a) => Ring (Poly a) where
+instance (Abelian a, NumEq a) ⇒ Abelian (Poly a)
+instance (Ring a, NumEq a) ⇒ Ring (Poly a) where
 	one = poly [one]
 	(*) = mul
 	fromInteger n = poly [fromInteger n]
-instance (IntDom a, NumEq a) => IntDom (Poly a)
--- instance (Ring a, NumEq a) => Module (Poly a) a where
+instance (IntDom a, NumEq a) ⇒ IntDom (Poly a)
+-- instance (Ring a, NumEq a) ⇒ Module (Poly a) a where
 --   scale r p = map (r*) p
-instance (Field a, NumEq a) => EuclideanDomain (Poly a) where
+instance (Field a, NumEq a) ⇒ EuclideanDomain (Poly a) where
 	stdUnit p = monomialP 0 (leadingP p)
 	stdAssociate p = p /. leadingP p
 	-- div = old_div
 	-- p `mod` q = p - (p `div` q)*q
 	divMod = new_divMod
-instance Module m r => Module (Poly m) r where
+instance Module m r ⇒ Module (Poly m) r where
 	scale r p = map (scale r) p
 
-instance (Monoid a, CharZero a) => CharZero (Poly a) where
+instance (Monoid a, CharZero a) ⇒ CharZero (Poly a) where
 	fromRational' x = poly [fromRational' x]
 
 -----------------------------------
 --- Internal Stuff
 -----------------------------------
-
+-- | just dump the contents of the poly
 guts (Poly xs) = P.show xs
 
-sortSimplifyP :: (Monoid a, NumEq a) => Poly a -> Poly a
+-- | collect like terms, sort terms by degree and remove zero terms.
+sortSimplifyP ∷ (Monoid a, NumEq a) ⇒ Poly a → Poly a
 sortSimplifyP (Poly xs) = Poly $ sortSimplifyP' xs
-sortSimplifyP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
+sortSimplifyP' ∷ (Monoid a, NumEq a) ⇒ [(Int,a)] → [(Int,a)]
 sortSimplifyP' = filterP' . combineP' . sortP'
 
-simplifyP :: (Monoid a, NumEq a) => Poly a -> Poly a
+-- | collect like terms and remove zero terms.
+simplifyP ∷ (Monoid a, NumEq a) ⇒ Poly a → Poly a
 simplifyP (Poly xs) = Poly $ simplifyP' xs
-simplifyP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
+simplifyP' ∷ (Monoid a, NumEq a) ⇒ [(Int,a)] → [(Int,a)]
 simplifyP' = filterP' . combineP'
 
-combineP :: (Monoid a, NumEq a) => Poly a -> Poly a
+
+-- | collect like terms
+combineP ∷ (Monoid a, NumEq a) ⇒ Poly a → Poly a
 combineP (Poly xs) = Poly . combineP' $ xs
 combineP' [] = []
 combineP' [x] = [x]
@@ -228,23 +243,30 @@ combineP' (x@(n,a):y@(m,b):xs)
 	| n == m = combineP' $ (n,mappend a b) : xs
 	| otherwise = x : combineP' (y:xs)
 
-filterP :: (NumEq a, Monoid a) => Poly a -> Poly a
+
+-- | remove zero terms.
+filterP ∷ (NumEq a, Monoid a) ⇒ Poly a → Poly a
 filterP (Poly xs) = Poly . filterP' $ xs
-filterP' :: (Monoid a, NumEq a) => [(Int,a)] -> [(Int,a)]
+filterP' ∷ (Monoid a, NumEq a) ⇒ [(Int,a)] → [(Int,a)]
 filterP' ls = catchEmpty' . filter crit $ ls
 	where
 		crit (n,a) = n >= 0 && not (nearZero a)
 
-catchEmpty' :: Monoid a => [(Int,a)] -> [(Int,a)]
+
+-- | Do not allow the empty polynomial, instead use the zero polynomial.
+catchEmpty' ∷ Monoid a ⇒ [(Int,a)] → [(Int,a)]
 catchEmpty' xs
 	| length xs == 0 = [(0,mempty)]
 	| otherwise = xs
 
-sortP :: Poly a -> Poly a
-sortP (Poly xs) = Poly . sortP' $ xs
-sortP' = sortBy (\x y -> compare (fst x) (fst y))
 
-merge :: Monoid a => (a -> a-> a) -> Poly a -> Poly a -> Poly a
+-- | sort terms by degree
+sortP ∷ Poly a → Poly a
+sortP (Poly xs) = Poly . sortP' $ xs
+sortP' = sortBy (\x y → compare (fst x) (fst y))
+
+-- | Given two sorted polynomials, merge their terms with the given function.
+merge ∷ Monoid a ⇒ (a → a→ a) → Poly a → Poly a → Poly a
 merge' f p [] = p
 merge' f [] q = q
 merge' f (x@(n,a):xs) (y@(m,b):ys)
@@ -253,8 +275,10 @@ merge' f (x@(n,a):xs) (y@(m,b):ys)
 	| otherwise = y : merge' f (x:xs) ys
 merge f (Poly xs) (Poly ys) = Poly $ merge' f xs ys
 
-removeTerm :: Int -> Poly a -> Poly a
-removeTerm d (Poly xs) = Poly $ filter (\(n,_) -> n /= d) xs
+-- | remove a term of the specified degree.
+removeTerm ∷ Int → Poly a → Poly a
+removeTerm d (Poly xs) = Poly $ filter (\(n,_) → n /= d) xs
 
-shiftPower :: Int -> Poly a -> Poly a
-shiftPower d (Poly xs) = Poly $ map (\(n,a) -> (n + d,a)) xs
+-- | shift the degree of every term in a polynomial. Warning, no checks for negative degrees.
+shiftPower ∷ Int → Poly a → Poly a
+shiftPower d (Poly xs) = Poly $ map (\(n,a) → (n + d,a)) xs
