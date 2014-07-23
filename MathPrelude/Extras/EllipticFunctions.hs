@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax, BangPatterns, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax, BangPatterns #-}
 module MathPrelude.Extras.EllipticFunctions
   (
   -- * Misc
@@ -50,7 +50,7 @@ import MathPrelude.Constructions.Complex
 -----------------------------------
 --- Carlson Symmetric Integrals
 -----------------------------------
--- carl_seq :: a → a → a → a
+-- carl_seq ∷ a → a → a → a
 carl_seq x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
   where
     start = (x,y,z)
@@ -66,7 +66,7 @@ carl_seq x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
 -- The Carlson symmetric forms of elliptic integrals are a modern alternative to the Legendre forms (the usual elliptic integrals). Their good duplication theorem make them easy to calculate.
 -- <https://en.wikipedia.org/wiki/Carlson_symmetric_form Wikipedia>
 
-carlsonF x y z = (\m -> recip . sqrt $ m) $ carl_seq x y z
+carlsonF x y z = (\m → recip . sqrt $ m) $ carl_seq x y z
 carlsonC x y = carlsonF x y y
 carlsonD x y z = carlsonJ x y z z
 carlsonJ x y z p
@@ -88,17 +88,17 @@ carlsonJ x y z p
 
 -- | The incomplete elliptic integral of the first kind. The first argument is the amplitude φ and the second is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_first_kind Wikipedia>
-ellipticF :: Transcendental a ⇒ a → a → a
+ellipticF ∷ Transcendental a ⇒ a → a → a
 ellipticF f k = (sin f) * carlsonF ((cos f)^2) (1-k^2*(sin f)^2) 1
 
 -- | The incomplete elliptic integral of the second kind. The first argument is the amplitude φ and the second is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_second_kind Wikipedia>
-ellipticE :: Transcendental a ⇒ a → a → a
+ellipticE ∷ Transcendental a ⇒ a → a → a
 ellipticE f k = (sin f) * carlsonF ((cos f)^2) (1-k^2*(sin f)^2) 1 - (1/3)* k^2 *(sin f)^3 * carlsonD ((cos f)^2) (1-k^2*(sin f)^2) 1
 
 -- | The incomplete elliptic integral of the third kind. The first argument is the amplitude φ, the second is the characteristic n and the third is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_third_kind Wikipedia>
-ellipticPi :: Transcendental a ⇒ a → a → a → a
+ellipticPi ∷ Transcendental a ⇒ a → a → a → a
 ellipticPi f n k = (sin f) * carlsonF ((cos f)^2) (1-k^2*(sin f)^2) 1 - (1/3)*n*(sin f)^3 * carlsonJ ((cos f)^2) (1-k^2*(sin f)^2) 1 (1-n*(sin f)^2)
 
 -----------------------------------
@@ -106,7 +106,7 @@ ellipticPi f n k = (sin f) * carlsonF ((cos f)^2) (1-k^2*(sin f)^2) 1 - (1/3)*n*
 -----------------------------------
 -- | The arithmetic geometric mean.
 -- <https://en.wikipedia.org/wiki/Arithmetic%E2%80%93geometric_mean Wikipedia>
-agm :: Transcendental a => a -> a -> a
+agm ∷ Transcendental a ⇒ a → a → a
 agm a g = fst . head . dropWhile test . iterate next $ (a,g)
   where
     next (!a,!g) = ((a+g)/ 2, sqrt (a*g))
@@ -114,17 +114,17 @@ agm a g = fst . head . dropWhile test . iterate next $ (a,g)
 
 -- | The complete elliptic integral of the first kind. The argument is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_first_kind Wikipedia>
-completeK :: Transcendental a => a -> a
+completeK ∷ Transcendental a ⇒ a → a
 completeK k = (pi/2)/ agm (1-k) (1+k)
 
 -- | The complete elliptic integral of the second kind. The argument is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_second_kind Wikipedia>
-completeE :: Transcendental a => a -> a
+completeE ∷ Transcendental a ⇒ a → a
 completeE k = carlsonF 0 (1-k^2) 1 - (1/3)* k^2* carlsonD 0 (1-k^2) 1
 
 -- | The complete elliptic integral of the third kind. The first argument is the characteristic n. The second argument is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_third_kind Wikipedia>
-completePi :: Transcendental a ⇒ a → a → a
+completePi ∷ Transcendental a ⇒ a → a → a
 completePi n k = carlsonF 0 (1-k^2) 1 - (1/3)*n* carlsonJ 0 (1-k^2) 1 (1-n)
 
 ------------------------------------
@@ -152,7 +152,7 @@ jacobi_theta11 z tau = exp (pi*iu*tau/4 + pi*iu*(z + (1/2))) * jacobi_theta (z +
 -- The twelve Jacobi elliptic functions. The first argument is the variable u (the value of the elliptic integral) and the second is the elliptic modulus k. The functions are named in the form pq, with p and q choosen from s c n d. These letters represent the points 0, K, iK' and K + iK' respectively, where K and K' are the quarter periods.  pq has a zero at p and a pole at q.
 -- <https://en.wikipedia.org/wiki/Jacobi%27s_elliptic_functions Wikipedia>
 
-sn :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+sn ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 sn u k = - (t00* jacobi_theta11 z tau) / (t10 * jacobi_theta01 z tau)
   where
     t00 = jacobi_theta00 0 tau
@@ -166,7 +166,7 @@ sn u k = - (t00* jacobi_theta11 z tau) / (t10 * jacobi_theta01 z tau)
     tau = log q / (iu*pi)
     z = u/pi/(t00^2)
 
-cn :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+cn ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 cn u k = (t01* jacobi_theta10 z tau) / (t10 * jacobi_theta01 z tau)
   where
     t00 = jacobi_theta00 0 tau
@@ -180,7 +180,7 @@ cn u k = (t01* jacobi_theta10 z tau) / (t10 * jacobi_theta01 z tau)
     tau = log q / (iu*pi)
     z = u/pi/(t00^2)
 
-dn :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+dn ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 dn u k = (t01* jacobi_theta00 z tau) / (t00 * jacobi_theta01 z tau)
   where
     t00 = jacobi_theta00 0 tau
@@ -194,24 +194,24 @@ dn u k = (t01* jacobi_theta00 z tau) / (t00 * jacobi_theta01 z tau)
     tau = log q / (iu*pi)
     z = u/pi/(t00^2)
 
-ns :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+ns ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 ns = 1 / sn
-nc :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+nc ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 nc = 1 / cn
-nd :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+nd ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 nd = 1 / dn
 
-sc :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+sc ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 sc = sn / cn
-sd :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+sd ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 sd = sn / dn
-ds :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+ds ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 ds = dn / sn
-dc :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+dc ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 dc = dn / cn
-cs :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+cs ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 cs = cn / sn
-cd :: (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
+cd ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
 cd = cn / dn
 
 ------------------------------------
@@ -253,11 +253,11 @@ wp_g3 tau = pi^6/216*(a^12 - 33 *a^8*b^4 - 33*a^4 *b^8 + b^12)
 ------------------------------------
 -- Misc
 ------------------------------------
--- aperiod :: Double -> Complex Double
--- -- aperiod :: (Ord a, Field a, Transcendental a) => a -> Complex a Double -> Complex Double
--- aperiod r = (-4::Double) .* iu * (fromReal $ ellipticK (r ^ 2))
--- --bperiod :: (Ord a, Field a, Transcendental a) => a -> Complex a
--- bperiod :: Double -> Complex Double
+-- aperiod ∷ Double → Complex Double
+-- -- aperiod ∷ (Ord a, Field a, Transcendental a) ⇒ a → Complex a Double → Complex Double
+-- aperiod r = (-4∷Double) .* iu * (fromReal $ ellipticK (r ^ 2))
+-- --bperiod ∷ (Ord a, Field a, Transcendental a) ⇒ a → Complex a
+-- bperiod ∷ Double → Complex Double
 -- bperiod r = ((-8)/(1+r)/(1+r)) .* (fromReal $ ellipticK ktilde)
 --   where ktilde = (1-r)*(1-r)/(1+r)/(1+r)
 --

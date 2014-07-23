@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+-- {-# LANGUAGE RebindableSyntax #-}
 {-|
 Module      : Re-export of Numbers
 Description : An assortment of prime number related functions
@@ -9,7 +9,6 @@ Stability   : alpha
 
 A library by A. Neumann, re-exported here for ease.
 -}
-
 module MathPrelude.Extras.Primes
   ( module Data.Numbers.Primes
   ) where

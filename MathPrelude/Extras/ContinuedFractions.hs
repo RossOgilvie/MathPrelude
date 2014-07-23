@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 module MathPrelude.Extras.ContinuedFractions
   (
   ) where
@@ -13,10 +13,11 @@ import MathPrelude.Constructions.Ratio
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Rational
 
+-- | A continued fraction
 data CF = CF [Integer] deriving Show
 
-
-makeCF :: Rational -> CF
+-- Construct a continued fraction from a 'Rational' number
+makeCF ∷ Rational → CF
 makeCF q = CF $ makeCF' (numerator q') (denominator q')
   where q' = simplifyQ q
 makeCF' a b
@@ -28,10 +29,12 @@ makeCF' a b
 liftCF f (CF l) = CF $ f l
 liftCF2 f (CF l) (CF l') = CF $ f l l'
 
+-- | Take the whole number part of a continued fraction
 leadingCF (CF (x:_)) = x
 
+-- | Evaluate a continued fraction to a field element
 evalCF (CF ls)= evalCF' ls
-evalCF' :: Field a => [Integer] -> a
+evalCF' ∷ Field a ⇒ [Integer] → a
 evalCF' [x] = fromInteger x
 evalCF' (x:xs) = fromInteger x + 1 / evalCF' xs
 
@@ -54,10 +57,12 @@ instance Ring (CF) where
   one = CF [one]
   (*) = liftCF2 mul
 
+-- | BROKEN
 add [x] (y:ys) = (x+y):ys
 add (x:xs) [y] = (x+y):xs
 add (x:xs) (y:ys) = (x+y): mul (mul xs ys) (recip' $ add xs ys)
 
+-- | BROKEN
 mul [x] ys = map (x*) ys
 mul xs [y] = map (y*) xs
 mul (x:xs) (y:ys) = (x*y): mul (mul xs ys) (recip' $ add (add xs' ys') [1])

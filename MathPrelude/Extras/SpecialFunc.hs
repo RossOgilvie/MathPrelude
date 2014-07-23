@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax, BangPatterns #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax, BangPatterns #-}
 module MathPrelude.Extras.SpecialFunc
   ( module MathPrelude.Constructions.Complex
   , gammaF
@@ -28,7 +28,7 @@ import MathPrelude.Extras.Combinatorics
 -----------------------------------------
 -- | The Gamma function. Defined on the whole plane. It is related to the factorial function by Γ(n) = (n-1)!.
 -- <https://en.wikipedia.org/wiki/Gamma_function Wikipedia>
-gammaF :: Complex Double -> Complex Double
+gammaF ∷ Complex Double → Complex Double
 gammaF z'
   | realPart z' >= 0.5 = part1 * part2 * part3 * part4
   | otherwise = pi / sin (pi*z') / gammaF (1-z')
@@ -40,10 +40,10 @@ gammaF z'
     part1 = sqrt (2*pi)
     part2 = (z + g + 0.5)**(z + 0.5)
     part3 = exp (negate (z + g + 0.5))
-    part4 = (ck!!0) + sum (zipWith (\c k -> c/(z+fromReal k)) (tail ck) [1..])
+    part4 = (ck!!0) + sum (zipWith (\c k → c/(z+fromReal k)) (tail ck) [1..])
 
 -- | The Gamma function as a real function.
-gammaF' :: Double -> Double
+gammaF' ∷ Double → Double
 gammaF' = realPart . gammaF . fromReal
 
 -----------------------------------------
@@ -51,14 +51,14 @@ gammaF' = realPart . gammaF . fromReal
 -----------------------------------------
 -- | The Riemann Zeta function. Converges everywhere except the line Re z = 1 (coming soon). Convergence is slow near this line also.
 -- <https://en.wikipedia.org/wiki/Riemann_zeta_function Wikipedia>
-zetaF :: Complex Double -> Complex Double
+zetaF ∷ Complex Double → Complex Double
 zetaF = zetaF_Euler
 
 zetaF_Hasse s = factor * converge (partialSums outer_sum)
   where
     factor = 1/(1-2**(1-s))
-    outer_sum = map (\n -> inner_sum n / 2^(fromInteger n+1)) [0..]
-    inner_sum n = sum . map (\k -> sign k * fromInteger (binomial n k) * (fromInteger k+1)**(-s)) $ [0..n]
+    outer_sum = map (\n → inner_sum n / 2^(fromInteger n+1)) [0..]
+    inner_sum n = sum . map (\k → sign k * fromInteger (binomial n k) * (fromInteger k+1)**(-s)) $ [0..n]
 
 zetaF_Euler s
   | realPart s >= 1 = converge $ partialprods
@@ -74,7 +74,7 @@ zetaF_Euler s
 -----------------------------------------
 -- | The Euler–Mascheroni constant (also called Euler's constant) is  defined as the limiting difference between the harmonic series and the natural logarithm.
 -- <https://en.wikipedia.org/wiki/Euler%27s_constant Wikipedia>
-euler_const :: Double
+euler_const ∷ Double
 euler_const = 0.57721566490153286
 
 
@@ -88,14 +88,14 @@ li x = euler_const + log (log x) + sqrt x * res
     res = converge $ partialSums outer
     outer = map outer_term [1..]
     outer_term n = sign (n-1) * (log x)^n / factorial n / fromInteger (2^(n-1)) * inner n
-    inner n = sum $ map (\k -> 1/fromIntegral (2*k +1)) [0..((n-1)`div`2)]
+    inner n = sum $ map (\k → 1/fromIntegral (2*k +1)) [0..((n-1)`div`2)]
 
 -----------------------------------------
 -- Error function
 -----------------------------------------
 -- | The error function is a renormalised version of the cumulative integral of the normal distribution.
 -- <https://en.wikipedia.org/wiki/Error_function Wikipedia>
-erf :: Double -> Double
+erf ∷ Double → Double
 erf x
   | x > 4.83 = 1
   | x < (-4.83) = -1
@@ -109,4 +109,4 @@ erf_series z = 2 / sqrt pi * converge (partialSums terms)
 erf_prod z = 2 / sqrt pi * converge (partialSums terms)
   where
     terms = z : zipWith (*) terms mult
-    mult = map (\k -> -(2*k -1) * z*z/k/(2*k+1)) [1..]
+    mult = map (\k → -(2*k -1) * z*z/k/(2*k+1)) [1..]
