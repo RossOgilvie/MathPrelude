@@ -25,11 +25,11 @@ instance (Monoid a, Arbitrary a) => Arbitrary (Poly a) where
 		ls <- arbitrary -- :: Gen [a]
 		return $ poly ls
 
-instance Arbitrary a => Arbitrary (Complex a) where
-	arbitrary = do
-		x <- arbitrary
-		y <- arbitrary
-		return $ x :+ y
+-- instance Arbitrary a => Arbitrary (Complex a) where
+-- 	arbitrary = do
+-- 		x <- arbitrary
+-- 		y <- arbitrary
+-- 		return $ x :+ y
 
 prop_construct xs = not (null xs) ==> (toListP . poly) xs == xs
 prop_destruct p = (poly . toListP) p == p

@@ -33,6 +33,7 @@ import MathPrelude.Algebraic.Field
 import MathPrelude.Algebraic.Module
 
 import MathPrelude.Constructions.Complex
+import MathPrelude.Constructions.ContinuedFractions
 import MathPrelude.Constructions.Polynomial
 import MathPrelude.Constructions.PowerSeries
 import MathPrelude.Constructions.Projective

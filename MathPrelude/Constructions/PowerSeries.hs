@@ -31,7 +31,7 @@ import MathPrelude.Classes.Evaluable
 -----------------------------------
 --- PowerSeries
 -----------------------------------
--- A power series
+-- | A power series
 data PS a = PS [a] deriving Eq
 
 

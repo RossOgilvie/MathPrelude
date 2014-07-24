@@ -51,6 +51,9 @@ evaluateR (x :% y) = x/y
 ------------------------------
 ---- Instances
 ------------------------------
+instance Functor Ratio where
+	fmap f (x:%y) = f x :% f y
+
 instance (IntDom a, Eq a) ⇒ Eq (Ratio a) where
 	(==) p@(x:%_) q@(y:%_)
 		| x == zero && y == zero = True
