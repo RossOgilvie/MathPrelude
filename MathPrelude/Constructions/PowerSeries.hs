@@ -106,9 +106,9 @@ instance (Show a, Ring a) ⇒ Show (PS a) where
 
 instance NumEq a ⇒ NumEq (PS a) where
   (=~) (PS xs') (PS ys') = (=~) xs' ys'
-  epsilon = scalarPS epsilon
-  nearZero (PS xs) = and . map nearZero $ xs
-  (>>~) (PS os) (PS xs) = and . map (smallL os) $ xs
+  -- epsilon = scalarPS epsilon
+  -- nearZero (PS xs) = and . map nearZero $ xs
+  -- (>>~) (PS os) (PS xs) = and . map (smallL os) $ xs
 instance Ring a ⇒ Derivation (PS a) where
   derive (PS p) = PS $ zipWith (*) (tail p) (map fromInteger [1..])
 instance Field a ⇒ Integration (PS a) where

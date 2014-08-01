@@ -137,9 +137,9 @@ instance Ord CF where
 
 instance NumEq (CF) where
   (=~) (CF ls) (CF ls') = ls == ls'
-  epsilon = recip $ makeCF $ fromInteger (10^5)
-  nearZero cf = cf < epsilon
-  (>>~) cf1 cf2 = cf2 / cf1 < epsilon
+  -- epsilon = recip $ makeCF $ fromInteger (10^5)
+  -- nearZero cf = cf < epsilon
+  -- (>>~) cf1 cf2 = cf2 / cf1 < epsilon
 
 sigfigs = 16
 ieps = 10^sigfigs

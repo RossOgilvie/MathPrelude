@@ -59,10 +59,10 @@ instance Show a ⇒ Show (Quotient a) where
 
 instance EuclideanDomain a ⇒ NumEq (Quotient a) where
   (=~) = liftQ2' (=~)
-  epsilon = Quotient Nothing epsilon
-  nearZero (Quotient Nothing x) = nearZero x
-  nearZero (Quotient (Just m) x) = nearZero (x `mod` m)
-  (>>~) = liftQ2' (>>~)
+  -- epsilon = Quotient Nothing epsilon
+  -- nearZero (Quotient Nothing x) = nearZero x
+  -- nearZero (Quotient (Just m) x) = nearZero (x `mod` m)
+  -- (>>~) = liftQ2' (>>~)
 
 instance (EuclideanDomain a, Eq a) ⇒ Eq (Quotient a) where
   (==) = liftQ2' (==)

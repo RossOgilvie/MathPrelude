@@ -64,15 +64,15 @@ instance NumEq a ⇒ NumEq (Proj a) where
   (=~) (Zero _) (Zero _) = True
   (=~) (Elem a) (Elem b) = a=~b
   (=~) (Infty _) (Infty _) = True
-  epsilon = Elem epsilon
-  nearZero = (>>~) (Zero epsilon)
-  (>>~) (Zero _) (Zero _) = True
-  (>>~) (Zero _) (Elem a) = nearZero a
-  (>>~) (Zero _) (Infty _) = False
-  (>>~) (Elem _) (Zero _) = True
-  (>>~) (Elem a) (Elem b) = a >>~ b
-  (>>~) (Elem _) (Infty _) = False
-  (>>~) (Infty _) _ = True
+  -- epsilon = Elem epsilon
+  -- nearZero = (>>~) (Zero epsilon)
+  -- (>>~) (Zero _) (Zero _) = True
+  -- (>>~) (Zero _) (Elem a) = nearZero a
+  -- (>>~) (Zero _) (Infty _) = False
+  -- (>>~) (Elem _) (Zero _) = True
+  -- (>>~) (Elem a) (Elem b) = a >>~ b
+  -- (>>~) (Elem _) (Infty _) = False
+  -- (>>~) (Infty _) _ = True
 
 instance Ord a ⇒ Ord (Proj a) where
   compare (Zero _) (Zero _) = EQ

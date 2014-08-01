@@ -37,8 +37,10 @@ import MathPrelude.Common.Rational
 -- | Display a complex number bracketed in the common notational form.
 display ∷ (Show a, NumEq a, Monoid a) ⇒ Complex a → Text
 display (x :+ y)
-	| x >>~ y = show x
-	| y >>~ x = show y ++ "i"
+	-- | x >>~ y = show x
+	-- | y >>~ x = show y ++ "i"
+	| nearZero y = show x
+	| nearZero x = show y ++ "i"
 	| otherwise = "(" ++ show x ++ "+" ++ show y ++ "i)"
 
 -- | The imaginary unit, ie 0:+1.
@@ -107,10 +109,10 @@ instance Evaluable a b c ⇒ Evaluable (Complex a) b (Complex c) where
 	eval (x:+y) p = (eval x p) :+ (eval y p)
 instance NumEq a ⇒ NumEq (Complex a) where
 	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)
-	epsilon = epsilon :+ epsilon
-	nearZero (a:+b)= nearZero a && nearZero b
-	(>>~) (x:+y) (a:+b) = m >>~ a && m >>~ b
-		where m = leastSmall [x,y]
+	-- epsilon = epsilon :+ epsilon
+	-- nearZero (a:+b)= nearZero a && nearZero b
+	-- (>>~) (x:+y) (a:+b) = m >>~ a && m >>~ b
+	-- 	where m = leastSmall [x,y]
 
 
 instance Monoid a ⇒ Monoid (Complex a) where

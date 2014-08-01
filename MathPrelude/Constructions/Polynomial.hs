@@ -164,12 +164,12 @@ instance NumEq a ⇒ NumEq (Poly a) where
 				| n == m = a =~ b && tripEq xs ys
 				| otherwise = False
 			tripEq _ _ = False
-	epsilon = scalarP epsilon
-	nearZero (Poly xs) = and . map (nearZero . snd) $ xs
-	(>>~) (Poly os) (Poly xs) = and . map (smallL os') $ xs'
-		where
-			os' = map snd os
-			xs' = map snd xs
+	-- epsilon = scalarP epsilon
+	-- nearZero (Poly xs) = and . map (nearZero . snd) $ xs
+	-- (>>~) (Poly os) (Poly xs) = and . map (smallL os') $ xs'
+	-- 	where
+	-- 		os' = map snd os
+	-- 		xs' = map snd xs
 
 instance (Ring a, Derivation a) ⇒ Derivation (Poly a) where
 	derive pp@(Poly p) = map derive pp + (Poly $ polyDiff' p)

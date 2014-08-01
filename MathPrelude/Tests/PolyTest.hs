@@ -69,7 +69,7 @@ prop_div p q =
 prop_gcd p q =
 	p /=~ zero ==>
 	q /=~ zero ==>
-		collect (degreeP g) $ q >>~ (mod p g)
+		collect (degreeP g) $ nearZero (mod p g)
 	where
 		g = gcd p q
 		types = p :: PD

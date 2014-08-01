@@ -66,7 +66,7 @@ rootOrder p x = length . takeWhile (flip isRoot x) . take (degreeP p) . iterate 
 
 -- | Does the polynomial has this point as a root.
 isRoot ∷ Ring a ⇒ Poly a → a → Bool
-isRoot p x = smallL (toListP p) $ eval p x
+isRoot p x = nearZero $ eval p x
 linearPolyWithRoot c = poly [negate c, one]
 
 --------------------------
@@ -104,7 +104,7 @@ dkStep p before (old:after) = dkStep p (new : before) after
 ----------------------------------
 -- | Generalised Bezout's method. Given p, q and a right hand side, finds (x,y) s.t. x*p + y*q = rhs, with x and y of minimal degree.
 solveBezout p q rhs
-	| m <<~ f = (x', y') -- only a sol if gcd | rhs
+	| nearZero m = (x', y') -- only a sol if gcd | rhs
 	| otherwise = (zero, zero)
 		where
 			g = gcd' p q -- use the un-normalised gcd

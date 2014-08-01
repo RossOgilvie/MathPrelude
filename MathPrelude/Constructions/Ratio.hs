@@ -66,10 +66,11 @@ instance (IntDom a, Ord a) ⇒ Ord (Ratio a) where
 			y'ord = compare y' zero
 
 instance (IntDom a, NumEq a) ⇒ NumEq (Ratio a) where
-	(=~) (x:%y) (x':%y') = smallL [x,y,x',y'] (x*y' - x'*y)
-	epsilon = epsilon :% one
-	nearZero = (>>~) zero
-	(>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
+	(=~) (x:%y) (x':%y') = (x*y' - x'*y) =~ 0
+	-- (=~) (x:%y) (x':%y') = smallL [x,y,x',y'] (x*y' - x'*y)
+	-- epsilon = epsilon :% one
+	-- nearZero = (>>~) zero
+	-- (>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
 instance (Derivation a, Ring a) ⇒ Derivation (Ratio a) where
 	derive (x:%y) = (derive x * y - x * derive y) :% (y^2)
 instance Evaluable a b c ⇒ Evaluable (Ratio a) b (Ratio c) where

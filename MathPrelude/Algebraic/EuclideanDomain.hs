@@ -49,13 +49,13 @@ gcd ∷ EuclideanDomain a ⇒ a → a → a
 gcd a b = stdAssociate $ gcd' a b
 -- | The greatest common divisor of two elements, presented as is.
 gcd' a b
-	| a >>~ b = a
+	| b =~ 0 = a
 	| otherwise = gcd' b (a `mod` b)
 
 -- | The extended Euclidean algorithm returns two numbers (x,y) from input (a,b) such that x*a + y*b = gcd'(a,b).
 extEuclidAlg ∷ (EuclideanDomain a, NumEq a) ⇒ a → a → (a,a)
 extEuclidAlg a b
-	| b >>~ r = (zero,one)
+	| r =~ 0 = (zero,one)
 	| otherwise = (y, x - (y * q))
 		where
 			(q,r) = a `divMod` b
