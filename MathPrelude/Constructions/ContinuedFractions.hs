@@ -1,7 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
-module MathPrelude.Constructions.ContinuedFractions
-  (
-  ) where
+module MathPrelude.Constructions.ContinuedFractions where
 
 ----------------------------------
 -- Imports
@@ -13,6 +11,7 @@ import MathPrelude.Constructions.Ratio
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Rational
 import MathPrelude.Common.Transcendental
+import MathPrelude.Classes.Derivation
 
 -- | A continued fraction
 data CF = CF [Integer] deriving Show
@@ -72,7 +71,7 @@ trAdd = TR 0 1 1 0 1 0 0 0
 trSub = TR 0 1 (-1) 0 1 0 0 0
 trNeg = TR 0 (-1) 0 0 1 0 0 0
 trMul = TR 0 0 0 1 1 0 0 0
-trDiv = TR 0 1 0 0 0 1 0 0
+trDiv = TR 0 1 0 0 0 0 1 0
 -- Construct a continued fraction from a 'Rational' number
 makeCF ∷ Rational → CF
 makeCF q = CF $ makeCF' (numerator q') (denominator q')
@@ -85,19 +84,20 @@ makeCF' a b
 
 liftCF f (CF l) = CF $ f l
 liftCF2 f (CF l) (CF l') = CF $ f l l'
+liftCF2' f (CF l) (CF l') = f l l'
 
 -- | Take the whole number part of a continued fraction
 leadingCF (CF (x:_)) = x
 
 -- | Evaluate a continued fraction to a field element
 evalCF ∷ Field a ⇒ CF → a
-evalCF (CF ls)= evalCF_new 16 ls
+evalCF (CF ls)= evalCF_new ls
 
 evalCF_old ∷ Field a ⇒ [Integer] → a
 evalCF_old [x] = fromInteger x
 evalCF_old (x:xs) = fromInteger x + 1 / evalCF_old xs
 
-evalCF_new sigfigs as = evaluateR $ map fromInteger result
+evalCF_new as = evaluateR $ map fromInteger result
   where
     nums = 0 : 1 : zipWith (+) nums (zipWith (*) as nums' )
     nums' = drop 1 nums
@@ -105,7 +105,6 @@ evalCF_new sigfigs as = evaluateR $ map fromInteger result
     dens' = drop 1 dens
     lows = even_terms $ zipWith (:%) (drop 2 nums) (drop 2 dens)
     highs = odd_terms $ zipWith (:%) (drop 2 nums) (drop 2 dens)
-    ieps = 10^sigfigs
     test ((a:%b), (c:%d)) = ieps * (a*d - b*c) > b*d
     converge = dropWhile test $ zip highs lows
     result = if null converge then last nums :% last dens else fst . head $ converge
@@ -120,12 +119,31 @@ odd_terms [] = []
 e = CF $ 2 : 1 : concatMap (\k → [2*k,1,1]) [1..]
 sqrt2 = CF $ 1 : repeat 2
 
-instance NumEq (CF) where
-  (=~) (CF ls) (CF ls') = ls =~ ls'
-  epsilon = undefined
-  nearZero = undefined
-  (>>~) = undefined
+instance Eq CF where
+  (==) (CF a) (CF b) = a == b
 
+instance Ord CF where
+  compare = liftCF2' compare'
+    where
+      compare' [] [] = EQ
+      compare' [] _ = GT
+      compare' _ [] = LT
+      compare' (x:xs) (y:ys)
+        | compare x y == EQ = opp $ compare' xs ys
+        | otherwise = compare x y
+      opp EQ = EQ
+      opp LT = GT
+      opp GT = LT
+
+instance NumEq (CF) where
+  (=~) (CF ls) (CF ls') = ls == ls'
+  epsilon = recip $ makeCF $ fromInteger (10^5)
+  nearZero cf = cf < epsilon
+  (>>~) cf1 cf2 = cf2 / cf1 < epsilon
+
+sigfigs = 16
+ieps = 10^sigfigs
+eps = recip $ makeCF $ fromInteger ieps
 
 instance Monoid (CF) where
   mempty = CF [zero]
@@ -152,6 +170,9 @@ recip' (x:xs)
 
 instance CharZero CF where
   fromRational' = makeCF
+
+instance Derivation CF where
+  derive _ = zero
 --
 -- instance Q CF where
 --   toRational = evalCF
