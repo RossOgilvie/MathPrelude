@@ -1,10 +1,11 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax, BangPatterns #-}
 module MathPrelude.Constructions.ContinuedFractions where
 
 ----------------------------------
 -- Imports
 ----------------------------------
 import BasicPrelude
+import qualified Data.Maybe as M
 import MathPrelude.Algebraic.EuclideanDomain
 import MathPrelude.Algebraic.Field
 import MathPrelude.Constructions.Ratio
@@ -13,13 +14,19 @@ import MathPrelude.Common.Rational
 import MathPrelude.Common.Transcendental
 import MathPrelude.Classes.Derivation
 
+import Test.QuickCheck hiding (output)
+
 -- | A continued fraction
 data CF = CF [Integer] deriving Show
 
+
+-------------------------------------------
+-- The crazy do everything method
+-------------------------------------------
 data TR = TR Integer Integer Integer Integer Integer Integer Integer Integer deriving Show
 
-agreement ∷ TR → (Bool , Maybe Integer)
-agreement (TR a b c d e f g h) = (agree, a1)
+agreement ∷ TR → (Bool , Bool, Integer)
+agreement (TR a b c d e f g h) = (agree, divByZero, M.fromJust a1)
   where
     mDiv x y
       | y == 0 = Nothing
@@ -28,6 +35,7 @@ agreement (TR a b c d e f g h) = (agree, a1)
     a2 = mDiv b f
     a3 = mDiv c g
     a4 = mDiv d h
+    divByZero = h == 0
     agree = a1 == a2 && a2 == a3 && a3 == a4
 
 output ∷ Integer → TR → TR
@@ -36,42 +44,67 @@ output r (TR a b c d e f g h) = TR e f g h (a-e*r) (b-f*r) (c-g*r) (d-h*r)
 inputx ∷ Integer → TR → TR
 inputx p (TR a b c d e f g h) = TR b (a+b*p) d (c+d*p) f (e+f*p) h (g+h*p)
 
-inputx' ∷ TR → TR
-inputx' (TR a b c d e f g h) = TR b b d d f f h h
-
 inputy ∷ Integer → TR → TR
 inputy q (TR a b c d e f g h) = TR c d (a+c*q) (b+d*q) g h (e+g*q) (f+h*q)
 
-inputy' ∷ TR → TR
-inputy' (TR a b c d e f g h) = TR c d c d g h g h
+inputx' ∷ TR → [Integer] → [Integer]
+inputx' (TR a b c d e f g h) ys
+  | agree = if divByZero then [] else value : inputx' (output value tr') ys
+  | null ys = endgameTR tr'
+  | otherwise = inputx' (inputy (head ys) tr') (tail ys)
+  where
+    tr' = TR b b d d f f h h
+    (agree, divByZero, value) = agreement tr'
+
+inputy' ∷ TR → [Integer] -> [Integer]
+inputy' (TR a b c d e f g h) xs
+  | agree = if divByZero then [] else value : inputy' (output value tr') xs
+  | null xs = endgameTR tr'
+  | otherwise = inputy' (inputx (head xs) tr') (tail xs)
+  where
+    tr' = TR c d c d g h g h
+    (agree, divByZero, value) = agreement tr'
+
+endgameTR ∷ TR → [Integer]
+endgameTR tr@(TR a b c d e f g h)
+  | h == 0 = []
+  | otherwise = let r = div d h in r : endgameTR (output r tr)
 
 choose_x ∷ TR → Bool
-choose_x (TR a b c d e f g h) = abs ((b*e - a*f)*(g*e)) > abs ((c*e - a*g)*(f*e))
-
-endgameTR ∷ TR → TR
-endgameTR (TR a b c d e f g h) = TR d d d d h h h h
+choose_x (TR a b c d e f g h) = abs ((b*e - a*f)*g) > abs ((c*e - a*g)*f)
 
 doTR ∷ TR → CF → CF -> CF
 doTR tr = liftCF2 (doTR' tr)
 doTR' ∷ TR → [Integer] → [Integer] -> [Integer]
-doTR' tr@(TR a b c d e f g h) xs ys
-  | agbool = if isJust ag then ag': doTR' (output ag' tr) xs ys else []
-  | null xs && null ys = doTR' (endgameTR tr) xs ys
-  | null xs = doTR' (inputy y tr) xs ys'
-  | null ys = doTR' (inputx x tr) xs' ys
-  | choose_x tr = doTR' (inputx x tr) xs' ys
-  | otherwise = doTR' (inputy y tr) xs ys'
+doTR' !tr [] [] = endgameTR tr
+doTR' !tr xs ys
+  | agree = if divByZero then [] else value : doTR' (output value tr) xs ys
+  | choose_x tr = if null xs then inputx' tr ys else doTR' (inputx (head xs) tr) (tail xs) ys
+  | otherwise = if null ys then inputy' tr xs else doTR' (inputy (head ys) tr) xs (tail ys)
   where
-    (agbool, ag) = agreement tr
-    Just ag' = ag
-    (x:xs') = xs
-    (y:ys') = ys
+    (agree, divByZero, value) = agreement tr
 
 trAdd = TR 0 1 1 0 1 0 0 0
 trSub = TR 0 1 (-1) 0 1 0 0 0
 trNeg = TR 0 (-1) 0 0 1 0 0 0
 trMul = TR 0 0 0 1 1 0 0 0
 trDiv = TR 0 1 0 0 0 0 1 0
+
+-------------------------------------------
+-- Sanity Check
+-------------------------------------------
+instance (Arbitrary a, NumEq a, Monoid a) => Arbitrary (Ratio a) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary `suchThat` (/=~ mempty)
+    return (x:%y)
+testAdd ∷ Rational → Rational → Bool
+testAdd x y = (makeCF x) + (makeCF y) == makeCF (x+y)
+
+-------------------------------------------
+-- Helpers
+-------------------------------------------
+
 -- Construct a continued fraction from a 'Rational' number
 makeCF ∷ Rational → CF
 makeCF q = CF $ makeCF' (numerator q') (denominator q')
@@ -88,6 +121,11 @@ liftCF2' f (CF l) (CF l') = f l l'
 
 -- | Take the whole number part of a continued fraction
 leadingCF (CF (x:_)) = x
+
+
+-------------------------------------------
+-- Evaling
+-------------------------------------------
 
 -- | Evaluate a continued fraction to a field element
 evalCF ∷ Field a ⇒ CF → a
@@ -116,9 +154,18 @@ odd_terms (x:y:xs) = y : odd_terms xs
 odd_terms [x] = []
 odd_terms [] = []
 
-e = CF $ 2 : 1 : concatMap (\k → [2*k,1,1]) [1..]
-sqrt2 = CF $ 1 : repeat 2
 
+-------------------------------------------
+-- Constants
+-------------------------------------------
+e = CF $ 2 : 1 : concatMap (\k → [2*k,1,1]) [1..]
+sqrt2 = CF sqrt2'
+sqrt2' = 1 : repeat 2
+
+
+-------------------------------------------
+-- Instances
+-------------------------------------------
 instance Eq CF where
   (==) (CF a) (CF b) = a == b
 
