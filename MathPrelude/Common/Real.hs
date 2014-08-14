@@ -1,4 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+-- | A module for converting between types that represent real numbers, and rounding operators.
 module MathPrelude.Common.Real where
 
 ------------------------------

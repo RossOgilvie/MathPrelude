@@ -23,17 +23,17 @@ polyRootBound ∷ Poly (Complex Double) → Double
 polyRootBound p = min opt1 opt2
 	where
 		(x:xs) = map norm . reverse $ toListP p
-		opt1 = 1 + (maximum xs)/x
-		opt2 = max 1 ((sum xs)/x)
+		opt1 = 1 + maximum xs /x
+		opt2 = max 1 (sum xs/x)
 
 -- | Use Newton's method to find a root
 findRoot ∷ Poly (Complex Double) → Complex Double → Complex Double
-findRoot p x0 = newtons (p$$) (p'$$) x0
+findRoot p = newtons (p$$) (p'$$)
 	where p' = derive p
 
 -- | A bastard polynomial that is difficult to factorise.
 w ∷ Poly (Complex Double)
-w = product . map linearPolyWithRoot . map fromReal $ [1..10]
+w = product . map (linearPolyWithRoot . fromReal) $ [1..10]
 
 -- | A type wrapper on 'findRoot'
 findRealRoots ∷ Poly Double → [Complex Double]
@@ -60,7 +60,7 @@ removeRoot p x
 
 -- | Calculate the order of a root.
 rootOrder ∷ (Derivation a, Ring a) ⇒ Poly a → a → Int
-rootOrder p x = length . takeWhile (flip isRoot x) . take (degreeP p) . iterate derive $ p
+rootOrder p x = length . takeWhile (`isRoot` x) . take (degreeP p) . iterate derive $ p
 -- rootOrder p x = takeWhile (flip isRoot x) . take (degreeP p) . iterate derive $ p
 -- rootOrder p x = iterate derive $ p
 
@@ -83,9 +83,9 @@ dkInitPts p = initPts
 	where
 		deg = degreeP p
 		omega = 2*pi/fromIntegral deg
-		args = map (\k → 1 + omega*k) . map fromIntegral $ [1..deg] -- roots of unity have pi*k/n args, and arg pi*k/n + 1 is never real
+		args = map (\k → 1 + omega* fromIntegral k) [1..deg] -- roots of unity have pi*k/n args, and arg pi*k/n + 1 is never real
 		r = polyRootBound p
-		radii = map (\k → k*r/fromIntegral deg) . map fromIntegral $ [1..deg]
+		radii = map (\k → fromIntegral k*r/fromIntegral deg) [1..deg]
 		initPts = zipWith fromPolar radii args
 
 -- | A single round of the DK method.

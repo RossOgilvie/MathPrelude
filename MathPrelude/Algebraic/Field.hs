@@ -1,4 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+-- | A field is a ring where all non-zero elements have multiplicative inverses. Ie, it has a division operation.
 module MathPrelude.Algebraic.Field
 	( module MathPrelude.Algebraic.Ring
 	, Field(..)

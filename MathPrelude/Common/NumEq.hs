@@ -1,5 +1,6 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
-module MathPrelude.Classes.NumEq
+-- | A comparison operation that makes sense for numeric types, such as applying approximate equality for floats.
+module MathPrelude.Common.NumEq
 	( module MathPrelude.Algebraic.Logic
 	, NumEq(..)
 	, nearZero
@@ -21,7 +22,7 @@ import MathPrelude.Common.PreludeNumConst
 class NumEq a where
 	-- | Numerically equal. Reduces to (==) for exact types, but useful for say Doubles
 	(=~) ∷ a → a → Bool
-	-- | Numericall not equal
+	-- | Numerically not equal
 	(/=~) ∷ a → a → Bool
 
 	-- | The tolerance permitted by '=~'
@@ -41,6 +42,7 @@ infixl 4 /=~
 -----------------------------------
 --- Methods
 -----------------------------------
+-- | Test whether we are close to zero.
 nearZero ∷ (NumEq a , Monoid a) ⇒ a → Bool
 nearZero a = a =~ mempty
 
@@ -112,7 +114,7 @@ instance NumEq Double where
 
 
 instance NumEq a ⇒ NumEq [a] where
-	(=~) x y = length x == length y && (and $ zipWith (=~) x y)
+	(=~) x y = length x == length y && and (zipWith (=~) x y)
 	-- epsilon = [epsilon]
 	-- nearZero xs = and . map nearZero $ xs
 	-- (>>~) os xs = and . map (smallL os) $ xs

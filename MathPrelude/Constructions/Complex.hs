@@ -37,8 +37,6 @@ import MathPrelude.Common.Rational
 -- | Display a complex number bracketed in the common notational form.
 display ∷ (Show a, NumEq a, Monoid a) ⇒ Complex a → Text
 display (x :+ y)
-	-- | x >>~ y = show x
-	-- | y >>~ x = show y ++ "i"
 	| nearZero y = show x
 	| nearZero x = show y ++ "i"
 	| otherwise = "(" ++ show x ++ "+" ++ show y ++ "i)"
@@ -58,17 +56,17 @@ fromReal ∷ Monoid a ⇒ a → Complex a
 fromReal r = r :+ mempty
 -- | Construct a unit norm complex from its argument.
 fromArg ∷ Transcendental a ⇒ a → Complex a
-fromArg x = (cos x) :+ (sin x)
+fromArg x = cos x :+ sin x
 -- | Construct a complex number from its polar representation (r,θ).
 fromPolar ∷ (Ring a, Transcendental a) ⇒ a → a → Complex a
-fromPolar r t = r .* (fromArg t)
+fromPolar r t = r .* fromArg t
 -- | Export a complex number to its polar representation (r,θ).
 toPolar ∷  (Ord a, Field a, Transcendental a) ⇒ Complex a → (a,a)
 toPolar z = (sqrt $ normsq' z, arg z)
 
 -- | Take the conjugate of a complex number, ie negate the imaginary part
 conjugate ∷ Abelian a ⇒ Complex a → Complex a
-conjugate (x:+y) = (x:+ (negate y))
+conjugate (x:+y) = x :+ negate y
 -- | Take the square of the norm of a complex number, expressed a (purely real) complex number
 normsq ∷ Ring a ⇒ Complex a → Complex a
 normsq z = z * conjugate z
@@ -104,11 +102,11 @@ instance Functor Complex where
 	fmap f (x :+ y) = f x :+ f y
 
 instance Derivation a ⇒ Derivation (Complex a) where
-	derive (x:+y) = (derive x) :+ (derive y)
+	derive (x:+y) = derive x :+ derive y
 instance Evaluable a b c ⇒ Evaluable (Complex a) b (Complex c) where
-	eval (x:+y) p = (eval x p) :+ (eval y p)
+	eval (x:+y) p = eval x p :+ eval y p
 instance NumEq a ⇒ NumEq (Complex a) where
-	(x1 :+ y1) =~ (x2 :+ y2) = (x1=~x2) && (y1=~y2)
+	(x1 :+ y1) =~ (x2 :+ y2) = (x1 =~ x2) && (y1 =~ y2)
 	-- epsilon = epsilon :+ epsilon
 	-- nearZero (a:+b)= nearZero a && nearZero b
 	-- (>>~) (x:+y) (a:+b) = m >>~ a && m >>~ b
@@ -130,7 +128,7 @@ instance Field a ⇒ Field (Complex a) where
 	recip z@(x:+y) = (x/zz) :+ (negate y/zz)
 		where zz = normsq' z
 instance Module m r ⇒ Module (Complex m) r where
-	scale r z = map (scale r) z
+	scale r = map (scale r)
 
 instance Num a ⇒ Num (Complex a) where
 	abs = undefined
@@ -143,28 +141,28 @@ instance (Monoid a, CharZero a) ⇒ CharZero (Complex a) where
 
 
 half' ∷ Field a ⇒ Complex a
-half' = fromReal $ half
+half' = fromReal half
 
 instance (Ord a, Field a, Transcendental a) ⇒ Transcendental (Complex a) where
 	pi = fromReal pi
-	exp (x:+y) = (exp x) .* (fromArg y)
-	log z = (log r) :+ t
+	exp (x:+y) = exp x .* fromArg y
+	log z = log r :+ t
 		where (r,t) = toPolar z
 	--(**) -- use default
 	sqrt z
 		| nearZero z = zero
 		| otherwise = z ** half'
 	--logBase -- use default
-	sin (x:+y) = ((sin x)*(cosh y)) :+ ((cos x)*(sinh y))
-	cos (x:+y) = ((cos x)*(cosh y)) :+ (negate $ (sin x)*(sinh y))
+	sin (x:+y) = (sin x * cosh y) :+ (cos x * sinh y)
+	cos (x:+y) = (cos x * cosh y) :+ negate (sin x * sinh y)
 	--tan  -- use default
-	asin z = (negate iu) * log (iu*z + sqrt(one - z*z))
+	asin z = negate iu * log (iu*z + sqrt (one - z*z))
 	acos z = half' * pi - asin z
 	atan z = half' * iu * (log (one - iu*z) - log (one + iu*z))
 	atan2 x y
 		| nearZero x = zero
 		| otherwise = atan (y/x)
-	sinh (x:+y) = ((sinh x)*(cos y)) :+ ((cosh x)*(sin y))
-	cosh (x:+y) = ((cosh x)*(cos y)) :+ ((sinh x)*(sin y))
+	sinh (x:+y) = (sinh x * cos y) :+ (cosh x * sin y)
+	cosh (x:+y) = (cosh x * cos y) :+ (sinh x * sin y)
 	--tanh  -- use default
 	--ahyps -- use defaults

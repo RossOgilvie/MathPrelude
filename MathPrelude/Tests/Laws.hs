@@ -36,8 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 import BasicPrelude
-import MathPrelude.Classes.NumEq
-import Test.QuickCheck
+import MathPrelude.Common.NumEq
+-- import Test.QuickCheck
 
 commutative :: NumEq a => (b -> b -> a) -> b -> b -> Bool
 commutative op x y  =  x `op` y =~ y `op` x
@@ -60,8 +60,8 @@ leftZero  =  flip . rightIdentity
 rightZero :: NumEq a => (a -> a -> a) -> a -> a -> Bool
 rightZero  =  flip . leftIdentity
 
-zero :: NumEq a => (a -> a -> a) -> a -> a -> Bool
-zero op x y  =  leftZero op x y  &&  rightZero op x y
+bothZero :: NumEq a => (a -> a -> a) -> a -> a -> Bool
+bothZero op x y  =  leftZero op x y  &&  rightZero op x y
 
 leftInverse :: NumEq a => (b -> b -> a) -> (b -> b) -> a -> b -> Bool
 leftInverse op inv y x  =  inv x `op` x =~ y
@@ -78,14 +78,11 @@ leftDistributive ( # ) op x y z  =  (y `op` z) # x =~ (y # x) `op` (z # x)
 rightDistributive :: NumEq a => (b -> a -> a) -> (a -> a -> a) -> b -> a -> a -> Bool
 rightDistributive ( # ) op x y z  =  x # (y `op` z) =~ (x # y) `op` (x # z)
 
-homomorphism :: NumEq a =>
-   (b -> a) -> (b -> b -> b) -> (a -> a -> a) -> b -> b -> Bool
+homomorphism :: NumEq a => (b -> a) -> (b -> b -> b) -> (a -> a -> a) -> b -> b -> Bool
 homomorphism f op0 op1 x y  =  f (x `op0` y) =~ f x `op1` f y
 
-rightCascade :: NumEq a =>
-   (b -> b -> b) -> (a -> b -> a) -> a -> b -> b -> Bool
-rightCascade ( # ) op x i j  =  (x `op` i) `op` j =~ x `op` (i#j)
-
-leftCascade :: NumEq a =>
-   (b -> b -> b) -> (b -> a -> a) -> a -> b -> b -> Bool
-leftCascade ( # ) op x i j  =  j `op` (i `op` x) =~ (j#i) `op` x
+-- rightCascade :: (NumEq a, NumEq b) => (b -> b -> b) -> (a -> b -> a) -> a -> b -> b -> Bool
+-- rightCascade ( # ) op x i j  =  (x `op` i) `op` j =~ x `op` i#j
+--
+-- leftCascade :: (NumEq a, NumEq b) => (b -> b -> b) -> (b -> a -> a) -> a -> b -> b -> Bool
+-- leftCascade ( # ) op x i j  =  j `op` (i `op` x) =~ j#i `op` x

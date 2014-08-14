@@ -1,4 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+-- | A module to do transcendental operations, such as exponentials and trigonometry.
 module MathPrelude.Common.Transcendental where
 
 ------------------------------
@@ -33,7 +34,7 @@ class Field a ⇒ Transcendental a where
 	-- | Inverse hyperbolic trig functions.
 	asinh, acosh, atanh ∷ a → a
 
-	sqrt x = x ** (recip 2)
+	sqrt x = x ** recip 2
 	x ** y = exp ( y * log x )
 	logBase b x = log x / log b
 	tan x = sin x / cos x

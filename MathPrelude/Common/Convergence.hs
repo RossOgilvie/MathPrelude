@@ -14,7 +14,7 @@ module MathPrelude.Common.Convergence
 
 import BasicPrelude
 import MathPrelude.Algebraic.Ring
-import MathPrelude.Classes.NumEq
+import MathPrelude.Common.NumEq
 import qualified Data.Either as E
 
 

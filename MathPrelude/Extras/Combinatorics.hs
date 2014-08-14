@@ -26,14 +26,14 @@ import MathPrelude.Common.Integral
 -- | The factorial function. Returns 1 on negative numbers.
 -- <https://en.wikipedia.org/wiki/Factorial Wikipedia>
 factorial ∷ (Integral a, Ring b) ⇒ a → b
-factorial n = foldr (*) 1 . map fromIntegral $ [1..n]
+factorial n = product . map fromIntegral $ [1..n]
 
 -- | The double factorial function. Not defined on negative odd numbers, as we are resticted by the ring instance. Instead returns 1 on negative numbers.
 -- <https://en.wikipedia.org/wiki/Double_factorial Wikipedia>
 dble_factorial ∷ (Integral a, Ring b) ⇒ a → b
 dble_factorial n
-  | even n = foldr (*) 1 . map fromIntegral $ [2,4..n]
-  | otherwise = foldr (*) 1 . map fromIntegral $ [1,3..n]
+  | even n = product . map fromIntegral $ [2,4..n]
+  | otherwise = product . map fromIntegral $ [1,3..n]
 
 -- | The Pochhammer function. Also known as the falling factorial. Returns 0 when the second argument is negative.
 -- <https://en.wikipedia.org/wiki/Pochhammer_symbol Wikipedia>

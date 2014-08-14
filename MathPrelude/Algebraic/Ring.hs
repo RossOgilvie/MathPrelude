@@ -1,4 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings #-}
+-- | Represent a ring, a structure that is an abelian group with a unital multiplication operator that distributes over the group operation. Our rings are all commutative.
 module MathPrelude.Algebraic.Ring
 	( module MathPrelude.Algebraic.Group
 	, Ring(..)
@@ -123,5 +124,5 @@ instance IntDom a ⇒ IntDom (Maybe a)
 
 instance Ring b ⇒ Ring (a → b) where
 	one = const one
-	(*) f g x = (f x) * (g x)
+	(*) f g x = f x * g x
 instance IntDom b ⇒ IntDom (a → b)

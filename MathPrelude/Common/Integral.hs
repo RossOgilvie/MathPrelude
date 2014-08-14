@@ -1,4 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+-- | A module for converting between integral types.
 module MathPrelude.Common.Integral
 	( Integral(..)
 	, fromIntegral98

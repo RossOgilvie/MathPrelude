@@ -1,14 +1,24 @@
-{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE RebindableSyntax, UnicodeSyntax, ScopedTypeVariables #-}
 module MathPrelude.Tests.AbelianTest where
 
 import BasicPrelude
 import qualified Prelude as P
 
 import MathPrelude.Algebraic.Group
+import MathPrelude.Tests.Laws
 import Test.QuickCheck
 
-prop_assoc a b c = (a + b) + c =~ a + (b + c)
-prop_comm a b = a + b =~ b + a
-prop_zero a = a + zero =~ a
-prop_negate a = a + negate a =~ zero
-prop_subtract a b = a + negate b =~ a - b
+
+fixtype ∷ a → (a→b) → (a→b)
+fixtype x f = f
+
+isGroup ∷ (Show a, Arbitrary a, Group a) ⇒ a → a → a → Bool
+isGroup a b c =
+  associative (<>) a b c
+  && identity (<>) zero a
+  && inverse (<>) negate zero a
+
+isAbelian ∷ (Show a, Arbitrary a, Abelian a) ⇒ a → a → a → Bool
+isAbelian a b c =
+  isGroup a b c
+  && commutative (+) a b

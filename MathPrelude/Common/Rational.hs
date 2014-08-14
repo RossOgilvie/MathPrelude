@@ -1,4 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+-- | A module for converting between rational types.
 module MathPrelude.Common.Rational
 	( Rational
 	, CharZero(..)
@@ -25,7 +26,7 @@ import MathPrelude.Common.Integral
 -- | The canonical version of a rational number.
 type Rational = Ratio Integer
 
--- | The only morphisms of field are injections. Thus there is a map from the rationals to a field if and only if the field has characteristic zero (ie it contains a subfield equal to the rationals).
+-- | The only morphisms of fields are injections. Thus there is a map from the rationals to a field if and only if the field has characteristic zero (ie it contains a subfield equal to the rationals).
 class CharZero a where
 	-- | Convert from a 'Rational' number to an element of the field. The prime is because the function fromRational must be defined on the prelude's Rational type, and is a reserved name.
 	fromRational' ∷ Rational → a
@@ -63,9 +64,9 @@ fromRational98 x = Ratio98.numerator x :% Ratio98.denominator x
 --- Instances
 ------------------------------
 instance Integral a ⇒ CharZero (Ratio a) where
-	 fromRational' (x :% y) = (fromInteger x) :% (fromInteger y)
+	 fromRational' (x :% y) = fromInteger x :% fromInteger y
 instance Integral a ⇒ Q (Ratio a) where
-	 toRational (x :% y) = (toInteger x) :% (toInteger y)
+	 toRational (x :% y) = toInteger x :% toInteger y
 
 
 instance CharZero Float where	fromRational' = P.fromRational . toRational98

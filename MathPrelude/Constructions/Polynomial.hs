@@ -1,8 +1,8 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Constructions.Polynomial
-	( module MathPrelude.Algebraic.Field
+	( module MathPrelude.Algebraic.Module
+	, module MathPrelude.Algebraic.Field
 	, module MathPrelude.Algebraic.EuclideanDomain
-	, module MathPrelude.Algebraic.Module
 	, module MathPrelude.Classes.Evaluable
 	, Poly, poly
 	, monomialP, xnP, scalarP, fromFactorsP
@@ -10,12 +10,12 @@ module MathPrelude.Constructions.Polynomial
 	, termwiseP, toListP
 	) where
 
-import BasicPrelude
-import qualified Prelude as P
-
 -----------------------------------
 --- Imports
 -----------------------------------
+
+import BasicPrelude
+import qualified Prelude as P
 
 import MathPrelude.Algebraic.Module
 import MathPrelude.Algebraic.Field
@@ -96,8 +96,8 @@ evalP (Poly xs) pt = shift 0 xs
 	where
 		shift _ [] = zero
 		shift k (y@(n,a):ys)
-			| k == n = a + (shift (k+1) ys)*pt
-			| otherwise = (shift (k+1) (y:ys))*pt
+			| k == n = a + shift (k+1) ys * pt
+			| otherwise = shift (k+1) (y:ys) * pt
 
 -- | Multiply two polys.
 mul ∷ Ring a ⇒ Poly a → Poly a → Poly a
@@ -210,7 +210,7 @@ instance (Field a, NumEq a) ⇒ EuclideanDomain (Poly a) where
 	-- p `mod` q = p - (p `div` q)*q
 	divMod = new_divMod
 instance Module m r ⇒ Module (Poly m) r where
-	scale r p = map (scale r) p
+	scale r = map (scale r)
 
 instance (Monoid a, CharZero a) ⇒ CharZero (Poly a) where
 	fromRational' x = poly [fromRational' x]
@@ -263,7 +263,7 @@ catchEmpty' xs
 -- | sort terms by degree
 sortP ∷ Poly a → Poly a
 sortP (Poly xs) = Poly . sortP' $ xs
-sortP' = sortBy (\x y → compare (fst x) (fst y))
+sortP' = sortBy (compare `on` fst)
 
 -- | Given two sorted polynomials, merge their terms with the given function.
 merge ∷ Monoid a ⇒ (a → a→ a) → Poly a → Poly a → Poly a

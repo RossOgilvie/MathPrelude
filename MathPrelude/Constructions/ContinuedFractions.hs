@@ -122,6 +122,7 @@ liftCF2' f (CF l) (CF l') = f l l'
 -- | Take the whole number part of a continued fraction
 leadingCF (CF (x:_)) = x
 
+toList (CF ls) = ls
 
 -------------------------------------------
 -- Evaling
@@ -129,7 +130,7 @@ leadingCF (CF (x:_)) = x
 
 -- | Evaluate a continued fraction to a field element
 evalCF ∷ Field a ⇒ CF → a
-evalCF (CF ls)= evalCF_new ls
+evalCF (CF ls) = evalCF_new ls
 
 evalCF_old ∷ Field a ⇒ [Integer] → a
 evalCF_old [x] = fromInteger x
@@ -137,15 +138,20 @@ evalCF_old (x:xs) = fromInteger x + 1 / evalCF_old xs
 
 evalCF_new as = evaluateR $ map fromInteger result
   where
+    test ((a:%b), (c:%d)) = ieps * (a*d - b*c) > b*d
+    (lows,highs) = boundsCF as
+    converge = dropWhile test $ zip lows highs
+    exact = if length lows == length highs then last highs else last lows
+    result = if null converge then exact else fst . head $ converge
+
+boundsCF as = (lows, highs)
+  where
     nums = 0 : 1 : zipWith (+) nums (zipWith (*) as nums' )
     nums' = drop 1 nums
     dens = 1 : 0 : zipWith (+) dens (zipWith (*) as dens' )
     dens' = drop 1 dens
     lows = even_terms $ zipWith (:%) (drop 2 nums) (drop 2 dens)
     highs = odd_terms $ zipWith (:%) (drop 2 nums) (drop 2 dens)
-    test ((a:%b), (c:%d)) = ieps * (a*d - b*c) > b*d
-    converge = dropWhile test $ zip highs lows
-    result = if null converge then last nums :% last dens else fst . head $ converge
 
 even_terms (x:y:xs) = x : even_terms xs
 even_terms [x] = [x]
