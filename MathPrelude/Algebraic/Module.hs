@@ -1,6 +1,7 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
--- | A module abstracts the notion of scaling.
+{-# LANGUAGE FunctionalDependencies #-}
+-- | A module abstracts the notion of scaling an additive group.
 module MathPrelude.Algebraic.Module where
 
 import BasicPrelude
@@ -8,13 +9,14 @@ import BasicPrelude
 import MathPrelude.Algebraic.Ring
 import MathPrelude.Algebraic.Group
 import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.Norm
 
 -----------------------------------
 --- Module
 -----------------------------------
 
 -- | A module over a ring is a generalisation of a vector space over a field. In fact the generalisation is exactly to allow ring. Scaling must distribute over addition of both the ring and the module. I am not concerned with left versus right modules, so both scalings are available and should be equal.
-class (Abelian m, Ring s) ⇒ Module m s where
+class (Abelian m, Ring s) ⇒ Module m s | m → s where
 	-- | Scale a vector by a ring element.
 	scale ∷ s → m → m
 	{-# MINIMAL scale #-}
@@ -26,28 +28,14 @@ class (Abelian m, Ring s) ⇒ Module m s where
 (*.) ∷ Module m s ⇒ m → s → m
 (*.) = flip scale
 
+class (Module m s, Field s) ⇒ VectorSpace m s
 
 -----------------------------------
 --- Instances
 -----------------------------------
 
-instance Ring r ⇒ Module r r where
-  scale r s = r*s
-
--- instance Ring r ⇒ Module r Integer where
--- 	scale n r = fromInteger n * r
-
------------------------------------
---- Vector Space
------------------------------------
-
--- class (Abelian v, Field k) ⇒ VectorSpace v k
-
------------------------------------
---- Instances
------------------------------------
-
--- instance Module v k ⇒ VectorSpace v k
+-- instance Ring r ⇒ Module r r where
+--   scale r s = r*s
 
 -----------------------------------
 --- Methods
@@ -58,3 +46,6 @@ instance Ring r ⇒ Module r r where
 -- | In the case where the base ring is actually a field after all, scalar division makes sense.
 (/.) ∷ (Field k, Module v k) ⇒ v → k → v
 (/.) = flip (./)
+
+normalise ∷ (VectorSpace v s, Norm v s) ⇒ v → v
+normalise v = norm v ./ v

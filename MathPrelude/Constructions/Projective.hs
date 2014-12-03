@@ -121,6 +121,7 @@ instance Ring a ⇒ Ring (Proj a) where
   (*) (Elem a) (Infty b) = Infty (a*b)
   (*) (Infty a) (Elem b) = Infty (a*b)
 
+instance CRing a ⇒ CRing (Proj a)
 instance IntDom a ⇒ IntDom (Proj a)
 
 instance Field a ⇒ Field (Proj a) where

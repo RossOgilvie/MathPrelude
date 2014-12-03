@@ -4,10 +4,11 @@ module MathPrelude.Constructions.Polynomial
 	, module MathPrelude.Algebraic.Field
 	, module MathPrelude.Algebraic.EuclideanDomain
 	, module MathPrelude.Classes.Evaluable
-	, Poly, poly
+	, Poly()
+	, poly, toListP, fromListP
 	, monomialP, xnP, scalarP, fromFactorsP
 	, constP, leadingP, degreeP
-	, termwiseP, toListP
+	, termwiseP
 	) where
 
 -----------------------------------
@@ -25,6 +26,9 @@ import MathPrelude.Classes.Evaluable
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Rational
 
+import Control.Lens
+import qualified Data.Foldable as F
+
 -----------------------------------
 --- Poly
 -----------------------------------
@@ -35,10 +39,24 @@ data Poly a = Poly [(Int,a)] deriving (Eq)
 -----------------------------------
 --- Methods
 -----------------------------------
+-- | The isomorphism between a polynomial and its list of coefficients.
+poly :: Monoid a ⇒ Iso' [a] (Poly a)
+poly = iso fromListP toListP
+{-# INLINE poly #-}
+
 -- | Construct a polynomial from its list of coefficients.
-poly ∷ Monoid a ⇒ [a] → Poly a
-poly [] = Poly [(0, mempty)]
-poly ls = Poly . zip [0..] $ ls
+fromListP ∷ Monoid a ⇒ [a] → Poly a
+fromListP [] = Poly [(0, mempty)]
+fromListP ls = Poly . zip [0..] $ ls
+
+-- | Extract the list of coefficients of the polynomial.
+toListP ∷ Monoid a ⇒ Poly a → [a]
+toListP (Poly xs) = toList' xs 0
+toList' ∷ Monoid a ⇒ [(Int, a)] → Int → [a]
+toList' [] _ = []
+toList' l@((n,x):xs) k
+	| n == k = x : toList' xs (k+1)
+	| otherwise = mempty : toList' l (k+1)
 
 -- | Contruct a monomial with the specified degree and coefficient.
 monomialP ∷ Int → a → Poly a
@@ -56,7 +74,7 @@ scalarP c = Poly [(0,c)]
 
 -- | Construct a monic polynomial with the specified roots (counting multiplicities).
 fromFactorsP ∷ Ring a ⇒ [a] → Poly a
-fromFactorsP ls = product . map (\l → poly [-l,1]) $ ls
+fromFactorsP ls = product . map (\l → fromListP [-l,1]) $ ls
 
 -- | Extract the constant coeffiecient of a polynomial.
 constP ∷ Monoid a ⇒ Poly a → a
@@ -75,17 +93,6 @@ degreeP (Poly xs) = fst . head . reverse $ xs
 -- | Apply a function termwise to a polynomial, acting potentially on its degree and coefficient.
 termwiseP ∷ (Ring a, NumEq a) ⇒ (Int → a → (Int,a)) → Poly a → Poly a
 termwiseP f (Poly xs) = Poly . sortSimplifyP' . map (uncurry f) $ xs
-
--- | Extract the list of coefficients of the polynomial.
-toListP ∷ Monoid a ⇒ Poly a → [a]
-toListP (Poly xs) = toList' xs 0
-toList' ∷ Monoid a ⇒ [(Int, a)] → Int → [a]
-toList' [] _ = []
-toList' l@((n,x):xs) k
-	| n == k = x : toList' xs (k+1)
-	| otherwise = mempty : toList' l (k+1)
-
-
 
 -----------------------------------
 --- Routines
@@ -123,16 +130,19 @@ new_divMod p q = (Poly (combineP' d), m)
 		div' p q
 			| deg < 0 = ([(0,mempty)], p)
 			| deg == 0 = ([(0, factor)], r)
+			| dq == 0 = (p'', 0)
 			| otherwise = (p' ++ [(deg, factor)], r')
 				where
 					dp = degreeP p
-					deg = dp - degreeP q
+					dq = degreeP q
+					deg = dp - dq
 					factor = leadingP p / leadingP q
 					r = removeTerm dp $ p - shiftPower deg (filterP $ factor .* q)
 					(p',r') = div' r q
+					Poly p'' = p /. constP q
 
 -- | A better show functions, using conventions and a dummy variable "x"
-display p = if s /= "" then "(" ++ s ++ ")" else "0"
+displayP p = if s /= "" then "(" ++ s ++ ")" else "0"
 	where s = display' p
 display' (Poly xs) = intercalate " + " . map display_m $ xs
 display_m (n,x)
@@ -150,7 +160,7 @@ instance Functor Poly where
 	fmap f (Poly xs) = Poly (map (map f) xs)
 
 instance (Show a, Ring a) ⇒ Show (Poly a) where
-	show = display
+	show = displayP
 	-- show = guts
 
 -- instance Eq a ⇒ Eq (Poly a) where
@@ -197,23 +207,22 @@ instance (Group a, NumEq a) ⇒ Group (Poly a) where
 	(-) p q = mappend p (negate q)
 instance (Abelian a, NumEq a) ⇒ Abelian (Poly a)
 instance (Ring a, NumEq a) ⇒ Ring (Poly a) where
-	one = poly [one]
+	one = fromListP [one]
 	(*) = mul
-	fromInteger n = poly [fromInteger n]
+	fromInteger n = fromListP [fromInteger n]
+instance (CRing a, NumEq a) ⇒ CRing (Poly a)
 instance (IntDom a, NumEq a) ⇒ IntDom (Poly a)
--- instance (Ring a, NumEq a) ⇒ Module (Poly a) a where
---   scale r p = map (r*) p
 instance (Field a, NumEq a) ⇒ EuclideanDomain (Poly a) where
 	stdUnit p = monomialP 0 (leadingP p)
 	stdAssociate p = p /. leadingP p
 	-- div = old_div
 	-- p `mod` q = p - (p `div` q)*q
 	divMod = new_divMod
-instance Module m r ⇒ Module (Poly m) r where
-	scale r = map (scale r)
+instance Ring r ⇒ Module (Poly r) r where
+	scale r = map (r*)
 
 instance (Monoid a, CharZero a) ⇒ CharZero (Poly a) where
-	fromRational' x = poly [fromRational' x]
+	fromRational' x = fromListP [fromRational' x]
 
 -----------------------------------
 --- Internal Stuff

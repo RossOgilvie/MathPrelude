@@ -76,7 +76,7 @@ partialSumsPS (PS xs) pt = partialSums $ zipWith (*) xs powers
 
 -- | Truncate a power series to a polynomial of given degree.
 toPoly ∷ Monoid a ⇒ Int → PS a → Poly a
-toPoly n = poly . take n . toListPS
+toPoly n = fromListP . take n . toListPS
 
 -- | Construct a finite power series from a given polynomial.
 fromPoly ∷ Monoid a ⇒ Poly a → PS a
@@ -130,10 +130,11 @@ instance Ring a ⇒ Ring (PS a) where
   one = scalarPS one
   (*) = mul
 
+instance CRing a ⇒ CRing (PS a)
 instance IntDom a ⇒ IntDom (PS a)
 
-instance Module m r ⇒ Module (PS m) r where
-  scale r p = map (scale r) p
+instance Ring r ⇒ Module (PS r) r where
+  scale r = map (r*)
 
 instance (Field a, NumEq a) ⇒ Field (PS a) where
   (/) = division

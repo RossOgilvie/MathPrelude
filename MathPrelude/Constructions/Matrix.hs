@@ -5,9 +5,9 @@
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE PolyKinds #-}
+-- {-# LANGUAGE TypeFamilies #-}
+-- {-# LANGUAGE TypeOperators #-}
+-- {-# LANGUAGE PolyKinds #-}
 
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses#-}
@@ -68,7 +68,7 @@ multMt (M rows) m = M . map mkRow $ rows
     M cols = transposeMt m
     mkRow = fromListV . zipWith dotV cols . repeat
 
-actMt ∷ (KnownNat n, Ring a) ⇒ Mat n m a → Vec m a → Vec n a
+actMt ∷ (KnownNat n, KnownNat m, Ring a) ⇒ Mat n m a → Vec m a → Vec n a
 actMt (M rows) = fromListV . zipWith dotV rows . repeat
 
 -----------------------------------
@@ -76,10 +76,7 @@ actMt (M rows) = fromListV . zipWith dotV rows . repeat
 -----------------------------------
 
 takeAndCount ∷ Integer → [a] → (Bool, [a])
-takeAndCount n [] = (n <= 0, [])
-takeAndCount n (x:xs)
-  | n <= 0 = (True, [])
-  | otherwise = let (b, ys) = takeAndCount (n-1) xs in (b, x:ys)
+takeAndCount n xs = let xs' = take (int n) xs in (length xs' == int n, xs')
 
 fromRows ∷ forall n m a. KnownNat n ⇒ [Vec m a] → Mat n m a
 fromRows vs = if b then M vs' else error "fromRows: supplied list not long enough."
@@ -128,7 +125,7 @@ elim v w
     (p,q) = partition nearZero v'
     c = w'!! length p
 
-normalise v
+normaliseRow v
   | null q = v
   | otherwise = head q ./ v
   where
@@ -140,7 +137,7 @@ rowEsh (M rows) = M $ rowEsh' rows
 rowEsh' ∷ (KnownNat m, Field k) ⇒ [Vec m k] → [Vec m k]
 rowEsh' [] = []
 rowEsh' (row:rows) = nrow : (rowEsh' . map (elim nrow)) rows
-  where nrow = normalise row
+  where nrow = normaliseRow row
 
 reduceRowEsh ∷ (KnownNat n, KnownNat m, Field k) ⇒ Mat n m k → Mat n m k
 reduceRowEsh (M rows) = M . reverse . rowEsh' . reverse . rowEsh' $ rows
@@ -170,7 +167,7 @@ instance (KnownNat n, KnownNat m, Abelian a) ⇒ Abelian (Mat n m a)
 instance (KnownNat n, KnownNat m, Ring a) ⇒ Module (Mat n m a) a where
   scale b = liftMt (b*)
 
-instance (KnownNat n, Ring a) ⇒ Evaluable (Mat n m a) (Vec m a) (Vec n a) where
+instance (KnownNat n, KnownNat m, Ring a) ⇒ Evaluable (Mat n m a) (Vec m a) (Vec n a) where
   eval = actMt
 
 instance (KnownNat n, Ring a) ⇒ Ring (Mat n n a) where

@@ -13,10 +13,13 @@ import BasicPrelude
 import MathPrelude.Constructions.Polynomial
 import MathPrelude.Constructions.Complex
 import MathPrelude.Classes.Derivation
+import MathPrelude.Classes.Norm
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Transcendental
 import MathPrelude.Common.Convergence
 import MathPrelude.Extras.NewtonsMethod
+
+type PCD = Poly (Complex Double)
 
 -- | All the roots of a poly lie in a circle of this radius
 polyRootBound ∷ Poly (Complex Double) → Double
@@ -41,15 +44,16 @@ findRealRoots p = findRoots $ map fromReal p
 
 -- | Find all the roots of a polynomial with multiplicity.
 findRoots ∷ Poly (Complex Double) → [Complex Double]
-findRoots p = concatMap (duplicate . refine) crudeRoots
+-- findRoots p = concatMap (duplicate . refine) crudeRoots
+findRoots p = concatMap duplicate crudeRoots
 	where
 		repeated = gcd' p (derive p)
 		squarefree = if degreeP repeated > 0 then p `div` repeated else p
 		crudeRoots = dkMethod squarefree
-		refine x
-			| isRoot p x = x
-			| otherwise = findRoot p x
-		duplicate x = replicate (rootOrder p x) x
+		-- refine x
+		-- 	| isRoot p x = x
+		-- 	| otherwise = findRoot p x
+		duplicate x = replicate ro x where ro = max 1 (rootOrder p x) -- sometimes even the refinement is not enough, in which case root order returns 0, but we 'know' it is a root already
 
 -- | Factor a root from a polynomial and return the factored polynomial and the multiplicity.
 removeRoot ∷ Field a ⇒ Poly a → a → (Poly a, Int)
@@ -67,7 +71,7 @@ rootOrder p x = length . takeWhile (`isRoot` x) . take (degreeP p) . iterate der
 -- | Does the polynomial has this point as a root.
 isRoot ∷ Ring a ⇒ Poly a → a → Bool
 isRoot p x = nearZero $ eval p x
-linearPolyWithRoot c = poly [negate c, one]
+linearPolyWithRoot c = fromListP [negate c, one]
 
 --------------------------
 -- Durand–Kerner method
@@ -83,7 +87,7 @@ dkInitPts p = initPts
 	where
 		deg = degreeP p
 		omega = 2*pi/fromIntegral deg
-		args = map (\k → 1 + omega* fromIntegral k) [1..deg] -- roots of unity have pi*k/n args, and arg pi*k/n + 1 is never real
+		args = map (\k → 1 + omega* fromIntegral k) [1..deg] -- roots of unity have 2*pi*k/n args, and arg pi*k/n + 1 is never real
 		r = polyRootBound p
 		radii = map (\k → fromIntegral k*r/fromIntegral deg) [1..deg]
 		initPts = zipWith fromPolar radii args
@@ -91,7 +95,7 @@ dkInitPts p = initPts
 -- | A single round of the DK method.
 -- Set up should be to call dkStep poly [] [est. roots].
 -- Step through the  second list, taking from the front , recomputing, and putting onto the front of the first list.
--- Then in the final step, when the second list is echausted, reverse the first list to preserve the ordering
+-- Then in the final step, when the second list is exhausted, reverse the first list to preserve the ordering
 dkStep ∷ Poly (Complex Double) → [Complex Double] → [Complex Double] → [Complex Double]
 dkStep p before [] = reverse before
 dkStep p before (old:after) = dkStep p (new : before) after
@@ -108,7 +112,7 @@ solveBezout p q rhs
 	| otherwise = (zero, zero)
 		where
 			g = gcd' p q -- use the un-normalised gcd
-			(f,m) = divMod rhs g -- factor out the gcd from rhs
+			(f,m) = divMod rhs g -- factor out the gcd from rhs. rhs = f*gcd + m
 			(x,y) = extEuclidAlg p q -- solve the related x*p + y*q = g
 			(d,x') = divMod (x*f) q -- (xf)p + (yf)q = fg = rhs, but then reduce xf by the 'best possible' multiple of q
 			y' = (y*f) + d*p -- reduce yf by the same multiple. The higher degrees will be cancelled by the same factor

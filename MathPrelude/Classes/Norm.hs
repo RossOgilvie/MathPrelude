@@ -1,28 +1,46 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
-module MathPrelude.Classes.Norm where
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
+-- {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE FunctionalDependencies #-}
+module MathPrelude.Classes.Norm
+  ( Norm(..)
+  , InnerProd(..)
+  , ComplexInnerProd(..)
+  -- , normalise
+  ) where
 
 import BasicPrelude
 import qualified Prelude as P
 
--- import MathPrelude.Common.PreludeNumConst
+-- import MathPrelude.Algebraic.Module
 import MathPrelude.Common.Integral
-import MathPrelude.Common.Real
+import MathPrelude.Common.Transcendental
 
--- | A class for norms. BROKEN/NEEDS SERIOUS THOUGHT AND REVISION
-class Norm a where
-  norm ∷ Real b ⇒ a → b
+-- | A class for norms.
+class Norm v s | v → s where
+  norm ∷ v → s
 
+class InnerProd v s | v → s where
+  iprod ∷ v → v → s
 
-instance Norm Int where
-  norm = fromDouble . fromIntegral . P.abs
-instance Norm Int32 where
-  norm = fromDouble . fromIntegral . P.abs
-instance Norm Int64 where
-  norm = fromDouble . fromIntegral . P.abs
-instance Norm Integer where
-  norm = fromDouble . fromIntegral . P.abs
+class ComplexInnerProd v s | v → s where
+  cxiprod ∷ v → v → s
 
-instance Norm Float where
-  norm = convReal . P.abs
-instance Norm Double where
-  norm = fromDouble . P.abs
+-- instance (Transcendental s, InnerProd v s) ⇒ Norm v s where
+--   norm v = sqrt $ iprod v v
+
+instance Norm Int Int where
+  norm = P.abs
+instance Norm Int32 Int32 where
+  norm = P.abs
+instance Norm Int64 Int64 where
+  norm = P.abs
+instance Norm Integer Integer where
+  norm = P.abs
+
+instance Norm Float Float where
+  norm = P.abs
+instance Norm Double Double where
+  norm = P.abs

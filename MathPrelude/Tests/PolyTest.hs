@@ -23,7 +23,7 @@ import Test.QuickCheck
 instance (Monoid a, Arbitrary a) => Arbitrary (Poly a) where
 	arbitrary = do
 		ls <- arbitrary -- :: Gen [a]
-		return $ poly ls
+		return $ fromListP ls
 
 -- instance Arbitrary a => Arbitrary (Complex a) where
 -- 	arbitrary = do
@@ -31,8 +31,8 @@ instance (Monoid a, Arbitrary a) => Arbitrary (Poly a) where
 -- 		y <- arbitrary
 -- 		return $ x :+ y
 
-prop_construct xs = not (null xs) ==> (toListP . poly) xs == xs
-prop_destruct p = (poly . toListP) p == p
+prop_construct xs = not (null xs) ==> (toListP . fromListP) xs == xs
+prop_destruct p = (fromListP . toListP) p == p
 
 type PD = Poly Double
 prop_add_assc :: PD -> PD -> PD -> Bool
@@ -179,11 +179,11 @@ prop_factor_root x p n =
 	n > 0 ==>
 	eval p x /=~ 0 ==>
 	snd (removeRoot (y^n *p) x) == n
-	where y = poly [-x,1]
+	where y = fromListP [-x,1]
 
 
 c = 31.793125588403605 :+ 0.0 :: Complex Double
-y = poly [-c,1] :: Poly (Complex Double)
+y = fromListP [-c,1] :: Poly (Complex Double)
 powers_test = takeWhile (=~0) . map (\p -> eval p c) . map (y^) $ [1..]
 inf_division_test p = takeWhile (=~p) . map (division_test p) $ [1..]
 division_test q n = (!!(n-1)) . iterate (`div` q) $ (q^n)

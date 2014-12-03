@@ -81,6 +81,8 @@ instance EuclideanDomain a ⇒ Abelian (Quotient a) where
 instance EuclideanDomain a ⇒ Ring (Quotient a) where
   one = Quotient Nothing one
   (*) = liftQ2 (*)
+  
+instance EuclideanDomain a ⇒ CRing (Quotient a)
 
 instance (Derivation a, EuclideanDomain a) ⇒ Derivation (Quotient  a) where
   derive = liftQ derive

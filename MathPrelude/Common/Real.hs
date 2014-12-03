@@ -11,13 +11,14 @@ import qualified Prelude as P
 import qualified GHC.Float as GF
 
 import MathPrelude.Algebraic.Ring
+import MathPrelude.Algebraic.Field
 import MathPrelude.Common.Integral
 
 ------------------------------
 --- Classes
 ------------------------------
 -- | A class representing real numbers. The canonical representation is sadly the 'Double'.
-class Real a where
+class (Field a, Ord a) ⇒ Real a where
 	-- | Marshall a Double
 	fromDouble ∷ Double → a
 	-- | Export a Double

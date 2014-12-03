@@ -12,6 +12,9 @@ module MathPrelude.Extras.Combinatorics
   -- * Catalan Numbers
   -- $catalan
   , catalan, catalans
+  -- * Stirling Numbers
+  -- $stirling
+  , stirling, stirlingRow
   -- * Misc
   , sign
   ) where
@@ -85,3 +88,21 @@ catalans' k = sum $ zipWith (*) cat (reverse cat)
 
 -- | Compute a specific Catalan from the formula.
 catalan n = binomial (2*n) n `div` (n+1)
+
+-- $stirling
+-- <https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind>
+-- | Compute a row of Stirling numbers of the second kind, ie S(n,k) for k=0,..,n
+stirlingRow ∷ Integer → [Integer]
+stirlingRow 0 = [1]
+stirlingRow n = 0 : zipWith3 (\k o t → k*o + t) [1..] (drop 1 s ++ [0]) s
+  where s = stirlingRow (n-1)
+
+-- | Compute the Stirling numbers of the second kind, ie S(n,k)
+stirling ∷ Integer → Integer → Integer
+stirling n k
+  | n < 0 = 0
+  | k < 0 || k > n = 0
+  | k == n = 1
+  | n > 0 && k == 0 = 0
+  | n > 0 && k == 1 = 1
+  | otherwise = (stirlingRow n) !! fromIntegral k

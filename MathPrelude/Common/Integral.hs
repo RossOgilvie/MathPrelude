@@ -5,6 +5,7 @@ module MathPrelude.Common.Integral
 	, fromIntegral98
 	, toIntegral98
 	, fromIntegral
+	, integral, int
 	-- * Misc
 	, even
 	, odd
@@ -19,6 +20,8 @@ import qualified Prelude as P
 import MathPrelude.Algebraic.Ring
 
 -- import qualified GHC.Integer.Type as GHC
+
+import Control.Lens
 
 -----------------------------------
 --- Classes
@@ -41,6 +44,15 @@ toIntegral98 = P.fromIntegral . toInteger
 -- | Convert any integral to an element of any ring.
 fromIntegral ∷ (Integral a, Ring b) ⇒ a → b
 fromIntegral =  fromInteger . toInteger
+
+integral ∷ (Integral a, Integral b) => Prism Integer Integer a b
+integral = prism toInteger (Right . fromInteger)
+-- integral = prism toInteger $ \ i -> let a = fromInteger i in
+--   if toInteger a == i
+--   then Right a
+--   else Left i
+
+int n = n ^. integral
 
 -- | Test whether an integral is even.
 even ∷ Integral a ⇒ a → Bool

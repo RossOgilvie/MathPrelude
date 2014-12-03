@@ -1,12 +1,13 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, UndecidableInstances #-}
 module MathPrelude.Constructions.Complex
 	( Complex(..)
-	, display
+	, displayC
 	, iu, realPart, imagPart
 	, fromReal
 	, fromArg, arg, primitiveRoot
 	, fromPolar, toPolar
-	, conjugate, normsq, normsq', norm
+	, conjugate, normsq, normsq'
+	-- , norm
 	) where
 
 -----------------------------------
@@ -20,23 +21,18 @@ import Data.Complex(Complex(..))
 import MathPrelude.Algebraic.Field
 import MathPrelude.Classes.Derivation
 import MathPrelude.Classes.Evaluable
+import MathPrelude.Classes.Norm
 import MathPrelude.Algebraic.Module
 import MathPrelude.Common.Transcendental
 import MathPrelude.Common.Integral
 import MathPrelude.Common.Rational
 
 -----------------------------------
---- Classes
------------------------------------
-
--- data LazyComplex a = a :+~ a deriving (Eq)
-
------------------------------------
 --- Methods
 -----------------------------------
 -- | Display a complex number bracketed in the common notational form.
-display ∷ (Show a, NumEq a, Monoid a) ⇒ Complex a → Text
-display (x :+ y)
+displayC ∷ (Show a, NumEq a, Monoid a) ⇒ Complex a → Text
+displayC (x :+ y)
 	| nearZero y = show x
 	| nearZero x = show y ++ "i"
 	| otherwise = "(" ++ show x ++ "+" ++ show y ++ "i)"
@@ -73,9 +69,6 @@ normsq z = z * conjugate z
 -- | Take the square of the norm of a complex number, expressed a real number
 normsq' ∷ Ring a ⇒ Complex a → a
 normsq' = realPart . normsq
--- | Take the norm of a complex number, expressed a real number, ie sqrt 'normsq''
-norm ∷ (Ring a, Transcendental a) ⇒ Complex a → a
-norm = sqrt . realPart . normsq
 
 -- | Compute the argument of a complex numer. The range is from -pi to pi. Arg 0 = 0. Arg (-x:+0) = pi.
 arg ∷ (Ord a, Field a, Transcendental a) ⇒ Complex a → a
@@ -123,12 +116,18 @@ instance Ring a ⇒ Ring (Complex a) where
 	one = one :+ zero
 	(*) (x:+y) (x':+y') = (x*x' - y*y') :+ (x*y' + x'*y)
 	fromInteger x = fromInteger x :+ zero
+instance CRing a ⇒ CRing (Complex a)
 instance IntDom a ⇒ IntDom (Complex a)
 instance Field a ⇒ Field (Complex a) where
 	recip z@(x:+y) = (x/zz) :+ (negate y/zz)
 		where zz = normsq' z
-instance Module m r ⇒ Module (Complex m) r where
-	scale r = map (scale r)
+-- instance Module m r ⇒ Module (Complex m) r where
+instance Ring r ⇒ Module (Complex r) r where
+	scale r = map (r*)
+instance (Transcendental r, Ring r) ⇒ Norm (Complex r) r where
+	norm = sqrt . normsq'
+instance Ring r ⇒ ComplexInnerProd (Complex r) (Complex r) where
+	cxiprod z w = z * conjugate w
 
 instance Num a ⇒ Num (Complex a) where
 	abs = undefined

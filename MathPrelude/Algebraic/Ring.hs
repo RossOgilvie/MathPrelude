@@ -4,6 +4,7 @@ module MathPrelude.Algebraic.Ring
 	( module MathPrelude.Algebraic.Group
 	, Ring(..)
 	, Num(..)
+	, CRing(..)
 	, IntDom(..)
 	, (^)
 	, product
@@ -54,14 +55,17 @@ class (Eq a, Show a, Ring a) ⇒ Num a  where
 
 -- instance Num a ⇒ P.Num a
 
+-- | A commutatice ring is one where the multiplication operation is commutative.
+class Ring a ⇒ CRing a
+
 -- | An integral domain is a ring with the property that non-zero elements multiply to give non-zero elements. Another way to say this is that there are no zero divisors. This is equivalent to the cancellation law holding.
-class Ring a ⇒ IntDom a
+class CRing a ⇒ IntDom a
 
 
 -----------------------------------
 -- Methods
 -----------------------------------
--- | Fold a list together multiplicatively
+-- | Fold a list together multiplicatively. An empty list yield the multiplicative identity
 product ∷ Ring a ⇒ [a] → a
 product = foldr (*) one
 
@@ -105,6 +109,13 @@ instance Ring Int64 where one = oneInt64; (*) = (P.*); fromInteger = P.fromInteg
 instance Ring Float where one = oneFloat; (*) = (P.*); fromInteger = P.fromInteger;
 instance Ring Double where one = oneDouble; (*) = (P.*); fromInteger = P.fromInteger;
 
+instance CRing Integer
+instance CRing Int
+instance CRing Int32
+instance CRing Int64
+instance CRing Float
+instance CRing Double
+
 instance IntDom Integer
 instance IntDom Int
 instance IntDom Int32
@@ -120,9 +131,11 @@ instance Num Float where abs = P.abs; signum = P.signum
 instance Num Double where abs = P.abs; signum = P.signum
 
 instance Ring a ⇒ Ring (Maybe a) where one = Just one; (*) = liftM2 (*); fromInteger x = Just (fromInteger x)
+instance CRing a ⇒ CRing (Maybe a)
 instance IntDom a ⇒ IntDom (Maybe a)
 
 instance Ring b ⇒ Ring (a → b) where
 	one = const one
 	(*) f g x = f x * g x
+instance CRing b ⇒ CRing (a → b)
 instance IntDom b ⇒ IntDom (a → b)

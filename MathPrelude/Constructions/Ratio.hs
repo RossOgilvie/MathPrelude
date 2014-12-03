@@ -91,6 +91,8 @@ instance IntDom a ⇒ Ring (Ratio a) where
 	one = one :% one
 	(*) (x:%y) (x':%y') = (x*x') :% (y*y')
 
+instance IntDom a ⇒ CRing (Ratio a)
+
 instance IntDom a ⇒ IntDom (Ratio a)
 
 instance IntDom a ⇒ Field (Ratio a) where
