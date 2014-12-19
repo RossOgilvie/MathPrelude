@@ -1,8 +1,9 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Classes.Derivation where
 
-import BasicPrelude
-import MathPrelude.Classes.Group
+import           BasicPrelude
+import           MathPrelude.Classes.Group
 -- import qualified Prelude as P
 
 -- | A class representing derivable types.

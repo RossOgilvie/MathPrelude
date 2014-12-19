@@ -1,11 +1,12 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Extras.NewtonsMethod
   ( newtons
   ) where
 
-import BasicPrelude
-import MathPrelude.Classes.Field
-import MathPrelude.Extras.Convergence
+import           BasicPrelude
+import           MathPrelude.Classes.Field
+import           MathPrelude.Extras.Convergence
 
 newton_step f f' x = x - (f x / f' x)
 

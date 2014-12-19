@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Extras.Convergence
   (
   -- * Sequences
@@ -12,10 +13,10 @@ module MathPrelude.Extras.Convergence
   , series'
   ) where
 
-import BasicPrelude
-import MathPrelude.Classes.Ring
-import MathPrelude.Classes.NumEq
-import qualified Data.Either as E
+import           BasicPrelude
+import qualified Data.Either               as E
+import           MathPrelude.Classes.NumEq
+import           MathPrelude.Classes.Ring
 
 
 -- | The supplied predicate is applied to successive terms of the sequence, and if it matches then that is returned in a Left. Otherwise the last term is returned in a Right

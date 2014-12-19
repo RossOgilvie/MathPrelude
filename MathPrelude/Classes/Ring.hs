@@ -1,11 +1,13 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RebindableSyntax  #-}
+{-# LANGUAGE UnicodeSyntax     #-}
 -- | Represent a ring, a structure that is an abelian group with a unital multiplication operator that distributes over the group operation. Our rings are all commutative.
 module MathPrelude.Classes.Ring
 	( module MathPrelude.Classes.Group
 	, Ring(..)
 	, Num(..)
-	, CRing(..)
-	, IntDom(..)
+	, CRing
+	, IntDom
 	, (^)
 	, product
 	-- , two
@@ -14,11 +16,11 @@ module MathPrelude.Classes.Ring
 -----------------------------------
 --- Imports
 -----------------------------------
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                     as P
 
-import MathPrelude.Classes.Group
-import MathPrelude.PreludeNumConst
+import           MathPrelude.Classes.Group
+import           MathPrelude.PreludeNumConst
 -- import MathPrelude.Classes.Integral(even)
 
 

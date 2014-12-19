@@ -1,16 +1,17 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Constructions.CReal where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                            as P
 
-import Data.Number.CReal
+import           Data.Number.CReal
 
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Rational
-import MathPrelude.Classes.Real
-import MathPrelude.Classes.Transcendental
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Rational
+import           MathPrelude.Classes.Real
+import           MathPrelude.Classes.Transcendental
 
 instance NumEq CReal where
   (=~) = (==)

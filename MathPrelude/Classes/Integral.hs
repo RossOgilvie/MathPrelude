@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A module for converting between integral types.
 module MathPrelude.Classes.Integral
 	( Integral(..)
@@ -14,14 +15,14 @@ module MathPrelude.Classes.Integral
 -----------------------------------
 --- Imports
 -----------------------------------
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                  as P
 
-import MathPrelude.Classes.Ring
+import           MathPrelude.Classes.Ring
 
 -- import qualified GHC.Integer.Type as GHC
 
-import Control.Lens
+import           Control.Lens
 
 -----------------------------------
 --- Classes

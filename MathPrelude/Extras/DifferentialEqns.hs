@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Extras.DifferentialEqns
   ( module MathPrelude.Constructions.PowerSeries
   , firstODE
@@ -11,10 +12,10 @@ module MathPrelude.Extras.DifferentialEqns
 ----------------------------------
 -- Imports
 ----------------------------------
-import BasicPrelude
-import MathPrelude.Constructions.PowerSeries
-import MathPrelude.Extras.Combinatorics
-import MathPrelude.Classes.Integral
+import           BasicPrelude
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Constructions.PowerSeries
+import           MathPrelude.Extras.Combinatorics
 ----------------------------------
 -- Methods
 ----------------------------------

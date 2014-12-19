@@ -1,18 +1,19 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A module for converting between types that represent real numbers, and rounding operators.
 module MathPrelude.Classes.Real where
 
 ------------------------------
 --- Imports
 ------------------------------
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                      as P
 
-import qualified GHC.Float as GF
+import qualified GHC.Float                    as GF
 
-import MathPrelude.Classes.Ring
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Ring
 
 ------------------------------
 --- Classes

@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A module for converting between rational types.
 module MathPrelude.Classes.Rational
 	( Rational
@@ -13,12 +14,12 @@ module MathPrelude.Classes.Rational
 ------------------------------
 --- Imports
 ------------------------------
-import BasicPrelude
-import qualified Prelude as P
-import qualified Data.Ratio as Ratio98
+import           BasicPrelude
+import qualified Data.Ratio                      as Ratio98
+import qualified Prelude                         as P
 
-import MathPrelude.Constructions.Ratio
-import MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Constructions.Ratio
 
 ------------------------------
 --- Classes

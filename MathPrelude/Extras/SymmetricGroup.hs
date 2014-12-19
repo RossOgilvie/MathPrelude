@@ -1,4 +1,6 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 {-|
 Module      : Symmetric Group
 Description : A data type for permutations
@@ -14,13 +16,13 @@ module MathPrelude.Extras.SymmetricGroup
   , symm
   )  where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                          as P
 
-import MathPrelude.Classes.Group
-import MathPrelude.Classes.Ring
-import MathPrelude.Classes.Action
-import MathPrelude.Extras.Combinatorics
+import           MathPrelude.Classes.Action
+import           MathPrelude.Classes.Group
+import           MathPrelude.Classes.Ring
+import           MathPrelude.Extras.Combinatorics
 
 ------------------------------
 --- Data

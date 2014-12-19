@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A special ring that has a division procedure. This procedure allows the implementation of the Euclidean algorithm.
 module MathPrelude.Classes.EuclideanDomain
 	( module MathPrelude.Classes.Ring
@@ -7,10 +8,10 @@ module MathPrelude.Classes.EuclideanDomain
 	, extEuclidAlg
 	) where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                  as P
 
-import MathPrelude.Classes.Ring
+import           MathPrelude.Classes.Ring
 
 -----------------------------------
 --- EuclideanDomain

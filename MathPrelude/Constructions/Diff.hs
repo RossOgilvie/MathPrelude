@@ -1,6 +1,7 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 module MathPrelude.Constructions.Diff
   ( module MathPrelude.Classes.Derivation
   , Diff()
@@ -14,13 +15,13 @@ module MathPrelude.Constructions.Diff
 -----------------------------------
 --- Imports
 -----------------------------------
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                            as P
 
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Transcendental
-import MathPrelude.Classes.Module
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Module
+import           MathPrelude.Classes.Transcendental
 
 data Diff a = D !a (Diff a) | C !a
 

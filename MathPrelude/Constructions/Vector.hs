@@ -1,14 +1,15 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE MultiParamTypeClasses#-}
+
 module MathPrelude.Constructions.Vector
   ( Vec()
   , dimV
@@ -25,13 +26,13 @@ module MathPrelude.Constructions.Vector
 -----------------------------------
 --- Imports
 -----------------------------------
-import BasicPrelude hiding (Vec,foldr)
+import BasicPrelude hiding (foldr)
 import qualified Prelude as P
 
 import MathPrelude.Classes.Module
 import MathPrelude.Classes.Field
 import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Real
+-- import MathPrelude.Classes.Real
 import MathPrelude.Classes.Transcendental
 import MathPrelude.Classes.Norm
 
@@ -41,7 +42,7 @@ import GHC.TypeLits
 import Data.Proxy
 
 import Control.Lens
-import Control.Lens.Tuple
+-- import Control.Lens.Tuple
 
 import qualified Data.Foldable as F
 

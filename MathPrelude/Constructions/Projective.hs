@@ -1,4 +1,7 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 module MathPrelude.Constructions.Projective
   ( Proj
   , fromField
@@ -10,13 +13,13 @@ module MathPrelude.Constructions.Projective
 --- Imports
 -----------------------------------
 
-import BasicPrelude
-import qualified Prelude as P
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Derivation
-import MathPrelude.Constructions.Complex
-import MathPrelude.Classes.Rational
-import MathPrelude.Classes.Action
+import           BasicPrelude
+import           MathPrelude.Classes.Action
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Rational
+import           MathPrelude.Constructions.Complex
+import qualified Prelude                           as P
 
 -----------------------------------
 --- Proj

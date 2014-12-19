@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A comparison operation that makes sense for numeric types, such as applying approximate equality for floats.
 module MathPrelude.Classes.NumEq
 	( module MathPrelude.Classes.Logic
@@ -9,11 +10,11 @@ module MathPrelude.Classes.NumEq
 	)
 where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                     as P
 
-import MathPrelude.Classes.Logic
-import MathPrelude.PreludeNumConst
+import           MathPrelude.Classes.Logic
+import           MathPrelude.PreludeNumConst
 
 -----------------------------------
 --- Class

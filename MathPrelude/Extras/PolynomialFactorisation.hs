@@ -1,25 +1,28 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 module MathPrelude.Extras.PolynomialFactorisation
 	( findRoot
 	, findRoots
+	, findRealRoots
 	, removeRoot
 	, rootOrder
 	, isRoot
 	, solveBezout
 	) where
 
-import BasicPrelude
+import           BasicPrelude
 
-import MathPrelude.Constructions.Polynomial
-import MathPrelude.Constructions.Complex
-import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Norm
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Transcendental
-import MathPrelude.Extras.Convergence
-import MathPrelude.Extras.NewtonsMethod
-
-type PCD = Poly (Complex Double)
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Norm
+import           MathPrelude.Classes.Transcendental
+import           MathPrelude.Constructions.Complex
+import           MathPrelude.Constructions.Polynomial
+import           MathPrelude.Extras.Convergence
+import           MathPrelude.Extras.NewtonsMethod
 
 -- | All the roots of a poly lie in a circle of this radius
 polyRootBound ∷ Poly (Complex Double) → Double
@@ -71,6 +74,8 @@ rootOrder p x = length . takeWhile (`isRoot` x) . take (degreeP p) . iterate der
 -- | Does the polynomial has this point as a root.
 isRoot ∷ Ring a ⇒ Poly a → a → Bool
 isRoot p x = nearZero $ act p x
+
+linearPolyWithRoot ∷ Ring a ⇒ a → Poly a
 linearPolyWithRoot c = fromListP [negate c, one]
 
 --------------------------
@@ -97,7 +102,7 @@ dkInitPts p = initPts
 -- Step through the  second list, taking from the front , recomputing, and putting onto the front of the first list.
 -- Then in the final step, when the second list is exhausted, reverse the first list to preserve the ordering
 dkStep ∷ Poly (Complex Double) → [Complex Double] → [Complex Double] → [Complex Double]
-dkStep p before [] = reverse before
+dkStep _ before [] = reverse before
 dkStep p before (old:after) = dkStep p (new : before) after
 	where
 		new = old - (p $$ old)/denom
@@ -107,6 +112,7 @@ dkStep p before (old:after) = dkStep p (new : before) after
 -- Bezout's method
 ----------------------------------
 -- | Generalised Bezout's method. Given p, q and a right hand side, finds (x,y) s.t. x*p + y*q = rhs, with x and y of minimal degree.
+solveBezout ∷ EuclideanDomain a ⇒ a → a → a → (a,a)
 solveBezout p q rhs
 	| nearZero m = (x', y') -- only a sol if gcd | rhs
 	| otherwise = (zero, zero)

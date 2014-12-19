@@ -1,15 +1,18 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE RebindableSyntax       #-}
+{-# LANGUAGE UnicodeSyntax          #-}
+
+{-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE MultiParamTypeClasses  #-}
 -- | A module abstracts the notion of scaling an additive group.
 module MathPrelude.Classes.Module where
 
-import BasicPrelude
+import           BasicPrelude
 
-import MathPrelude.Classes.Ring
-import MathPrelude.Classes.Group
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Norm
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Group
+import           MathPrelude.Classes.Norm
+import           MathPrelude.Classes.Ring
 
 -----------------------------------
 --- Module

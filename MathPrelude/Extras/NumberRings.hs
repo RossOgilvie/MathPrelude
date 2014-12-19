@@ -1,24 +1,25 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax  #-}
+{-# LANGUAGE UnicodeSyntax     #-}
 
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TemplateHaskell   #-}
 
 module MathPrelude.Extras.NumberRings
   ( Z(..)
   , modulusZ
   ) where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                          as P
 
-import MathPrelude.Extras.NumberRingsTH
-import MathPrelude.Extras.Primes
-import MathPrelude.Classes.Field
+import           MathPrelude.Classes.Field
+import           MathPrelude.Extras.NumberRingsTH
+import           MathPrelude.Extras.Primes
 
-import GHC.TypeLits
-import Data.Proxy
+import           Data.Proxy
+import           GHC.TypeLits
 
-import Language.Haskell.TH
+import           Language.Haskell.TH
 
 
 instance KnownNat n ⇒ Show (Z n) where

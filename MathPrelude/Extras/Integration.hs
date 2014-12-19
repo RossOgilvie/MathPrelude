@@ -1,15 +1,19 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UnicodeSyntax         #-}
+
+{-# LANGUAGE MultiParamTypeClasses #-}
+
 module MathPrelude.Extras.Integration
   ( numIntegrate
   , trapezoid
   , simpsons
   ) where
 
-import BasicPrelude
-import MathPrelude.Classes.Field
-import MathPrelude.Extras.Convergence
+import           BasicPrelude
+import           MathPrelude.Classes.Field
+import           MathPrelude.Extras.Convergence
 -- import MathPrelude.Constructions.Complex
-import MathPrelude.Classes.Module
+import           MathPrelude.Classes.Module
 -- import MathPrelude.Classes.Transcendental
 
 

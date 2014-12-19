@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Extras.Combinatorics
   (
   -- * Factorials
@@ -19,12 +20,12 @@ module MathPrelude.Extras.Combinatorics
   , sign
   ) where
 
-import BasicPrelude
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.EuclideanDomain
+import           BasicPrelude
+import           MathPrelude.Classes.EuclideanDomain
+import           MathPrelude.Classes.Field
 -- import MathPrelude.Constructions.Complex
 -- import MathPrelude.Classes.Module
-import MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Integral
 
 -- | The factorial function. Returns 1 on negative numbers.
 -- <https://en.wikipedia.org/wiki/Factorial Wikipedia>

@@ -1,7 +1,5 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
-
 {-# LANGUAGE TemplateHaskell #-}
-
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE ScopedTypeVariables #-}

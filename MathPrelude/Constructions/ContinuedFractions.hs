@@ -1,20 +1,22 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, BangPatterns #-}
+{-# LANGUAGE BangPatterns     #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Constructions.ContinuedFractions where
 
 ----------------------------------
 -- Imports
 ----------------------------------
-import BasicPrelude
-import qualified Data.Maybe as M
-import MathPrelude.Classes.EuclideanDomain
-import MathPrelude.Classes.Field
-import MathPrelude.Constructions.Ratio
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Rational
-import MathPrelude.Classes.Transcendental
-import MathPrelude.Classes.Derivation
+import           BasicPrelude
+import qualified Data.Maybe                          as M
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.EuclideanDomain
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Rational
+import           MathPrelude.Classes.Transcendental
+import           MathPrelude.Constructions.Ratio
 
-import Test.QuickCheck hiding (output)
+import           Test.QuickCheck                     hiding (output)
 
 -- | A continued fraction
 data CF = CF [Integer] deriving Show

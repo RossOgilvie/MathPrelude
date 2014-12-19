@@ -1,7 +1,7 @@
 {-# LANGUAGE UnicodeSyntax #-}
 module MathPrelude.PreludeNumConst where
 
-import Prelude(fromInteger, fromRational, Int, Integer, Float, Double)
+-- import Prelude(fromInteger, fromRational, Int, Integer, Float, Double)
 import Data.Int (Int32, Int64)
 
 -- * Constants

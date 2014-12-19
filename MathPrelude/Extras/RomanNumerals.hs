@@ -1,5 +1,6 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE RebindableSyntax           #-}
+{-# LANGUAGE UnicodeSyntax              #-}
 {-|
 Module      : Roman Numerals
 Description : A data type for integers represented as Roman numerals
@@ -9,12 +10,12 @@ module MathPrelude.Extras.RomanNumerals
   , Roman()
   )  where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                             as P
 
-import MathPrelude.Classes.Ring
-import MathPrelude.Classes.EuclideanDomain
-import MathPrelude.Classes.Integral
+import           MathPrelude.Classes.EuclideanDomain
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Ring
 
 newtype Roman = R Integer
   deriving (Enum, Eq, NumEq, Ord, Monoid, Group, Abelian, Ring, CRing, IntDom, EuclideanDomain, Integral)

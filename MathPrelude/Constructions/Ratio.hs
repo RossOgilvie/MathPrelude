@@ -1,4 +1,8 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, UndecidableInstances #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UndecidableInstances  #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 module MathPrelude.Constructions.Ratio
 	( module MathPrelude.Classes.Field
 	, Ratio(..)
@@ -8,13 +12,13 @@ module MathPrelude.Constructions.Ratio
 	, evaluateR
 	)  where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                             as P
 
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.EuclideanDomain
-import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Action
+import           MathPrelude.Classes.Action
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.EuclideanDomain
+import           MathPrelude.Classes.Field
 
 ------------------------------
 --- Ratio

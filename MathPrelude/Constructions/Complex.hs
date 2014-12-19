@@ -1,4 +1,10 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings, MultiParamTypeClasses, FlexibleInstances, IncoherentInstances, UndecidableInstances #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE IncoherentInstances   #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UndecidableInstances  #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 module MathPrelude.Constructions.Complex
 	( Complex(..)
 	, displayC
@@ -13,19 +19,19 @@ module MathPrelude.Constructions.Complex
 -----------------------------------
 --- Imports
 -----------------------------------
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                            as P
 
-import Data.Complex(Complex(..))
+import           Data.Complex                       (Complex (..))
 
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Action
-import MathPrelude.Classes.Norm
-import MathPrelude.Classes.Module
-import MathPrelude.Classes.Transcendental
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Rational
+import           MathPrelude.Classes.Action
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Module
+import           MathPrelude.Classes.Norm
+import           MathPrelude.Classes.Rational
+import           MathPrelude.Classes.Transcendental
 
 -----------------------------------
 --- Methods

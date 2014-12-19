@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, BangPatterns #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Extras.SpecialFunc
   ( module MathPrelude.Constructions.Complex
   , gammaF
@@ -12,16 +13,16 @@ module MathPrelude.Extras.SpecialFunc
 -----------------------------------------
 -- Imports
 -----------------------------------------
-import BasicPrelude
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.EuclideanDomain
-import MathPrelude.Constructions.Complex
-import MathPrelude.Extras.Convergence
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Rational
-import MathPrelude.Classes.Transcendental
-import MathPrelude.Extras.Primes
-import MathPrelude.Extras.Combinatorics
+import           BasicPrelude
+import           MathPrelude.Classes.EuclideanDomain
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Rational
+import           MathPrelude.Classes.Transcendental
+import           MathPrelude.Constructions.Complex
+import           MathPrelude.Extras.Combinatorics
+import           MathPrelude.Extras.Convergence
+import           MathPrelude.Extras.Primes
 
 -----------------------------------------
 -- Gamma Function

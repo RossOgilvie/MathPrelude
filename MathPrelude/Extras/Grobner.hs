@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Extras.Grobner
   (
   ) where
@@ -6,7 +7,7 @@ module MathPrelude.Extras.Grobner
 ----------------------------------
 -- Imports
 ----------------------------------
-import BasicPrelude
+import           BasicPrelude
 
 ----------------------------------
 -- Methods

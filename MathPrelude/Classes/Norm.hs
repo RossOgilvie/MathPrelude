@@ -1,21 +1,23 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE RebindableSyntax       #-}
+{-# LANGUAGE UnicodeSyntax          #-}
+
 -- {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE MultiParamTypeClasses  #-}
+{-# LANGUAGE UndecidableInstances   #-}
 module MathPrelude.Classes.Norm
   ( Norm(..)
   , InnerProd(..)
   , ComplexInnerProd(..)
   ) where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude      as P
 
 -- import MathPrelude.Classes.Module
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Transcendental
+-- import MathPrelude.Classes.Integral
+-- import MathPrelude.Classes.Transcendental
 
 -- | A class for norms.
 class Norm v s | v → s where

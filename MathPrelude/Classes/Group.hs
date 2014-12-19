@@ -1,9 +1,10 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | Represent a group, a structure with an invertible operation, that may or may not be commutative (aka abelian).
 module MathPrelude.Classes.Group
 	( module MathPrelude.Classes.NumEq
 	, Group(..)
-	, Abelian(..)
+	, Abelian
 	, zero
 	, (+)
 	, sum) where
@@ -11,11 +12,11 @@ module MathPrelude.Classes.Group
 -----------------------------------
 --- Imports
 -----------------------------------
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                     as P
 
-import MathPrelude.Classes.NumEq
-import MathPrelude.PreludeNumConst
+import           MathPrelude.Classes.NumEq
+import           MathPrelude.PreludeNumConst
 
 -----------------------------------
 --- Classes

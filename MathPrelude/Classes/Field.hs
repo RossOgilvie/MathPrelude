@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A field is a ring where all non-zero elements have multiplicative inverses. Ie, it has a division operation.
 module MathPrelude.Classes.Field
 	( module MathPrelude.Classes.Ring
@@ -6,10 +7,10 @@ module MathPrelude.Classes.Field
 	, half
 	)  where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                  as P
 
-import MathPrelude.Classes.Ring
+import           MathPrelude.Classes.Ring
 
 ------------------------------
 --- Classes

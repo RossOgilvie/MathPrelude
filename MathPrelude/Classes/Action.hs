@@ -1,15 +1,16 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax       #-}
+{-# LANGUAGE UnicodeSyntax          #-}
 
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FunctionalDependencies #-}
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses  #-}
 
 module MathPrelude.Classes.Action
   ( Action(..)
   , ($$)
   ) where
 
-import BasicPrelude
+import           BasicPrelude
 
 -- | A class for function like objects of type a that can act on points in type b to produce c's. Types a and b determine c.
 class Action a b c | a b → c where

@@ -1,4 +1,6 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, BangPatterns #-}
+{-# LANGUAGE BangPatterns     #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 module MathPrelude.Extras.EllipticFunctions
   (
   -- * Misc
@@ -39,12 +41,12 @@ module MathPrelude.Extras.EllipticFunctions
 -----------------------------------
 --- Imports
 -----------------------------------
-import BasicPrelude
-import MathPrelude.Classes.Field
-import MathPrelude.Extras.Convergence
-import MathPrelude.Classes.Transcendental
-import MathPrelude.Classes.Integral
-import MathPrelude.Constructions.Complex
+import           BasicPrelude
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Transcendental
+import           MathPrelude.Constructions.Complex
+import           MathPrelude.Extras.Convergence
 -- import MathPrelude.Classes.Module
 
 -----------------------------------

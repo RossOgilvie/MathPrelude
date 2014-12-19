@@ -13,4 +13,4 @@ module MathPrelude.Extras.Primes
   ( module Data.Numbers.Primes
   ) where
 
-import Data.Numbers.Primes
+import           Data.Numbers.Primes

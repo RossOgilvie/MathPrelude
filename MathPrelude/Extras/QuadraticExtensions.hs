@@ -1,4 +1,7 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings, GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE RebindableSyntax           #-}
+{-# LANGUAGE UnicodeSyntax              #-}
 module MathPrelude.Extras.QuadraticExtensions
   (
   -- * Quadratic extentions of the rationals
@@ -6,12 +9,12 @@ module MathPrelude.Extras.QuadraticExtensions
   , QuadExt(..), quadExt
   )  where
 
-import BasicPrelude
-import MathPrelude.Classes.EuclideanDomain
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Rational
-import MathPrelude.Constructions.Quotient
-import MathPrelude.Constructions.Polynomial
+import           BasicPrelude
+import           MathPrelude.Classes.EuclideanDomain
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Rational
+import           MathPrelude.Constructions.Polynomial
+import           MathPrelude.Constructions.Quotient
 
 -- | The quadratic extenion of the rationals by the sqrt of 2.
 newtype Qr2 = Qr2 (Quotient (Poly Rational)) deriving

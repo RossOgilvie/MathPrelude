@@ -1,4 +1,8 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 module MathPrelude.Constructions.PowerSeries
   ( module MathPrelude.Classes.Field
   , module MathPrelude.Classes.Action
@@ -14,18 +18,18 @@ module MathPrelude.Constructions.PowerSeries
 --- Imports
 -----------------------------------
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                              as P
 
-import MathPrelude.Classes.Module
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Derivation
-import MathPrelude.Constructions.Polynomial
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Module
+import           MathPrelude.Constructions.Polynomial
 
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Transcendental
-import MathPrelude.Extras.Convergence
-import MathPrelude.Classes.Action
+import           MathPrelude.Classes.Action
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Transcendental
+import           MathPrelude.Extras.Convergence
 
 
 -----------------------------------

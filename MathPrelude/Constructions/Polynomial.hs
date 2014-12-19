@@ -1,4 +1,8 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RebindableSyntax      #-}
+{-# LANGUAGE UnicodeSyntax         #-}
 module MathPrelude.Constructions.Polynomial
 	( module MathPrelude.Classes.Module
 	, module MathPrelude.Classes.Field
@@ -15,19 +19,19 @@ module MathPrelude.Constructions.Polynomial
 --- Imports
 -----------------------------------
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                             as P
 
-import MathPrelude.Classes.Module
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.EuclideanDomain
-import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Action
-import MathPrelude.Classes.Integral
-import MathPrelude.Classes.Rational
+import           MathPrelude.Classes.Action
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.EuclideanDomain
+import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.Module
+import           MathPrelude.Classes.Rational
 
-import Control.Lens hiding (Action)
-import qualified Data.Foldable as F
+import           Control.Lens                        hiding (Action)
+import qualified Data.Foldable                       as F
 
 -----------------------------------
 --- Poly
@@ -78,7 +82,8 @@ fromFactorsP ls = product . map (\l → fromListP [-l,1]) $ ls
 
 -- | Extract the constant coeffiecient of a polynomial.
 constP ∷ Monoid a ⇒ Poly a → a
-constP (Poly ((n,a):xs)) = if n == 0 then a else mempty
+constP (Poly []) = mempty
+constP (Poly ((n,a):_)) = if n == 0 then a else mempty
 
 -- | Extract the leading coeffiecient of a polynomial.
 leadingP ∷ Ring a ⇒ Poly a → a
@@ -275,13 +280,14 @@ sortP (Poly xs) = Poly . sortP' $ xs
 sortP' = sortBy (compare `on` fst)
 
 -- | Given two sorted polynomials, merge their terms with the given function.
-merge ∷ Monoid a ⇒ (a → a→ a) → Poly a → Poly a → Poly a
-merge' f p [] = p
-merge' f [] q = q
+merge' ∷ Monoid a ⇒ (a → a→ a) → [a] → [a] → [a]
+merge' _ p [] = p
+merge' _ [] q = q
 merge' f (x@(n,a):xs) (y@(m,b):ys)
 	| n == m = (n, f a b) : merge' f xs ys
 	| n < m = x : merge' f xs (y:ys)
 	| otherwise = y : merge' f (x:xs) ys
+merge ∷ Monoid a ⇒ (a → a→ a) → Poly a → Poly a → Poly a
 merge f (Poly xs) (Poly ys) = Poly $ merge' f xs ys
 
 -- | remove a term of the specified degree.

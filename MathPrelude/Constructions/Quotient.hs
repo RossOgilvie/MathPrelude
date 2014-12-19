@@ -1,4 +1,6 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RebindableSyntax  #-}
+{-# LANGUAGE UnicodeSyntax     #-}
 module MathPrelude.Constructions.Quotient
   ( module MathPrelude.Classes.EuclideanDomain
   , Quotient(..)
@@ -6,11 +8,11 @@ module MathPrelude.Constructions.Quotient
   , liftQ, liftQ2, liftQ2'
   )  where
 
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                             as P
 
-import MathPrelude.Classes.EuclideanDomain
-import MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.Derivation
+import           MathPrelude.Classes.EuclideanDomain
 
 
 ------------------------------
@@ -81,7 +83,7 @@ instance EuclideanDomain a ⇒ Abelian (Quotient a) where
 instance EuclideanDomain a ⇒ Ring (Quotient a) where
   one = Quotient Nothing one
   (*) = liftQ2 (*)
-  
+
 instance EuclideanDomain a ⇒ CRing (Quotient a)
 
 instance (Derivation a, EuclideanDomain a) ⇒ Derivation (Quotient  a) where

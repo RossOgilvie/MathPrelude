@@ -1,14 +1,15 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A module to do transcendental operations, such as exponentials and trigonometry.
 module MathPrelude.Classes.Transcendental where
 
 ------------------------------
 --- Imports
 ------------------------------
-import BasicPrelude
-import qualified Prelude as P
+import           BasicPrelude
+import qualified Prelude                   as P
 
-import MathPrelude.Classes.Field
+import           MathPrelude.Classes.Field
 
 ------------------------------
 --- Classes

@@ -1,4 +1,5 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax    #-}
 -- | A module with the basic logical operators
 module MathPrelude.Classes.Logic
 	( P.not
@@ -8,9 +9,9 @@ module MathPrelude.Classes.Logic
 	, ifThenElse
 	) where
 
-import BasicPrelude
-import qualified Prelude as P
-import qualified Data.List as L
+import           BasicPrelude
+import qualified Data.List    as L
+import qualified Prelude      as P
 
 -- | This binary logic function corresponds to the formal logic implication operator, aka logical consequence or entailment. It is false if and only if the first argument is true and the second is  false.
 implies ∷ Bool → Bool → Bool

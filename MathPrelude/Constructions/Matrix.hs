@@ -1,16 +1,15 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-
+{-# LANGUAGE MultiParamTypeClasses#-}
+-- {-# LANGUAGE PolyKinds #-}
 -- {-# LANGUAGE TypeFamilies #-}
 -- {-# LANGUAGE TypeOperators #-}
--- {-# LANGUAGE PolyKinds #-}
-
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses#-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module MathPrelude.Constructions.Matrix
   ( Mat()
   , dimMt

@@ -1,4 +1,6 @@
-{-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+{-# LANGUAGE RebindableSyntax #-}
+{-# LANGUAGE UnicodeSyntax #-}
+
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE ViewPatterns #-}
 module MathPrelude.Constructions.Sphere3 where
@@ -12,7 +14,7 @@ import MathPrelude.Constructions.Complex
 import MathPrelude.Constructions.Vector
 import MathPrelude.Constructions.Matrix
 
-import GHC.TypeLits
+-- import GHC.TypeLits
 
 import Control.Lens
 
