@@ -28,11 +28,11 @@ module MathPrelude.Constructions.Matrix
 import BasicPrelude hiding (Vec)
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Module
-import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.Module
+import MathPrelude.Classes.Field
 import MathPrelude.Constructions.Vector
-import MathPrelude.Classes.Evaluable
-import MathPrelude.Common.Integral
+import MathPrelude.Classes.Action
+import MathPrelude.Classes.Integral
 
 import GHC.TypeLits
 import Data.Proxy
@@ -102,7 +102,6 @@ zeroes n = take n $ repeat zero
 
 diag' ∷ Ring r ⇒ Int → [r] → [[r]]
 diag' n = zipWith (\k d → zeroes k ++ [d] ++ zeroes (n-k-1)) [0..(n-1)]
-
 diag ∷ forall n r. (KnownNat n, Ring r) ⇒ [r] → Mat n n r
 diag = fromListsMt . diag' n'
   where n' = fromInteger $ natVal (Proxy ∷ Proxy n)
@@ -167,8 +166,8 @@ instance (KnownNat n, KnownNat m, Abelian a) ⇒ Abelian (Mat n m a)
 instance (KnownNat n, KnownNat m, Ring a) ⇒ Module (Mat n m a) a where
   scale b = liftMt (b*)
 
-instance (KnownNat n, KnownNat m, Ring a) ⇒ Evaluable (Mat n m a) (Vec m a) (Vec n a) where
-  eval = actMt
+instance (KnownNat n, KnownNat m, Ring a) ⇒ Action (Mat n m a) (Vec m a) (Vec n a) where
+  act = actMt
 
 instance (KnownNat n, Ring a) ⇒ Ring (Mat n n a) where
   (*) = multMt

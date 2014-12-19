@@ -6,6 +6,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE MultiParamTypeClasses#-}
 module MathPrelude.Constructions.Vector
   ( Vec()
@@ -26,12 +28,14 @@ module MathPrelude.Constructions.Vector
 import BasicPrelude hiding (Vec,foldr)
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Module
-import MathPrelude.Algebraic.Field
-import MathPrelude.Common.Integral
--- import MathPrelude.Common.Real
-import MathPrelude.Common.Transcendental
+import MathPrelude.Classes.Module
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Real
+import MathPrelude.Classes.Transcendental
 import MathPrelude.Classes.Norm
+
+import MathPrelude.Constructions.Complex
 
 import GHC.TypeLits
 import Data.Proxy
@@ -220,6 +224,22 @@ instance (KnownNat n, Ring a) ⇒ Module (Vec n a) a where
   scale b = liftV (b*)
 
 instance (KnownNat n, Field a) ⇒ VectorSpace (Vec n a) a
+
+instance KnownNat n ⇒ InnerProd (Vec n Double) Double where
+  iprod = dotV
+
+instance KnownNat n ⇒ Norm (Vec n Double) Double where
+  norm v = sqrt $ dotV v v
+
+instance (KnownNat n, Ring a, InnerProd (Vec n a) a) ⇒ InnerProd (Vec n (Complex a)) (Complex a) where
+  iprod v w = dotV v (liftV conjugate w)
+
+instance (KnownNat n, Transcendental a, InnerProd (Vec n (Complex a)) (Complex a)) ⇒ Norm (Vec n (Complex a)) a where
+  norm v = sqrt . realPart $ iprod v v
+
+-- instance (KnownNat n, ComplexClass (Complex a), Transcendental a) ⇒ Norm (Vec n (Complex a)) a where
+--   norm v = sqrt . realPart $ dotV v v
+
 
 -----------------------------------
 --- Lens Instances

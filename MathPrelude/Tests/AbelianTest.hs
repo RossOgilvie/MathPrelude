@@ -4,7 +4,7 @@ module MathPrelude.Tests.AbelianTest where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Group
+import MathPrelude.Classes.Group
 import MathPrelude.Tests.Laws
 import Test.QuickCheck
 

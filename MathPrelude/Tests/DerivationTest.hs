@@ -5,11 +5,11 @@ import BasicPrelude
 import qualified Prelude as P
 
 import MathPrelude.Classes.Derivation
-import MathPrelude.Algebraic.Ring
+import MathPrelude.Classes.Ring
 import MathPrelude.Constructions.Polynomial
 import MathPrelude.Constructions.Quotient
 
--- import MathPrelude.Common.Floating
+-- import MathPrelude.Classes.Floating
 import MathPrelude.Extras.PolynomialFactorisation
 import MathPrelude.Tests.PolyTest
 import MathPrelude.Tests.RatioTest

@@ -1,6 +1,6 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax, OverloadedStrings #-}
 module MathPrelude.Constructions.Quotient
-  ( module MathPrelude.Algebraic.EuclideanDomain
+  ( module MathPrelude.Classes.EuclideanDomain
   , Quotient(..)
   , proj
   , liftQ, liftQ2, liftQ2'
@@ -9,7 +9,7 @@ module MathPrelude.Constructions.Quotient
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.EuclideanDomain
+import MathPrelude.Classes.EuclideanDomain
 import MathPrelude.Classes.Derivation
 
 

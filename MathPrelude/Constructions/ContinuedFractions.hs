@@ -6,12 +6,12 @@ module MathPrelude.Constructions.ContinuedFractions where
 ----------------------------------
 import BasicPrelude
 import qualified Data.Maybe as M
-import MathPrelude.Algebraic.EuclideanDomain
-import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.EuclideanDomain
+import MathPrelude.Classes.Field
 import MathPrelude.Constructions.Ratio
-import MathPrelude.Common.Integral
-import MathPrelude.Common.Rational
-import MathPrelude.Common.Transcendental
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Rational
+import MathPrelude.Classes.Transcendental
 import MathPrelude.Classes.Derivation
 
 import Test.QuickCheck hiding (output)
@@ -210,6 +210,8 @@ instance Abelian (CF) where
 instance Ring (CF) where
   one = CF [one]
   (*) = doTR trMul
+
+instance CRing (CF)
 
 instance IntDom (CF)
 

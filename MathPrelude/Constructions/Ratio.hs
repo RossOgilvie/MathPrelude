@@ -1,6 +1,6 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, UndecidableInstances #-}
 module MathPrelude.Constructions.Ratio
-	( module MathPrelude.Algebraic.Field
+	( module MathPrelude.Classes.Field
 	, Ratio(..)
 	, numerator
 	, denominator
@@ -11,10 +11,10 @@ module MathPrelude.Constructions.Ratio
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Field
-import MathPrelude.Algebraic.EuclideanDomain
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.EuclideanDomain
 import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Evaluable
+import MathPrelude.Classes.Action
 
 ------------------------------
 --- Ratio
@@ -73,8 +73,9 @@ instance (IntDom a, NumEq a) ⇒ NumEq (Ratio a) where
 	-- (>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
 instance (Derivation a, Ring a) ⇒ Derivation (Ratio a) where
 	derive (x:%y) = (derive x * y - x * derive y) :% (y^2)
-instance Evaluable a b c ⇒ Evaluable (Ratio a) b (Ratio c) where
-	eval (p:%q) = \x → (p$$x) :% (q$$x)
+
+instance Action a b c ⇒ Action (Ratio a) b (Ratio c) where
+	act (p:%q) = \x → (p$$x) :% (q$$x)
 
 
 

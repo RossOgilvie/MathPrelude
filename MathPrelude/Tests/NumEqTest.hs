@@ -4,9 +4,9 @@ module MathPrelude.Tests.NumEqTest where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Logic
-import MathPrelude.Common.NumEq
-import MathPrelude.Common.PreludeNumConst
+import MathPrelude.Classes.Logic
+import MathPrelude.Classes.NumEq
+import MathPrelude.PreludeNumConst
 
 import Test.QuickCheck
 

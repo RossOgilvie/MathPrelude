@@ -18,14 +18,14 @@ import qualified Prelude as P
 
 import Data.Complex(Complex(..))
 
-import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.Field
 import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Evaluable
+import MathPrelude.Classes.Action
 import MathPrelude.Classes.Norm
-import MathPrelude.Algebraic.Module
-import MathPrelude.Common.Transcendental
-import MathPrelude.Common.Integral
-import MathPrelude.Common.Rational
+import MathPrelude.Classes.Module
+import MathPrelude.Classes.Transcendental
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Rational
 
 -----------------------------------
 --- Methods
@@ -96,8 +96,8 @@ instance Functor Complex where
 
 instance Derivation a ⇒ Derivation (Complex a) where
 	derive (x:+y) = derive x :+ derive y
-instance Evaluable a b c ⇒ Evaluable (Complex a) b (Complex c) where
-	eval (x:+y) p = eval x p :+ eval y p
+instance Action a b c ⇒ Action (Complex a) b (Complex c) where
+	act (x:+y) p = act x p :+ act y p
 instance NumEq a ⇒ NumEq (Complex a) where
 	(x1 :+ y1) =~ (x2 :+ y2) = (x1 =~ x2) && (y1 =~ y2)
 	-- epsilon = epsilon :+ epsilon

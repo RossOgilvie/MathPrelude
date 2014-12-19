@@ -1,7 +1,7 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Constructions.PowerSeries
-  ( module MathPrelude.Algebraic.Field
-  , module MathPrelude.Classes.Evaluable
+  ( module MathPrelude.Classes.Field
+  , module MathPrelude.Classes.Action
   , PS(..)
   , fromListPS ,toListPS
   , scalarPS, monomialPS, constPS
@@ -17,15 +17,15 @@ module MathPrelude.Constructions.PowerSeries
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Module
-import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.Module
+import MathPrelude.Classes.Field
 import MathPrelude.Classes.Derivation
 import MathPrelude.Constructions.Polynomial
 
-import MathPrelude.Common.Integral
-import MathPrelude.Common.Transcendental
-import MathPrelude.Common.Convergence
-import MathPrelude.Classes.Evaluable
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Transcendental
+import MathPrelude.Extras.Convergence
+import MathPrelude.Classes.Action
 
 
 -----------------------------------
@@ -113,8 +113,8 @@ instance Ring a ⇒ Derivation (PS a) where
   derive (PS p) = PS $ zipWith (*) (tail p) (map fromInteger [1..])
 instance Field a ⇒ Integration (PS a) where
   integrate (PS p) = PS $ 0 : zipWith (/) p (map fromInteger [1..])
-instance Ring a ⇒ Evaluable (PS a) a a where
-  eval = evalPS
+instance Ring a ⇒ Action (PS a) a a where
+  act = evalPS
 
 
 instance Monoid a ⇒ Monoid (PS a) where

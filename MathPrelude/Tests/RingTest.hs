@@ -4,7 +4,7 @@ module MathPrelude.Tests.RingTest where
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Ring
+import MathPrelude.Classes.Ring
 import MathPrelude.Tests.AbelianTest
 import MathPrelude.Tests.Laws as Laws
 import Test.QuickCheck

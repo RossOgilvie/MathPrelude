@@ -1,9 +1,9 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleInstances, OverloadedStrings #-}
 module MathPrelude.Constructions.Polynomial
-	( module MathPrelude.Algebraic.Module
-	, module MathPrelude.Algebraic.Field
-	, module MathPrelude.Algebraic.EuclideanDomain
-	, module MathPrelude.Classes.Evaluable
+	( module MathPrelude.Classes.Module
+	, module MathPrelude.Classes.Field
+	, module MathPrelude.Classes.EuclideanDomain
+	, module MathPrelude.Classes.Action
 	, Poly()
 	, poly, toListP, fromListP
 	, monomialP, xnP, scalarP, fromFactorsP
@@ -18,15 +18,15 @@ module MathPrelude.Constructions.Polynomial
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Module
-import MathPrelude.Algebraic.Field
-import MathPrelude.Algebraic.EuclideanDomain
+import MathPrelude.Classes.Module
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.EuclideanDomain
 import MathPrelude.Classes.Derivation
-import MathPrelude.Classes.Evaluable
-import MathPrelude.Common.Integral
-import MathPrelude.Common.Rational
+import MathPrelude.Classes.Action
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Rational
 
-import Control.Lens
+import Control.Lens hiding (Action)
 import qualified Data.Foldable as F
 
 -----------------------------------
@@ -195,8 +195,8 @@ instance Field a ⇒ Integration (Poly a) where
 			polyInt' [] = []
 			polyInt' ((n, x):ps) = (n-1, x / n') : polyInt' ps
 				where n' = fromIntegral n
-instance Ring a ⇒ Evaluable (Poly a) a a where
-	eval = evalP
+instance Ring a ⇒ Action (Poly a) a a where
+	act = evalP
 
 
 instance (Monoid a, NumEq a) ⇒ Monoid (Poly a) where

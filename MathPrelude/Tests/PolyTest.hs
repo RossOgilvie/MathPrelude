@@ -7,9 +7,9 @@ import qualified Prelude as P
 import MathPrelude.Constructions.Polynomial
 import MathPrelude.Extras.PolynomialFactorisation
 
-import MathPrelude.Common.Transcendental
-import MathPrelude.Common.Real
-import MathPrelude.Common.Rational
+import MathPrelude.Classes.Transcendental
+import MathPrelude.Classes.Real
+import MathPrelude.Classes.Rational
 import MathPrelude.Constructions.Complex
 import MathPrelude.Classes.Derivation
 
@@ -173,18 +173,18 @@ stdDev l = sqrt . (/n) . sum . map d $ l
 		d x = (x-m)^2
 
 
-prop_find_roots p = map (eval p) (findRoots p) =~ take (degreeP p) (repeat 0)
+prop_find_roots p = map (act p) (findRoots p) =~ take (degreeP p) (repeat 0)
 
 prop_factor_root x p n =
 	n > 0 ==>
-	eval p x /=~ 0 ==>
+	act p x /=~ 0 ==>
 	snd (removeRoot (y^n *p) x) == n
 	where y = fromListP [-x,1]
 
 
 c = 31.793125588403605 :+ 0.0 :: Complex Double
 y = fromListP [-c,1] :: Poly (Complex Double)
-powers_test = takeWhile (=~0) . map (\p -> eval p c) . map (y^) $ [1..]
+powers_test = takeWhile (=~0) . map (\p -> act p c) . map (y^) $ [1..]
 inf_division_test p = takeWhile (=~p) . map (division_test p) $ [1..]
 division_test q n = (!!(n-1)) . iterate (`div` q) $ (q^n)
 prop_division_test p =

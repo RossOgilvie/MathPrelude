@@ -12,11 +12,11 @@ module MathPrelude.Constructions.Projective
 
 import BasicPrelude
 import qualified Prelude as P
-import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.Field
 import MathPrelude.Classes.Derivation
 import MathPrelude.Constructions.Complex
-import MathPrelude.Common.Rational
-import MathPrelude.Classes.Evaluable
+import MathPrelude.Classes.Rational
+import MathPrelude.Classes.Action
 
 -----------------------------------
 --- Proj
@@ -154,5 +154,5 @@ instance Field a ⇒ NumEq (MobiusT a) where
       r4 = d/w
 
 
-instance Field a ⇒ Evaluable (MobiusT a) a a where
-  eval (MobiusT a b c d) = \z → (a*z + b)/(c*z + d)
+instance Field a ⇒ Action (MobiusT a) a a where
+  act (MobiusT a b c d) = \z → (a*z + b)/(c*z + d)

@@ -5,7 +5,7 @@ import BasicPrelude
 import qualified Prelude as P
 
 import MathPrelude.Constructions.Ratio
-import MathPrelude.Common.Rational
+import MathPrelude.Classes.Rational
 
 -- import MathPrelude.Tests.Laws
 import MathPrelude.Tests.RingTest
