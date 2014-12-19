@@ -6,11 +6,11 @@ module MathPrelude.Extras.Integration
   ) where
 
 import BasicPrelude
-import MathPrelude.Algebraic.Field
-import MathPrelude.Common.Convergence
+import MathPrelude.Classes.Field
+import MathPrelude.Extras.Convergence
 -- import MathPrelude.Constructions.Complex
-import MathPrelude.Algebraic.Module
--- import MathPrelude.Common.Transcendental
+import MathPrelude.Classes.Module
+-- import MathPrelude.Classes.Transcendental
 
 
 -- | Numerical integration of a function on from the lower bound to the uper bound via Simpons' method with an increasingly fine partition.

@@ -14,9 +14,9 @@ import MathPrelude.Constructions.Polynomial
 import MathPrelude.Constructions.Complex
 import MathPrelude.Classes.Derivation
 import MathPrelude.Classes.Norm
-import MathPrelude.Common.Integral
-import MathPrelude.Common.Transcendental
-import MathPrelude.Common.Convergence
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Transcendental
+import MathPrelude.Extras.Convergence
 import MathPrelude.Extras.NewtonsMethod
 
 type PCD = Poly (Complex Double)
@@ -70,7 +70,7 @@ rootOrder p x = length . takeWhile (`isRoot` x) . take (degreeP p) . iterate der
 
 -- | Does the polynomial has this point as a root.
 isRoot ∷ Ring a ⇒ Poly a → a → Bool
-isRoot p x = nearZero $ eval p x
+isRoot p x = nearZero $ act p x
 linearPolyWithRoot c = fromListP [negate c, one]
 
 --------------------------

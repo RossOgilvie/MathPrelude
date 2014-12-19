@@ -14,7 +14,7 @@ module MathPrelude.Extras.DifferentialEqns
 import BasicPrelude
 import MathPrelude.Constructions.PowerSeries
 import MathPrelude.Extras.Combinatorics
-import MathPrelude.Common.Integral
+import MathPrelude.Classes.Integral
 ----------------------------------
 -- Methods
 ----------------------------------

@@ -40,12 +40,12 @@ module MathPrelude.Extras.EllipticFunctions
 --- Imports
 -----------------------------------
 import BasicPrelude
-import MathPrelude.Algebraic.Field
-import MathPrelude.Common.Convergence
-import MathPrelude.Common.Transcendental
-import MathPrelude.Common.Integral
+import MathPrelude.Classes.Field
+import MathPrelude.Extras.Convergence
+import MathPrelude.Classes.Transcendental
+import MathPrelude.Classes.Integral
 import MathPrelude.Constructions.Complex
--- import MathPrelude.Algebraic.Module
+-- import MathPrelude.Classes.Module
 
 -----------------------------------
 --- Carlson Symmetric Integrals

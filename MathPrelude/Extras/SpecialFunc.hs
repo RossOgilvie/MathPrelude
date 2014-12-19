@@ -13,13 +13,13 @@ module MathPrelude.Extras.SpecialFunc
 -- Imports
 -----------------------------------------
 import BasicPrelude
-import MathPrelude.Algebraic.Field
-import MathPrelude.Algebraic.EuclideanDomain
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.EuclideanDomain
 import MathPrelude.Constructions.Complex
-import MathPrelude.Common.Convergence
-import MathPrelude.Common.Integral
-import MathPrelude.Common.Rational
-import MathPrelude.Common.Transcendental
+import MathPrelude.Extras.Convergence
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Rational
+import MathPrelude.Classes.Transcendental
 import MathPrelude.Extras.Primes
 import MathPrelude.Extras.Combinatorics
 

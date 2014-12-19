@@ -4,7 +4,7 @@ Module      : Symmetric Group
 Description : A data type for permutations
 -}
 module MathPrelude.Extras.SymmetricGroup
-  (  module MathPrelude.Algebraic.Group
+  (  module MathPrelude.Classes.Group
   -- * Constructors
   , Perm()
   , fromTable, transp, cyc
@@ -17,9 +17,9 @@ module MathPrelude.Extras.SymmetricGroup
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Group
-import MathPrelude.Algebraic.Ring
-import MathPrelude.Classes.Evaluable
+import MathPrelude.Classes.Group
+import MathPrelude.Classes.Ring
+import MathPrelude.Classes.Action
 import MathPrelude.Extras.Combinatorics
 
 ------------------------------
@@ -128,9 +128,9 @@ instance Show Perm where
   show (P []) = "()"
   show (P cs) = concatMap showC cs
 
-instance Evaluable Perm Int Int where
-  eval (P []) y = y
-  eval (P (c:cs)) y = P cs $$ actCycle c y
+instance Action Perm Int Int where
+  act (P []) y = y
+  act (P (c:cs)) y = P cs $$ actCycle c y
 
 instance Monoid Perm where
   mempty = P []

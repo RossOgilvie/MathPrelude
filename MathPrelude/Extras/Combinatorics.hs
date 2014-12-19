@@ -20,11 +20,11 @@ module MathPrelude.Extras.Combinatorics
   ) where
 
 import BasicPrelude
-import MathPrelude.Algebraic.Field
-import MathPrelude.Algebraic.EuclideanDomain
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.EuclideanDomain
 -- import MathPrelude.Constructions.Complex
--- import MathPrelude.Algebraic.Module
-import MathPrelude.Common.Integral
+-- import MathPrelude.Classes.Module
+import MathPrelude.Classes.Integral
 
 -- | The factorial function. Returns 1 on negative numbers.
 -- <https://en.wikipedia.org/wiki/Factorial Wikipedia>

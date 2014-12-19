@@ -8,15 +8,14 @@ module MathPrelude.Classes.Norm
   ( Norm(..)
   , InnerProd(..)
   , ComplexInnerProd(..)
-  -- , normalise
   ) where
 
 import BasicPrelude
 import qualified Prelude as P
 
--- import MathPrelude.Algebraic.Module
-import MathPrelude.Common.Integral
-import MathPrelude.Common.Transcendental
+-- import MathPrelude.Classes.Module
+import MathPrelude.Classes.Integral
+import MathPrelude.Classes.Transcendental
 
 -- | A class for norms.
 class Norm v s | v → s where

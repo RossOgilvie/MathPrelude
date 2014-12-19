@@ -5,19 +5,19 @@ Module      : Roman Numerals
 Description : A data type for integers represented as Roman numerals
 -}
 module MathPrelude.Extras.RomanNumerals
-  (  module MathPrelude.Algebraic.Ring
+  (  module MathPrelude.Classes.Ring
   , Roman()
   )  where
 
 import BasicPrelude
 import qualified Prelude as P
 
-import MathPrelude.Algebraic.Ring
-import MathPrelude.Algebraic.EuclideanDomain
-import MathPrelude.Common.Integral
+import MathPrelude.Classes.Ring
+import MathPrelude.Classes.EuclideanDomain
+import MathPrelude.Classes.Integral
 
 newtype Roman = R Integer
-  deriving (Enum, Eq, NumEq, Ord, Monoid, Group, Abelian, Ring, IntDom, EuclideanDomain, Integral)
+  deriving (Enum, Eq, NumEq, Ord, Monoid, Group, Abelian, Ring, CRing, IntDom, EuclideanDomain, Integral)
 
 instance Show Roman where
   show n

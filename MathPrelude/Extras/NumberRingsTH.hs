@@ -10,9 +10,9 @@ module MathPrelude.Extras.NumberRingsTH where
 
 import BasicPrelude
 
-import MathPrelude.Algebraic.Ring
-import MathPrelude.Algebraic.Field
-import MathPrelude.Algebraic.EuclideanDomain
+import MathPrelude.Classes.Ring
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.EuclideanDomain
 
 import Language.Haskell.TH
 

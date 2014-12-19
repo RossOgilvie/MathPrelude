@@ -2,7 +2,7 @@
 module MathPrelude.Classes.Derivation where
 
 import BasicPrelude
-import MathPrelude.Algebraic.Group
+import MathPrelude.Classes.Group
 -- import qualified Prelude as P
 
 -- | A class representing derivable types.

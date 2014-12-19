@@ -5,12 +5,12 @@ module MathPrelude.Extras.Path
   ) where
 
 import BasicPrelude
-import MathPrelude.Algebraic.Field
-import MathPrelude.Algebraic.Module
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.Module
 import MathPrelude.Extras.Integration
 import MathPrelude.Constructions.Complex
-import MathPrelude.Common.Rational
-import MathPrelude.Common.Transcendental
+import MathPrelude.Classes.Rational
+import MathPrelude.Classes.Transcendental
 
 -- | A path in a space (the type of type-parameter), defined on the interval [start,end].
 data Path a = Path {path ∷ Double → a, start ∷ Double, end ∷ Double}

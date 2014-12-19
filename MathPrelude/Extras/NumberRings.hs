@@ -1,6 +1,7 @@
 {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
 
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module MathPrelude.Extras.NumberRings
   ( Z(..)
@@ -12,7 +13,7 @@ import qualified Prelude as P
 
 import MathPrelude.Extras.NumberRingsTH
 import MathPrelude.Extras.Primes
-import MathPrelude.Algebraic.Field
+import MathPrelude.Classes.Field
 
 import GHC.TypeLits
 import Data.Proxy
