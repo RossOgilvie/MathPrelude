@@ -1,6 +1,8 @@
 {-# LANGUAGE BangPatterns     #-}
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
+-- | A continued fraction can be seen as the generalisation of the rational numbers. Infinite continued fractions can be used to concisely compute irrational numbers. In this sense, they can be used as computable reals. Implementation here is kinda broken.
 module MathPrelude.Constructions.ContinuedFractions where
 
 ----------------------------------
@@ -140,7 +142,7 @@ evalCF_old (x:xs) = fromInteger x + 1 / evalCF_old xs
 
 evalCF_new as = evaluateR $ map fromInteger result
   where
-    test ((a:%b), (c:%d)) = ieps * (a*d - b*c) > b*d
+    test (a:%b, c:%d) = ieps * (a*d - b*c) > b*d
     (lows,highs) = boundsCF as
     converge = dropWhile test $ zip lows highs
     exact = if length lows == length highs then last highs else last lows
@@ -166,9 +168,12 @@ odd_terms [] = []
 -------------------------------------------
 -- Constants
 -------------------------------------------
-e = CF $ 2 : 1 : concatMap (\k → [2*k,1,1]) [1..]
-sqrt2 = CF sqrt2'
-sqrt2' = 1 : repeat 2
+-- | Euler's number, ie 2.718281828...
+euler ∷ CF
+euler = CF $ 2 : 1 : concatMap (\k → [2*k,1,1]) [1..]
+-- | The square root of two.
+sqrt2 ∷ CF
+sqrt2 = CF $ 1 : repeat 2
 
 
 -------------------------------------------

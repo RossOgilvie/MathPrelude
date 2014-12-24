@@ -6,6 +6,8 @@
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
 {-# LANGUAGE UndecidableInstances   #-}
+
+-- | A Norm is a generalisation of the notion of length or magnituge of a vector. The archetypal norm is just the length of a vector, though the absolute value of a number is more trivial example. Should be prefered over 'abs'. Also contains classes for inner products, aka dot product.
 module MathPrelude.Classes.Norm
   ( Norm(..)
   , InnerProd(..)
@@ -19,13 +21,15 @@ import qualified Prelude      as P
 -- import MathPrelude.Classes.Integral
 -- import MathPrelude.Classes.Transcendental
 
--- | A class for norms.
+-- | The norm is the length of a object. If the object is a vector, the norm should commute with positive scaling and obey the triangle inequality.
 class Norm v s | v → s where
   norm ∷ v → s
 
+-- | An inner product is a billinear operation, that is positive definite on the diagonal (iprod v v >= 0, with equality iff v ==0) and nondegenerate.
 class InnerProd v s | v → s where
   iprod ∷ v → v → s
 
+-- | A complex inner product is much the same as an inner product, but is insead sequilinear, ie only conjugate linear in the second argument.
 class ComplexInnerProd v s | v → s where
   cxiprod ∷ v → v → s
 

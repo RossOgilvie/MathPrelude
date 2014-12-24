@@ -75,7 +75,7 @@ instance (IntDom a, NumEq a) ⇒ NumEq (Ratio a) where
 	-- epsilon = epsilon :% one
 	-- nearZero = (>>~) zero
 	-- (>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
-instance (Derivation a, Ring a) ⇒ Derivation (Ratio a) where
+instance (Derivation a, IntDom a) ⇒ Derivation (Ratio a) where
 	derive (x:%y) = (derive x * y - x * derive y) :% (y^2)
 
 instance Action a b c ⇒ Action (Ratio a) b (Ratio c) where

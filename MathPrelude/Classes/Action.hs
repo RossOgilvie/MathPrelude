@@ -5,6 +5,7 @@
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
 
+-- | A class for the general notion of one object acting on another. Typically, the acting objects will themselves form a semigroup in a way such that the action (the map from the objects to functions) will become a homomorphism. A typical example is a polynomial acting on the field by evaulation.
 module MathPrelude.Classes.Action
   ( Action(..)
   , ($$)

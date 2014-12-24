@@ -2,6 +2,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE RebindableSyntax      #-}
 {-# LANGUAGE UnicodeSyntax         #-}
+
+-- | A module for doing automatic differentiation. Borrowing heavily from the ideas in Data.Number.Diff
 module MathPrelude.Constructions.Diff
   ( module MathPrelude.Classes.Derivation
   , Diff()
@@ -9,8 +11,6 @@ module MathPrelude.Constructions.Diff
   , variable
   , value
   ) where
-
--- borrowing heavily from https://hackage.haskell.org/package/numbers-3000.2.0.1/docs/Data-Number-Dif.html
 
 -----------------------------------
 --- Imports
@@ -23,21 +23,40 @@ import           MathPrelude.Classes.Field
 import           MathPrelude.Classes.Module
 import           MathPrelude.Classes.Transcendental
 
+-----------------------------------
+--- Data
+-----------------------------------
+
+-- | A Diff represents a value and possibly the values of the derivatives. A function valued in Diff therefore contains the information of its derivative.
 data Diff a = D !a (Diff a) | C !a
 
+-- Possibly it would be neater to implement Diff with a single constructor, iso to an infinite list of a the value and the values of the derivative. I have a feeling that this way, explictly tracking the constants, is faster though (if the number of derivatives is not insane) as we can be strict.
+
+-----------------------------------
+--- Methods
+-----------------------------------
+
+-- | Lift a regular value to Diff as a constant.
 constant ∷ a → Diff a
 constant = C
 
+-- | The identity function, f(x) = x. Compose with this function to create functions valued in Diff.
 variable ∷ Ring a ⇒ a → Diff a
 variable x = D x 1
 
+-- | Extract the value of a Diff.
 value ∷ Diff a → a
 value (D x _) = x
 value (C x) = x
 
+-- | Take a derivative.
 deriv ∷ Ring a ⇒ Diff a → Diff a
 deriv (D _ x') = x'
 deriv (C _) = C 0
+
+-----------------------------------
+--- Instances
+-----------------------------------
 
 instance Show a ⇒ Show (Diff a) where
   show = P.show . value
@@ -45,6 +64,7 @@ instance Show a ⇒ Show (Diff a) where
 instance Ring a ⇒ Derivation (Diff a) where
   derive = deriv
 
+-- | How to differentiate a function valued in Diff.
 instance Ring b ⇒ Derivation (a → Diff b) where
   derive f x = derive (f x)
 
@@ -56,14 +76,20 @@ instance NumEq a ⇒ NumEq (Diff a) where
 instance Monoid a ⇒ Monoid (Diff a) where
   mempty = C mempty
   mappend (D x x') (D y y') = D (x<>y) (x'<>y')
-  mappend (D x x') (C y) = D (x<>y) (x')
-  mappend (C x) (D y y') = D (x<>y) (y')
+  mappend (D x x') (C y) = D (x<>y) x'
+  mappend (C x) (D y y') = D (x<>y) y'
   mappend (C x) (C y) = C (x<>y)
 
 instance Group a ⇒ Group (Diff a) where
   negate (D x x') = D (negate x) (negate x')
   negate (C x) = C (negate x)
+
 instance Abelian a ⇒ Abelian (Diff a) where
+
+instance Ring r ⇒ Module (Diff r) r where
+  scale r (D x x') = D (r*x) (scale r x')
+  scale r (C x) = C (r*x)
+
 instance Ring a ⇒ Ring (Diff a) where
   one = C one
   (*) (D x x') (D y y') = D (x*y) (x.*y'+y.*x')
@@ -71,16 +97,14 @@ instance Ring a ⇒ Ring (Diff a) where
   (*) (C x) (D y y') = D (x*y) (x.*y')
   (*) (C x) (C y) = C (x*y)
   fromInteger = C . fromInteger
+
 instance CRing a ⇒ CRing (Diff a)
+
 instance IntDom a ⇒ IntDom (Diff a)
+
 instance Field a ⇒ Field (Diff a) where
   recip (D x x') = D (recip x) (negate x' /. (x*x))
   recip (C x) = C (recip x)
--- instance Module m r ⇒ Module (Diff m) r where
-instance Ring r ⇒ Module (Diff r) r where
-  scale r (D x x') = D (r*x) (scale r x')
-  scale r (C x) = C (r*x)
-
 
 instance (Field a, Transcendental a) ⇒ Transcendental (Diff a) where
   pi = C pi
@@ -111,4 +135,4 @@ instance (Field a, Transcendental a) ⇒ Transcendental (Diff a) where
   cosh (D x x') = D (sinh x) (sinh x .* x')
   cosh (C x) = C (sinh x)
   --tanh  -- use default
-  --ahyps -- use defaults
+  --ahyps -- use default

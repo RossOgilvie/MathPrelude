@@ -6,7 +6,7 @@ module MathPrelude.Classes.Integral
 	, fromIntegral98
 	, toIntegral98
 	, fromIntegral
-	, integral, int
+	, integral
 	-- * Misc
 	, even
 	, odd
@@ -46,14 +46,9 @@ toIntegral98 = P.fromIntegral . toInteger
 fromIntegral ∷ (Integral a, Ring b) ⇒ a → b
 fromIntegral =  fromInteger . toInteger
 
+-- | Prism (lens) for converting between integral types.
 integral ∷ (Integral a, Integral b) => Prism Integer Integer a b
 integral = prism toInteger (Right . fromInteger)
--- integral = prism toInteger $ \ i -> let a = fromInteger i in
---   if toInteger a == i
---   then Right a
---   else Left i
-
-int n = n ^. integral
 
 -- | Test whether an integral is even.
 even ∷ Integral a ⇒ a → Bool

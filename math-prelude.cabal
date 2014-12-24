@@ -16,7 +16,59 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     MathPrelude, MathPrelude.PreludeNumConst, MathPrelude.Extras.EllipticFunctions, MathPrelude.Extras.SymmetricGroup, MathPrelude.Extras.DifferentialEqns, MathPrelude.Extras.Path, MathPrelude.Extras.NewtonsMethod, MathPrelude.Extras.NumberRings, MathPrelude.Extras.SpecialFunc, MathPrelude.Extras.PolynomialFactorisation, MathPrelude.Extras.Convergence, MathPrelude.Extras.Primes, MathPrelude.Extras.NumberRingsTH, MathPrelude.Extras.Grobner, MathPrelude.Extras.QuadraticExtensions, MathPrelude.Extras.Integration, MathPrelude.Extras.RomanNumerals, MathPrelude.Extras.Combinatorics, MathPrelude.Tests.NumEqTest, MathPrelude.Tests.DerivationTest, MathPrelude.Tests.RingTest, MathPrelude.Tests.Laws, MathPrelude.Tests.PolyTest, MathPrelude.Tests.RatioTest, MathPrelude.Tests.AbelianTest, MathPrelude.Tests.RandomShit, MathPrelude.Constructions.Polynomial, MathPrelude.Constructions.PowerSeries, MathPrelude.Constructions.ContinuedFractions, MathPrelude.Constructions.Complex, MathPrelude.Constructions.Quotient, MathPrelude.Constructions.Matrix, MathPrelude.Constructions.Ratio, MathPrelude.Constructions.Vector, MathPrelude.Constructions.Projective, MathPrelude.Classes.Derivation, MathPrelude.Classes.Module, MathPrelude.Classes.NumEq, MathPrelude.Classes.Transcendental, MathPrelude.Classes.Norm, MathPrelude.Classes.Integral, MathPrelude.Classes.Group, MathPrelude.Classes.Action, MathPrelude.Classes.Ring, MathPrelude.Classes.Logic, MathPrelude.Classes.Rational, MathPrelude.Classes.Field, MathPrelude.Classes.EuclideanDomain, MathPrelude.Classes.Real
+  exposed-modules:
+    MathPrelude
+    , MathPrelude.PreludeNumConst
+    , MathPrelude.Extras.EllipticFunctions
+    , MathPrelude.Extras.SymmetricGroup
+    , MathPrelude.Extras.DifferentialEqns
+    , MathPrelude.Extras.Path
+    , MathPrelude.Extras.NewtonsMethod
+    , MathPrelude.Extras.NumberRings
+    , MathPrelude.Extras.SpecialFunc
+    , MathPrelude.Extras.PolynomialFactorisation
+    , MathPrelude.Extras.Convergence
+    , MathPrelude.Extras.Primes
+    , MathPrelude.Extras.NumberRingsTH
+    , MathPrelude.Extras.Grobner
+    , MathPrelude.Extras.QuadraticExtensions
+    , MathPrelude.Extras.Integration
+    , MathPrelude.Extras.RomanNumerals
+    , MathPrelude.Extras.Combinatorics
+    , MathPrelude.Tests.NumEqTest
+    , MathPrelude.Tests.DerivationTest
+    , MathPrelude.Tests.RingTest
+    , MathPrelude.Tests.Laws
+    , MathPrelude.Tests.PolyTest
+    , MathPrelude.Tests.RatioTest
+    , MathPrelude.Tests.AbelianTest
+    , MathPrelude.Tests.RandomShit
+    , MathPrelude.Constructions.Polynomial
+    , MathPrelude.Constructions.PowerSeries
+    , MathPrelude.Constructions.ContinuedFractions
+    , MathPrelude.Constructions.Complex
+    , MathPrelude.Constructions.Quotient
+    , MathPrelude.Constructions.Matrix
+    , MathPrelude.Constructions.Ratio
+    , MathPrelude.Constructions.Vector
+    , MathPrelude.Constructions.Projective
+    , MathPrelude.Classes.Derivation
+    , MathPrelude.Classes.Module
+    , MathPrelude.Classes.NumEq
+    , MathPrelude.Classes.Transcendental
+    , MathPrelude.Classes.Norm
+    , MathPrelude.Classes.Integral
+    , MathPrelude.Classes.Group
+    , MathPrelude.Classes.Action
+    , MathPrelude.Classes.Ring
+    , MathPrelude.Classes.Logic
+    , MathPrelude.Classes.Rational
+    , MathPrelude.Classes.Field
+    , MathPrelude.Classes.EuclideanDomain
+    , MathPrelude.Classes.Real
+    , MathPrelude.Exports.IntegralLists
+    , MathPrelude.Exports.Polynomials
+    , MathPrelude.Exports.Standard
   -- other-modules:
   other-extensions:    RebindableSyntax, UnicodeSyntax, BangPatterns, MultiParamTypeClasses, FlexibleContexts, TemplateHaskell, FlexibleInstances, OverloadedStrings, DataKinds, KindSignatures, ScopedTypeVariables, GeneralizedNewtypeDeriving, RankNTypes, IncoherentInstances, UndecidableInstances, TypeFamilies, TypeOperators, PolyKinds, FunctionalDependencies, AllowAmbiguousTypes
   build-depends:       base >=4.7, mathless-basic-prelude >=0.1, template-haskell >=2.9, primes >=0.2, QuickCheck >=2.7, lens >=4.1, numbers >= 3000

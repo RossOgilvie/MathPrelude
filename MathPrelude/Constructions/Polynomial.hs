@@ -194,12 +194,12 @@ instance (Ring a, Derivation a) ⇒ Derivation (Poly a) where
 				| n /= 0 = (n-1, n' * x): polyDiff' ps
 				| otherwise = polyDiff' ps
 				where n' = fromIntegral n
-instance Field a ⇒ Integration (Poly a) where
-	integrate (Poly p) = Poly $ polyInt' p
-		where
-			polyInt' [] = []
-			polyInt' ((n, x):ps) = (n-1, x / n') : polyInt' ps
-				where n' = fromIntegral n
+-- instance Field a ⇒ Integration (Poly a) where
+-- 	integrate (Poly p) = Poly $ polyInt' p
+-- 		where
+-- 			polyInt' [] = []
+-- 			polyInt' ((n, x):ps) = (n+1, x / n') : polyInt' ps
+-- 				where n' = fromIntegral n
 instance Ring a ⇒ Action (Poly a) a a where
 	act = evalP
 
@@ -280,7 +280,7 @@ sortP (Poly xs) = Poly . sortP' $ xs
 sortP' = sortBy (compare `on` fst)
 
 -- | Given two sorted polynomials, merge their terms with the given function.
-merge' ∷ Monoid a ⇒ (a → a→ a) → [a] → [a] → [a]
+merge' ∷ Monoid a ⇒ (a → a→ a) → [(Int,a)] → [(Int,a)] → [(Int,a)]
 merge' _ p [] = p
 merge' _ [] q = q
 merge' f (x@(n,a):xs) (y@(m,b):ys)

@@ -1,6 +1,8 @@
 {-# LANGUAGE BangPatterns     #-}
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
+-- | The many variations of the elliptic functions and their inverses.
 module MathPrelude.Extras.EllipticFunctions
   (
   -- * Misc

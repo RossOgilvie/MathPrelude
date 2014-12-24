@@ -51,6 +51,7 @@ class Field a ⇒ Transcendental a where
 ------------------------------
 --- Instances
 ------------------------------
+-- | Transcendental instance for Float
 instance Transcendental Float where
 	pi = P.pi
 	exp = P.exp
@@ -72,6 +73,7 @@ instance Transcendental Float where
 	acosh = P.acosh
 	atanh = P.atanh
 
+-- | Transcendental instance for Double
 instance Transcendental Double where
 	pi = P.pi
 	exp = P.exp

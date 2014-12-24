@@ -2,6 +2,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE RebindableSyntax      #-}
 {-# LANGUAGE UnicodeSyntax         #-}
+
+-- | An attempt at making a generic projectivisation operation, ie the operation of adding an infinity. It makes the arithmetic kinda screw-y though. This works well enough for computing cross rations, and even better and Mobius transformations.
 module MathPrelude.Constructions.Projective
   ( Proj
   , fromField
@@ -35,11 +37,14 @@ type CP = Proj (Complex Double)
 --- Methods
 -----------------------------------
 -- | Inject a field into its projectivisation.
+fromField ∷ Field a ⇒ a → Proj a
 fromField x
-  | x==0 = Zero x
+  | x =~ 0 = Zero (x/epsilon)
+  | recip x =~ 0 = Infty (x*epsilon)
   | otherwise = Elem x
 
 -- | Calculate a cross-ratio.
+crossRatio ∷ Field a ⇒ Proj a → Proj a → Proj a → Proj a → Proj a
 crossRatio x y z w = (x-z)/(y-z)*(x-w)/(y-w)
 
 -----------------------------------
@@ -53,9 +58,9 @@ data MobiusT a = MobiusT a a a a deriving Show
 -----------------------------------
 
 instance Show a ⇒ Show (Proj a) where
-  show (Zero a) = "0"
+  show (Zero _) = "0"
   show (Elem a) = P.show a
-  show (Infty a) = "Infinity"
+  show (Infty _) = "Infinity"
 
 instance Eq a ⇒ Eq (Proj a) where
   (==) (Zero _) (Zero _) = True
@@ -112,11 +117,11 @@ instance Ring a ⇒ Group (Proj a) where
   negate (Infty a) = Infty (negate a)
 instance Ring a ⇒ Abelian (Proj a)
 
-instance Ring a ⇒ Ring (Proj a) where
+instance Field a ⇒ Ring (Proj a) where
   one = Elem one
-  (*) (Zero a) (Zero b) = Zero (a*b)
+  (*) (Zero a) (Zero b) = Zero (a*b*epsilon)
   (*) (Elem a) (Elem b) = Elem (a*b)
-  (*) (Infty a) (Infty b) = Infty (a*b)
+  (*) (Infty a) (Infty b) = Infty (a*b/epsilon)
   (*) (Zero a) (Elem b) = Zero (a*b)
   (*) (Elem a) (Zero b) = Zero (a*b)
   (*) (Zero a) (Infty b) = Elem (a*b)
@@ -124,16 +129,15 @@ instance Ring a ⇒ Ring (Proj a) where
   (*) (Elem a) (Infty b) = Infty (a*b)
   (*) (Infty a) (Elem b) = Infty (a*b)
 
-instance CRing a ⇒ CRing (Proj a)
-instance IntDom a ⇒ IntDom (Proj a)
+instance Field a ⇒ CRing (Proj a)
+instance Field a ⇒ IntDom (Proj a)
 
 instance Field a ⇒ Field (Proj a) where
   recip (Zero a) = Infty (recip a)
   recip (Elem a) = Elem (recip a)
   recip (Infty a) = Zero (recip a)
-  -- (/)
 
-instance (Eq a, CharZero a, Ring a) ⇒ CharZero (Proj a) where
+instance (Eq a, CharZero a, Field a) ⇒ CharZero (Proj a) where
   fromRational' = fromField . fromRational'
 
 

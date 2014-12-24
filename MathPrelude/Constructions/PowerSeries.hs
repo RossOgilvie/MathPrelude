@@ -115,8 +115,8 @@ instance NumEq a ⇒ NumEq (PS a) where
   -- (>>~) (PS os) (PS xs) = and . map (smallL os) $ xs
 instance Ring a ⇒ Derivation (PS a) where
   derive (PS p) = PS $ zipWith (*) (tail p) (map fromInteger [1..])
-instance Field a ⇒ Integration (PS a) where
-  integrate (PS p) = PS $ 0 : zipWith (/) p (map fromInteger [1..])
+-- instance Field a ⇒ Integration (PS a) where
+--   integrate (PS p) = PS $ 0 : zipWith (/) p (map fromInteger [1..])
 instance Ring a ⇒ Action (PS a) a a where
   act = evalPS
 

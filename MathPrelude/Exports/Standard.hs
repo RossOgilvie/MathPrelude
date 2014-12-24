@@ -1,4 +1,6 @@
 -- {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+
+-- | A standard collections of modules covering the most common areas of mathematics/arithmetic.
 module MathPrelude.Exports.Standard( module X ) where
 
 -- import BasicPrelude as X

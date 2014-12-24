@@ -1,4 +1,6 @@
 -- {-# LANGUAGE RebindableSyntax, UnicodeSyntax #-}
+
+-- | Expport some useful modules for working with polynomials, such as factorisation and complex numbers.
 module MathPrelude.Exports.Polynomials( module X ) where
 
 import MathPrelude.Exports.Standard as X

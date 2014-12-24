@@ -1,19 +1,20 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
+-- | A derivation is generalisation of taking the derivative of a function. In most cases however it will actually just be the derivative you expect
 module MathPrelude.Classes.Derivation where
 
 import           BasicPrelude
-import           MathPrelude.Classes.Group
+import           MathPrelude.Classes.Ring
 -- import qualified Prelude as P
 
--- | A class representing derivable types.
--- Should replace with Kmett's AD
-class Derivation r where
+-- | A class representing derivable types. A derivation is a map such that the 'constants' are mapped to zero, and Leibniz' rule holds ie d(ab) = da b + a db
+class Ring r ⇒ Derivation r where
   derive ∷ r → r
 
 -- | A class representing integrable types.
-class Integration r where
-  integrate ∷ r → r
+-- class Integration r where
+--   integrate ∷ r → r
 
 -----------------------------------
 --- Instances

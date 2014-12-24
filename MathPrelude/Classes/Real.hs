@@ -59,7 +59,7 @@ class Real a ⇒ RealFloat a where
 ------------------------------
 --- Instances
 ------------------------------
-
+-- | Real instance for Double
 instance Real Double where
 	fromDouble = id
 	toDouble = id
@@ -68,6 +68,7 @@ instance Real Double where
 	ceiling = fromIntegral98 . P.ceiling
 	floor = fromIntegral98 . P.floor
 
+-- | Real instance for Float
 instance Real Float where
 	fromDouble = GF.double2Float
 	toDouble = GF.float2Double
@@ -77,10 +78,13 @@ instance Real Float where
 	floor = fromIntegral98 . P.floor
 
 
+-- | RealFrac instance for Float
 instance RealFrac Float
+-- | RealFrac instance for Double
 instance RealFrac Double
 
 
+-- | RealFloat instance for Float
 instance RealFloat Float where
 	floatRadix = P.floatRadix
 	floatDigits = P.floatDigits
@@ -96,6 +100,7 @@ instance RealFloat Float where
 	isNegativeZero = P.isNegativeZero
 	isIEEE = P.isIEEE
 
+-- | RealFloat instance for Double
 instance RealFloat Double where
 	floatRadix = P.floatRadix
 	floatDigits = P.floatDigits

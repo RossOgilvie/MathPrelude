@@ -35,6 +35,8 @@ import MathPrelude.Classes.Integral
 
 import GHC.TypeLits
 import Data.Proxy
+
+import Control.Lens hiding (Action)
 -----------------------------------
 --- Vec
 -----------------------------------
@@ -75,7 +77,7 @@ actMt (M rows) = fromListV . zipWith dotV rows . repeat
 -----------------------------------
 
 takeAndCount ∷ Integer → [a] → (Bool, [a])
-takeAndCount n xs = let xs' = take (int n) xs in (length xs' == int n, xs')
+takeAndCount n xs = let n' = view integral n; xs' = take n' xs in (length xs' == n', xs')
 
 fromRows ∷ forall n m a. KnownNat n ⇒ [Vec m a] → Mat n m a
 fromRows vs = if b then M vs' else error "fromRows: supplied list not long enough."

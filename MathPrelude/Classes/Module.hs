@@ -4,15 +4,13 @@
 {-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
--- | A module abstracts the notion of scaling an additive group.
+-- | A module (the algebraic object, not the Haskell file) abstracts the notion of scaling an additive group. A vector space is a module where the scalars form a field.
 module MathPrelude.Classes.Module where
 
 import           BasicPrelude
 
 import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Group
 import           MathPrelude.Classes.Norm
-import           MathPrelude.Classes.Ring
 
 -----------------------------------
 --- Module
@@ -31,14 +29,12 @@ class (Abelian m, Ring s) ⇒ Module m s | m → s where
 (*.) ∷ Module m s ⇒ m → s → m
 (*.) = flip scale
 
+-- | A vector space is a set of vectors that can be added and scaled by an element of the 'base' field. All (finite rank) vector spaces are isomorphic to a power of the field, and so can be dealt with entirely in terms of bases, but this is not explored/exploited here (yet).
 class (Module m s, Field s) ⇒ VectorSpace m s
 
 -----------------------------------
 --- Instances
 -----------------------------------
-
--- instance Ring r ⇒ Module r r where
---   scale r s = r*s
 
 -----------------------------------
 --- Methods
@@ -49,6 +45,6 @@ class (Module m s, Field s) ⇒ VectorSpace m s
 -- | In the case where the base ring is actually a field after all, scalar division makes sense.
 (/.) ∷ (Field k, Module v k) ⇒ v → k → v
 (/.) = flip (./)
-
+-- | Scale a vector by dividing by its norm. This should make it uni length.
 normalise ∷ (VectorSpace v s, Norm v s) ⇒ v → v
 normalise v = norm v ./ v

@@ -88,9 +88,9 @@ fromListV as = if b then Vec as' else error "fromListV: supplied list not long e
     (b, as') = takeAndCountV n' as
 
 takeAndCountV ∷ Integer → [a] → (Bool, [a])
-takeAndCountV n xs = let xs' = take (int n) xs in (length xs' == int n, xs')
+takeAndCountV n xs = let n' = view integral n; xs' = take n' xs in (length xs' == n', xs')
 
-vectorT1 ∷ Iso' (a) (Vec 1 a)
+vectorT1 ∷ Iso' a (Vec 1 a)
 vectorT1 = iso fromTuple1 toTuple1
 {-# INLINE vectorT1 #-}
 
@@ -125,7 +125,7 @@ fromTuple4 (x,y,z,u) = Vec [x,y,z,u]
 fromTuple5 ∷ (a,a,a,a,a) → Vec 5 a
 fromTuple5 (x,y,z,u,v) = Vec [x,y,z,u,v]
 
-toTuple1 ∷ Vec 1 a → (a)
+toTuple1 ∷ Vec 1 a → a
 toTuple1 (Vec [x]) = (x)
 
 toTuple2 ∷ Vec 2 a → (a,a)
@@ -177,6 +177,7 @@ basisV5 5 = Vec [0,0,0,0,1]
 -----------------------------------
 -- instance (KnownNat n, Ring a) ⇒ InnerProd (Vec n a) a where
   -- iprod v w = sum . toListV $ liftV2 (*) v w
+dotV ∷ Ring a ⇒ Vec n a → Vec n a → a
 dotV v w = sum . toListV $ liftV2 (*) v w
 
 crossV ∷ Ring a ⇒ Vec 3 a → Vec 3 a → Vec 3 a
@@ -203,7 +204,7 @@ instance F.Foldable (Vec n) where
 
 instance Traversable (Vec n) where
     {-# INLINE traverse #-}
-    traverse f (Vec xs) = Vec <$> (traverse f xs)
+    traverse f (Vec xs) = Vec <$> traverse f xs
 
 -----------------------------------
 --- Math Instances

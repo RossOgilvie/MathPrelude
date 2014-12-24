@@ -1,6 +1,11 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
-module MathPrelude.Constructions.CReal where
+
+-- | The computable reals, to arbitrary precision. Wraps Data.Number.CReal
+module MathPrelude.Constructions.CReal
+  ( phi
+  , ramanujan
+  ) where
 
 import           BasicPrelude
 import qualified Prelude                            as P
@@ -86,8 +91,10 @@ instance RealFloat CReal where
   isNegativeZero = P.isNegativeZero
   isIEEE = P.isIEEE
 
+-- | The golden ratio
 phi ∷ CReal
 phi = (1 + P.sqrt 5)/2
 
+-- | Ramanujan's constant. It is almost an integer, despite being e^(pi * sqrt 163)
 ramanujan :: CReal
 ramanujan = exp (pi * sqrt 163)
