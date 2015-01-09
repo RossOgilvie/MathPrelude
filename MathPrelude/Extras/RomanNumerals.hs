@@ -17,21 +17,24 @@ import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Integral
 import           MathPrelude.Classes.Ring
 
+-- | A type representing the integers as Roman numerals
 newtype Roman = R Integer
   deriving (Enum, Eq, NumEq, Ord, Monoid, Group, Abelian, Ring, CRing, IntDom, EuclideanDomain, Integral)
 
 instance Show Roman where
   show n
-    | n == 0 = "Nullus"
+    | n == 0 = "N"
     | n < 0 = "Minus " ++ P.show (-n)
     | otherwise = romanize n
 
+romanize ∷ Roman → String
 romanize n = replicate (fromIntegral md) 'M' ++ digitise (cd*100) ++ digitise (xd*10) ++ digitise xr
   where
     (md, mr) = n `divMod` 1000
     (cd, cr) = mr `divMod` 100
     (xd, xr) = cr `divMod` 10
 
+digitise ∷ Roman → String
 digitise 0 = ""
 digitise 1 = "I"
 digitise 2 = "II"
@@ -60,3 +63,4 @@ digitise 600 = "DC"
 digitise 700 = "DCC"
 digitise 800 = "DCCC"
 digitise 900 = "CM"
+digitise _ = ""

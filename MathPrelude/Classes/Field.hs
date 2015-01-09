@@ -28,6 +28,7 @@ class IntDom a ⇒ Field a where
 
 	{-# MINIMAL recip | (/) #-}
 
+infixl 7 /
 
 ------------------------------
 --- Methods

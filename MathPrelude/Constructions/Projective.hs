@@ -93,7 +93,7 @@ instance Ord a ⇒ Ord (Proj a) where
   compare (Infty _) (Elem _) = GT
   compare (Infty _) (Infty _) = EQ
 
-instance Derivation a ⇒ Derivation (Proj a) where
+instance (Field a, Derivation a) ⇒ Derivation (Proj a) where
   derive (Zero a) = Zero (derive a)
   derive (Elem a) = Elem (derive a)
   derive (Infty a) = Infty (derive a)

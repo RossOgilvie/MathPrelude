@@ -81,6 +81,8 @@ product = foldr (*) one
 			powers = iterate (\a → a*a) x
 			f b y = if b then y else one
 
+infixr 8 ^
+
 -- | converts an int to a list of binary digits. True= 1, False = 0
 intToBinary ∷ Int → [Bool]
 intToBinary n = reverse $ intToBinary' n powers

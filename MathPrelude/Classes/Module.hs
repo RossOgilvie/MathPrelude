@@ -29,6 +29,9 @@ class (Abelian m, Ring s) ⇒ Module m s | m → s where
 (*.) ∷ Module m s ⇒ m → s → m
 (*.) = flip scale
 
+infixr 7 .*
+infixl 7 *.
+
 -- | A vector space is a set of vectors that can be added and scaled by an element of the 'base' field. All (finite rank) vector spaces are isomorphic to a power of the field, and so can be dealt with entirely in terms of bases, but this is not explored/exploited here (yet).
 class (Module m s, Field s) ⇒ VectorSpace m s
 
@@ -45,6 +48,10 @@ class (Module m s, Field s) ⇒ VectorSpace m s
 -- | In the case where the base ring is actually a field after all, scalar division makes sense.
 (/.) ∷ (Field k, Module v k) ⇒ v → k → v
 (/.) = flip (./)
+
+infixr 7 ./
+infixl 7 /.
+
 -- | Scale a vector by dividing by its norm. This should make it uni length.
 normalise ∷ (VectorSpace v s, Norm v s) ⇒ v → v
 normalise v = norm v ./ v
