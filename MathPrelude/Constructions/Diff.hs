@@ -20,6 +20,7 @@ import qualified Prelude                            as P
 
 import           MathPrelude.Classes.Derivation
 import           MathPrelude.Classes.Field
+import           MathPrelude.Classes.Rational
 import           MathPrelude.Classes.Module
 import           MathPrelude.Classes.Transcendental
 
@@ -136,3 +137,7 @@ instance (Field a, Transcendental a) ⇒ Transcendental (Diff a) where
   cosh (C x) = C (sinh x)
   --tanh  -- use default
   --ahyps -- use default
+
+instance CharZero a ⇒ CharZero (Diff a) where fromRational' = C . fromRational'
+instance Q a ⇒ Q (Diff a) where toRational = toRational . value
+instance Fractional a ⇒ Fractional (Diff a)

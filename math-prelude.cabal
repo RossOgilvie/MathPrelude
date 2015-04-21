@@ -52,6 +52,7 @@ library
     , MathPrelude.Constructions.Ratio
     , MathPrelude.Constructions.Vector
     , MathPrelude.Constructions.Projective
+    , MathPrelude.Constructions.Diff
     , MathPrelude.Classes.Derivation
     , MathPrelude.Classes.Module
     , MathPrelude.Classes.NumEq
