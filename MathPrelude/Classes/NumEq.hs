@@ -14,7 +14,7 @@ import           BasicPrelude
 import qualified Prelude                     as P
 
 import           MathPrelude.Classes.Logic
-import           MathPrelude.PreludeNumConst
+import           PreludeNumConst
 
 -----------------------------------
 --- Class

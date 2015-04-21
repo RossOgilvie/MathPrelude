@@ -6,7 +6,6 @@ module MathPrelude.Classes.Integral
 	, fromIntegral98
 	, toIntegral98
 	, fromIntegral
-	, integral
 	-- * Misc
 	, even
 	, odd
@@ -19,10 +18,6 @@ import           BasicPrelude
 import qualified Prelude                  as P
 
 import           MathPrelude.Classes.Ring
-
--- import qualified GHC.Integer.Type as GHC
-
-import           Control.Lens
 
 -----------------------------------
 --- Classes
@@ -45,10 +40,6 @@ toIntegral98 = P.fromIntegral . toInteger
 -- | Convert any integral to an element of any ring.
 fromIntegral ∷ (Integral a, Ring b) ⇒ a → b
 fromIntegral =  fromInteger . toInteger
-
--- | Prism (lens) for converting between integral types.
-integral ∷ (Integral a, Integral b) => Prism Integer Integer a b
-integral = prism toInteger (Right . fromInteger)
 
 -- | Test whether an integral is even.
 even ∷ Integral a ⇒ a → Bool

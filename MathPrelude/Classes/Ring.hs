@@ -17,12 +17,10 @@ module MathPrelude.Classes.Ring
 --- Imports
 -----------------------------------
 import           BasicPrelude
+import           PreludeNumConst
 import qualified Prelude                     as P
 
 import           MathPrelude.Classes.Group
-import           MathPrelude.PreludeNumConst
--- import MathPrelude.Classes.Integral(even)
-
 
 -----------------------------------
 --- Classes

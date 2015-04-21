@@ -1,6 +1,6 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax #-}
-module MathPrelude.PreludeNumConst where
+module PreludeNumConst where
 
 import Prelude(fromInteger, fromRational, Int, Integer, Float, Double)
 import Data.Int (Int32, Int64)

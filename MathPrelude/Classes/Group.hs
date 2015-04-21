@@ -12,11 +12,11 @@ module MathPrelude.Classes.Group
 -----------------------------------
 --- Imports
 -----------------------------------
+import           PreludeNumConst
 import           BasicPrelude
 import qualified Prelude                     as P
 
 import           MathPrelude.Classes.NumEq
-import           MathPrelude.PreludeNumConst
 
 -----------------------------------
 --- Classes

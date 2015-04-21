@@ -15,8 +15,6 @@ module MathPrelude.Constructions.Ratio
 import           BasicPrelude
 import qualified Prelude                             as P
 
-import           MathPrelude.Classes.Action
-import           MathPrelude.Classes.Derivation
 import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Field
 
@@ -75,12 +73,6 @@ instance (IntDom a, NumEq a) ⇒ NumEq (Ratio a) where
 	-- epsilon = epsilon :% one
 	-- nearZero = (>>~) zero
 	-- (>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
-instance (Derivation a, IntDom a) ⇒ Derivation (Ratio a) where
-	derive (x:%y) = (derive x * y - x * derive y) :% (y^2)
-
-instance Action a b c ⇒ Action (Ratio a) b (Ratio c) where
-	act (p:%q) = \x → (p$$x) :% (q$$x)
-
 
 
 instance IntDom a ⇒ Monoid (Ratio a) where

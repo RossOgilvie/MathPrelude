@@ -2,7 +2,7 @@
 
 -- | The 'mathless-prelude' has some list functions that take Ints. This module generalises them to take any integral type.
 -- | This module did do that, but then it fails without explicit type annotations. For now, use Integer
-module MathPrelude.Exports.IntegralLists
+module IntegralLists
   ( module BasicPrelude
   , length
   , take
