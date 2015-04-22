@@ -29,8 +29,11 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     MathPrelude, MathPrelude.Classes.NumEq, MathPrelude.Classes.Transcendental, MathPrelude.Classes.Integral, MathPrelude.Classes.Group, MathPrelude.Classes.Ring, MathPrelude.Classes.Logic, MathPrelude.Classes.Rational, MathPrelude.Classes.Field, MathPrelude.Classes.EuclideanDomain, MathPrelude.Classes.Real
-  -- other-modules:
+  exposed-modules:     MathPrelude
+    , MathPrelude.Classes.NumEq, MathPrelude.Classes.Transcendental, MathPrelude.Classes.Integral, MathPrelude.Classes.Group, MathPrelude.Classes.Ring, MathPrelude.Classes.Logic, MathPrelude.Classes.Rational, MathPrelude.Classes.Field, MathPrelude.Classes.EuclideanDomain, MathPrelude.Classes.Real,
+    MathPrelude.Classes.Module
+    , MathPrelude.Constructions.Ratio, MathPrelude.Constructions.Complex, MathPrelude.Constructions.Polynomial
+  other-modules: BasicPrelude, CorePrelude, IntegralLists, PreludeNumConst
   other-extensions:    RebindableSyntax, UnicodeSyntax, NoImplicitPrelude, CPP, OverloadedStrings
   build-depends:       base >=4.8 && <4.9
     , hashable >=1.2 && <1.3
