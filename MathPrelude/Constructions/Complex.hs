@@ -134,6 +134,7 @@ instance Ring r ⇒ Module (Complex r) r where
 	scale r (x :+ y) = (r*x) :+ (r*y)
 instance (Transcendental r, Ring r) ⇒ Norm (Complex r) r where
 	norm = sqrt . normsq'
+	
 instance Ring r ⇒ ComplexInnerProd (Complex r) (Complex r) where
 	cxiprod z w = z * conjugate w
 

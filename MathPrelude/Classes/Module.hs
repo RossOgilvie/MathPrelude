@@ -10,7 +10,7 @@ module MathPrelude.Classes.Module where
 import MathPrelude
 
 import           MathPrelude.Classes.Field
--- import           MathPrelude.Classes.Norm
+import           MathPrelude.Classes.Norm
 
 -----------------------------------
 --- Module
@@ -53,5 +53,5 @@ infixr 7 ./
 infixl 7 /.
 
 -- | Scale a vector by dividing by its norm. This should make it uni length.
--- normalise ∷ (VectorSpace v s, Norm v s) ⇒ v → v
--- normalise v = norm v ./ v
+normalise ∷ (VectorSpace v s, Norm v s) ⇒ v → v
+normalise v = norm v ./ v
