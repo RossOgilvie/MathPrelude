@@ -6,17 +6,28 @@
 
 module MathPrelude.Extras.NumberRingsTH where
 
-import MathPrelude
+--------------------------------------
+-- Imports
+--------------------------------------
+import MathPrelude hiding (Q)
 
-import MathPrelude.Classes.Ring
+-- From math-prelude
 import MathPrelude.Classes.Field
 import MathPrelude.Classes.EuclideanDomain
+import MathPrelude.Classes.Ring
 
-import Language.Haskell.TH
-
+-- TH stuff
 import GHC.TypeLits
 import Data.Proxy
+import Language.Haskell.TH
 
+-- The primes to make finite fields for
+primes ∷ [Integer]
+primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101]
+
+--------------------------------------
+-- Methods
+--------------------------------------
 -- | Find a reciprocal in a finite field using the extended Euclidean algorithm.
 findRecip m z = fst $ extEuclidAlg z m
 

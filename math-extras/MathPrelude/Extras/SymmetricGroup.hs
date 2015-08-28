@@ -17,26 +17,29 @@ module MathPrelude.Extras.SymmetricGroup
   )  where
 
 import MathPrelude
-import qualified Prelude                          as P
+import qualified Prelude as P
 
-import           MathPrelude.Classes.Action
-import           MathPrelude.Classes.Group
-import           MathPrelude.Classes.Ring
-import           MathPrelude.Extras.Combinatorics
+-- from math-prelude
+import MathPrelude.Classes.Group
+import MathPrelude.Classes.Ring
+
+-- from math-extras
+import MathPrelude.Classes.Action
+-- import MathPrelude.Extras.Combinatorics
 
 ------------------------------
 --- Data
 ------------------------------
 -- | Typesym representing a cycle in cycle notation.
-type Cycle = [Int]
--- | A Permutation sotred as the product of disjoint cycles.
+type Cycle = [Integer]
+-- | A Permutation sotred as the product of disjoInteger cycles.
 newtype Perm = P [Cycle]
 
 ------------------------------
 ---  Constructors
 ------------------------------
 -- | Construct a permutation from a table. The input is the bottom line of a permutation table.
-fromTable ∷ [Int] → Perm
+fromTable ∷ [Integer] → Perm
 fromTable ls = P . fromTable' [1..(length ls)] $ ls
 
 -- | Aux function to make a permutation by picking out an unused number from ns and constructing its cycle.
@@ -47,16 +50,16 @@ fromTable' ns ls
   where c = makeCycle (head ns) ls
 
 -- | Given a number and a table, find its cycle.
-makeCycle ∷ Int → [Int] -> Cycle
+makeCycle ∷ Integer → [Integer] -> Cycle
 makeCycle x ls =  (x :) . takeWhile (/= x) . tail . iterate f $ x
   where f y = ls !! (y-1)
 
 -- | Make a permutation table from a given Permutation.
-toTable ∷ Perm → [Int]
-toTable p = map (p$$) ([1..(size p)]::[Int])
+toTable ∷ Perm → [Integer]
+toTable p = map (p$$) ([1..(size p)]::[Integer])
 
 -- | The transposition of the two elements.
-transp :: Int → Int → Perm
+transp :: Integer → Integer → Perm
 transp m n
   | m == n = P []
   | m < n = P [[m,n]]
@@ -64,16 +67,17 @@ transp m n
 
 -- | Construct a cyclic permutation.
 -- Repeated elements are ignored. eg [1,2,2,3] becomes (1 2 3).
-cyc ∷ [Int] → Perm
+cyc ∷ [Integer] → Perm
 cyc xs = P [dedupe xs]
 
 ------------------------------
 --- Methods
 ------------------------------
 -- | Act a cycle on an element.
-actCycle ∷ Cycle → Int → Int
+actCycle ∷ Cycle → Integer → Integer
 actCycle [] y = y
 actCycle ls y = actCycle' (ls ++ [head ls]) y
+
 -- | Aux function for actCycle
 actCycle' [] y = y
 actCycle' [l] y = y
@@ -95,16 +99,18 @@ takeDrop p (x:xs)
   | p x = let (ys,zs) = takeDrop p xs in (x:ys,zs)
   | otherwise = ([],x:xs)
 
--- | Calculate the sign of a cycle. Cycles of even length are odd, and vice versa.
-parityC ∷ Cycle → Int
+-- | Calculate the sign of a cycle. Cycles of even length are odd (-1), and odd length cycles are even (1).
+parityC ∷ Cycle → Integer
 parityC = negate . sign . length
+    where
+        sign k = if even k then 1 else -1
 
 -- | Calculate the sign of a permutation, ie whether it is composed of an even or odd number of transpositions.
-parity ∷ Perm → Int
+parity ∷ Perm → Integer
 parity (P cs) = product . map parityC $ cs
 
 -- | To which S_n does the permutation belong?
-size ∷ Perm → Int
+size ∷ Perm → Integer
 size (P []) = 0
 size (P cs) = maximum . map maximum $ cs
 
@@ -118,8 +124,9 @@ dedupe [] = []
 dedupe (x:xs) = x : dedupe (filter (/=x) xs)
 
 -- | Construct all the permutations of a given size.
-symm ∷ Int → [Perm]
+symm ∷ Integer → [Perm]
 symm n = map fromTable $ permutations [1..n]
+
 ------------------------------
 --- Instances
 ------------------------------
@@ -130,7 +137,7 @@ instance Show Perm where
   show (P []) = "()"
   show (P cs) = concatMap showC cs
 
-instance Action Perm Int Int where
+instance Action Perm Integer Integer where
   act (P []) y = y
   act (P (c:cs)) y = P cs $$ actCycle c y
 

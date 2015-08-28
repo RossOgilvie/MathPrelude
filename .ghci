@@ -1,4 +1,11 @@
 :set -XRebindableSyntax
 :set -XUnicodeSyntax
+:set -XOverloadedStrings
+
+:set +s
+
+:set -fwarn-unused-binds -fwarn-unused-imports
 
 import qualified Prelude as P
+
+:load MathPrelude

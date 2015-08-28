@@ -3,6 +3,7 @@
 
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE DataKinds   #-}
 
 module MathPrelude.Extras.NumberRings
   ( Z(..)
@@ -12,14 +13,17 @@ module MathPrelude.Extras.NumberRings
 import MathPrelude
 import qualified Prelude                          as P
 
+-- From math-prelude
 import           MathPrelude.Classes.Field
-import           MathPrelude.Extras.NumberRingsTH
-import           MathPrelude.Extras.Primes
 
+-- From math-extras
+import           MathPrelude.Extras.NumberRingsTH
+
+-- TH stuff
 import           Data.Proxy
 import           GHC.TypeLits
-
 import           Language.Haskell.TH
+
 
 
 instance KnownNat n ⇒ Show (Z n) where
@@ -43,5 +47,4 @@ instance KnownNat n ⇒ Ring (Z n) where
 
 instance KnownNat n ⇒ CRing (Z n)
 
-
-$(mkFiniteFields (takeWhile (<30) primes))
+$(mkFiniteFields primes)

@@ -12,10 +12,18 @@ module MathPrelude.Extras.DifferentialEqns
 ----------------------------------
 -- Imports
 ----------------------------------
-import MathPrelude
-import           MathPrelude.Classes.Integral
-import           MathPrelude.Constructions.PowerSeries
-import           MathPrelude.Extras.Combinatorics
+-- From math-prelude
+import      MathPrelude
+import      MathPrelude.Classes.Integral
+
+-- From math-special-functions
+import      MathPrelude.SpecialFunctions.Combinatorics(factorial, pochhammer)
+
+-- From math-extras
+import      MathPrelude.Constructions.PowerSeries
+
+
+
 ----------------------------------
 -- Methods
 ----------------------------------

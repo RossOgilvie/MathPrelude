@@ -16,11 +16,64 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  exposed-modules: MathPrelude.Extras.EllipticFunctions, MathPrelude.Extras.SymmetricGroup, MathPrelude.Extras.DifferentialEqns, MathPrelude.Extras.Path, MathPrelude.Extras.NewtonsMethod, MathPrelude.Extras.NumberRings, MathPrelude.Extras.SpecialFunc, MathPrelude.Extras.PolynomialFactorisation, MathPrelude.Extras.Convergence, MathPrelude.Extras.Primes, MathPrelude.Extras.NumberRingsTH, MathPrelude.Extras.Grobner, MathPrelude.Extras.QuadraticExtensions, MathPrelude.Extras.Integration, MathPrelude.Extras.RomanNumerals, MathPrelude.Extras.Combinatorics, MathPrelude.Tests.NumEqTest, MathPrelude.Tests.DerivationTest, MathPrelude.Tests.RingTest, MathPrelude.Tests.Laws, MathPrelude.Tests.PolyTest, MathPrelude.Tests.RatioTest, MathPrelude.Tests.AbelianTest, MathPrelude.Exports.Polynomials, MathPrelude.Constructions.PowerSeries, MathPrelude.Constructions.Diff, MathPrelude.Constructions.CReal, MathPrelude.Constructions.ContinuedFractions, MathPrelude.Constructions.Quotient, MathPrelude.Classes.Derivation, MathPrelude.Classes.Action
+  exposed-modules:
+    MathPrelude.Extras.DifferentialEqns
+    , MathPrelude.Extras.NumberRings
+    , MathPrelude.Extras.NumberRingsTH
+    , MathPrelude.Extras.Path
+    , MathPrelude.Extras.PolynomialFactorisation
+    , MathPrelude.Extras.QuadraticExtensions
+    , MathPrelude.Extras.RomanNumerals
+    , MathPrelude.Extras.SymmetricGroup
+    -- , MathPrelude.Extras.NewtonsMethod
+    -- , MathPrelude.Extras.SpecialFun
+    -- , MathPrelude.Extras.Convergenc
+    -- , MathPrelude.Extras.Prime
+    -- , MathPrelude.Extras.Integratio
+    -- , MathPrelude.Extras.Combinatoric
+    -- , MathPrelude.Tests.NumEqTes
+    -- , MathPrelude.Tests.DerivationTes
+    -- , MathPrelude.Tests.RingTes
+    -- , MathPrelude.Tests.Law
+    -- , MathPrelude.Tests.PolyTes
+    -- , MathPrelude.Tests.RatioTes
+    -- , MathPrelude.Tests.AbelianTes
+    , MathPrelude.Exports.Polynomials
+    , MathPrelude.Constructions.PowerSeries
+    , MathPrelude.Constructions.CReal
+    , MathPrelude.Constructions.ContinuedFractions
+    , MathPrelude.Constructions.Quotient
+    -- , MathPrelude.Constructions.Dif
+    -- , MathPrelude.Classes.Derivatio
+    , MathPrelude.Classes.Action
   -- other-modules:
-  other-extensions:    BangPatterns, RebindableSyntax, UnicodeSyntax, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, TemplateHaskell, OverloadedStrings, DataKinds, KindSignatures, ScopedTypeVariables, GeneralizedNewtypeDeriving, RankNTypes, IncoherentInstances, UndecidableInstances, PolyKinds, TypeFamilies, TypeOperators, ViewPatterns, FunctionalDependencies, AllowAmbiguousTypes
-  build-depends:       base >=4.8 && <4.9
+  other-extensions:
+    BangPatterns
+    , RebindableSyntax
+    , UnicodeSyntax
+    , MultiParamTypeClasses
+    , FlexibleContexts
+    , FlexibleInstances
+    , TemplateHaskell
+    , OverloadedStrings
+    , DataKinds
+    , KindSignatures
+    , ScopedTypeVariables
+    , GeneralizedNewtypeDeriving
+    , RankNTypes
+    , IncoherentInstances
+    , UndecidableInstances
+    , PolyKinds
+    , TypeFamilies
+    , TypeOperators
+    , ViewPatterns
+    , FunctionalDependencies
+    , AllowAmbiguousTypes
+  build-depends:
+    base >=4.8 && <4.9
     , math-prelude >=0.2 && <0.3
+    , math-calculus >= 0.1 && <0.2
+    , math-special-functions >= 0.1 && <0.2
     , template-haskell >=2.10 && <2.11
     , QuickCheck
     , primes

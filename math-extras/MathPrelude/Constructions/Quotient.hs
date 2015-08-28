@@ -11,8 +11,11 @@ module MathPrelude.Constructions.Quotient
 import MathPrelude
 import qualified Prelude                             as P
 
-import           MathPrelude.Classes.Derivation
+-- From math-prelude
 import           MathPrelude.Classes.EuclideanDomain
+
+-- From math-calculus
+import           MathPrelude.Calculus.Derivation
 
 
 ------------------------------

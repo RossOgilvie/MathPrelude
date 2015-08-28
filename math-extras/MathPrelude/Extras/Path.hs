@@ -7,16 +7,34 @@ module MathPrelude.Extras.Path
   , pathIntegration
   ) where
 
+-----------------------------------
+--- Imports
+-----------------------------------
+
+
+-- from math-prelude
 import MathPrelude
-import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Module
-import           MathPrelude.Classes.Rational
-import           MathPrelude.Classes.Transcendental
-import           MathPrelude.Constructions.Complex
-import           MathPrelude.Extras.Integration
+import MathPrelude.Classes.Field
+import MathPrelude.Classes.Module
+import MathPrelude.Classes.Rational
+import MathPrelude.Classes.Transcendental
+import MathPrelude.Constructions.Complex
+
+-- from math-calculus
+import MathPrelude.Calculus.Integration
+
+
+-----------------------------------
+--- Data
+-----------------------------------
 
 -- | A path in a space (the type of type-parameter), defined on the interval [start,end].
 data Path a = Path {path ∷ Double → a, start ∷ Double, end ∷ Double}
+
+
+-----------------------------------
+--- Methods
+-----------------------------------
 
 -- | Use numerical integration to integrate a function over the given path.
 pathIntegration ∷ (Field b, Module b Double, NumEq b) ⇒ (a → b) → Path a → b

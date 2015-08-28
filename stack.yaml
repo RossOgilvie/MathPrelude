@@ -1,0 +1,12 @@
+flags: {}
+packages:
+- math-prelude/
+- math-linear/
+- math-calculus/
+- math-special-functions/
+- math-extras/
+- math-geometry/
+- math-graphics/
+extra-deps:
+- easyplot-1.0
+resolver: nightly-2015-07-11

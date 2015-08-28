@@ -7,13 +7,13 @@ module MathPrelude.Constructions.Polynomial
 	( module MathPrelude.Classes.Module
 	, module MathPrelude.Classes.Field
 	, module MathPrelude.Classes.EuclideanDomain
-	-- , module MathPrelude.Classes.Action
 	, Poly()
 	-- , poly
 	, toListP, fromListP
 	, (*^), scalarP, fromFactorsP
 	, constP, leadingP, degreeP
 	, termwiseP
+	, evalP
 	) where
 
 -----------------------------------
@@ -23,8 +23,6 @@ module MathPrelude.Constructions.Polynomial
 import MathPrelude
 import qualified Prelude                             as P
 
--- import           MathPrelude.Classes.Action
--- import           MathPrelude.Classes.Derivation
 import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Field
 import           MathPrelude.Classes.Integral
@@ -38,7 +36,7 @@ import qualified Data.Foldable                       as F
 --- Poly
 -----------------------------------
 -- | A sparse representation of polynomials.
-data Poly a = Poly [(Int,a)] deriving (Eq)
+data Poly a = Poly [(Integer,a)] deriving (Eq)
 
 
 -----------------------------------
@@ -57,14 +55,14 @@ fromListP ls = Poly . zip [0..] $ ls
 -- | Extract the list of coefficients of the polynomial.
 toListP ∷ Monoid a ⇒ Poly a → [a]
 toListP (Poly xs) = toList' xs 0
-toList' ∷ Monoid a ⇒ [(Int, a)] → Int → [a]
+toList' ∷ Monoid a ⇒ [(Integer, a)] → Integer → [a]
 toList' [] _ = []
 toList' l@((n,x):xs) k
 	| n == k = x : toList' xs (k+1)
 	| otherwise = mempty : toList' l (k+1)
 
 -- | Contruct a monomial with the specified coefficient and degree. 2*^3 + 3*^1 = 2x^3 + 3x
-(*^) ∷ a → Int → Poly a
+(*^) ∷ a → Integer → Poly a
 (*^) c d
 	| d >= 0 = Poly [(d,c)]
 	| otherwise = Poly [(0,c)]
@@ -90,12 +88,12 @@ leadingP (Poly []) = one
 leadingP (Poly xs) = snd . head . reverse $ xs
 
 -- | Extract the degree of the polynomial.
-degreeP ∷ Poly a → Int
+degreeP ∷ Poly a → Integer
 degreeP (Poly []) = 0
 degreeP (Poly xs) = fst . head . reverse $ xs
 
 -- | Apply a function termwise to a polynomial, acting potentially on its degree and coefficient.
-termwiseP ∷ (Ring a, NumEq a) ⇒ (Int → a → (Int,a)) → Poly a → Poly a
+termwiseP ∷ (Ring a, NumEq a) ⇒ (Integer → a → (Integer,a)) → Poly a → Poly a
 termwiseP f (Poly xs) = Poly . sortSimplifyP' . map (uncurry f) $ xs
 
 -----------------------------------
@@ -237,13 +235,13 @@ guts (Poly xs) = P.show xs
 -- | collect like terms, sort terms by degree and remove zero terms.
 sortSimplifyP ∷ (Monoid a, NumEq a) ⇒ Poly a → Poly a
 sortSimplifyP (Poly xs) = Poly $ sortSimplifyP' xs
-sortSimplifyP' ∷ (Monoid a, NumEq a) ⇒ [(Int,a)] → [(Int,a)]
+sortSimplifyP' ∷ (Monoid a, NumEq a) ⇒ [(Integer,a)] → [(Integer,a)]
 sortSimplifyP' = filterP' . combineP' . sortP'
 
 -- | collect like terms and remove zero terms.
 simplifyP ∷ (Monoid a, NumEq a) ⇒ Poly a → Poly a
 simplifyP (Poly xs) = Poly $ simplifyP' xs
-simplifyP' ∷ (Monoid a, NumEq a) ⇒ [(Int,a)] → [(Int,a)]
+simplifyP' ∷ (Monoid a, NumEq a) ⇒ [(Integer,a)] → [(Integer,a)]
 simplifyP' = filterP' . combineP'
 
 
@@ -260,14 +258,14 @@ combineP' (x@(n,a):y@(m,b):xs)
 -- | remove zero terms.
 filterP ∷ (NumEq a, Monoid a) ⇒ Poly a → Poly a
 filterP (Poly xs) = Poly . filterP' $ xs
-filterP' ∷ (Monoid a, NumEq a) ⇒ [(Int,a)] → [(Int,a)]
+filterP' ∷ (Monoid a, NumEq a) ⇒ [(Integer,a)] → [(Integer,a)]
 filterP' ls = catchEmpty' . filter crit $ ls
 	where
 		crit (n,a) = n >= 0 && not (nearZero a)
 
 
 -- | Do not allow the empty polynomial, instead use the zero polynomial.
-catchEmpty' ∷ Monoid a ⇒ [(Int,a)] → [(Int,a)]
+catchEmpty' ∷ Monoid a ⇒ [(Integer,a)] → [(Integer,a)]
 catchEmpty' xs
 	| length xs == 0 = [(0,mempty)]
 	| otherwise = xs
@@ -279,7 +277,7 @@ sortP (Poly xs) = Poly . sortP' $ xs
 sortP' = sortBy (compare `on` fst)
 
 -- | Given two sorted polynomials, merge their terms with the given function.
-merge' ∷ Monoid a ⇒ (a → a→ a) → [(Int,a)] → [(Int,a)] → [(Int,a)]
+merge' ∷ Monoid a ⇒ (a → a→ a) → [(Integer,a)] → [(Integer,a)] → [(Integer,a)]
 merge' _ p [] = p
 merge' _ [] q = q
 merge' f (x@(n,a):xs) (y@(m,b):ys)
@@ -290,9 +288,9 @@ merge ∷ Monoid a ⇒ (a → a→ a) → Poly a → Poly a → Poly a
 merge f (Poly xs) (Poly ys) = Poly $ merge' f xs ys
 
 -- | remove a term of the specified degree.
-removeTerm ∷ Int → Poly a → Poly a
+removeTerm ∷ Integer → Poly a → Poly a
 removeTerm d (Poly xs) = Poly $ filter (\(n,_) → n /= d) xs
 
 -- | shift the degree of every term in a polynomial. Warning, no checks for negative degrees.
-shiftPower ∷ Int → Poly a → Poly a
+shiftPower ∷ Integer → Poly a → Poly a
 shiftPower d (Poly xs) = Poly $ map (\(n,a) → (n + d,a)) xs

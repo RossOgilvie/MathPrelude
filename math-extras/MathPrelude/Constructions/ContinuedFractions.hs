@@ -10,7 +10,7 @@ module MathPrelude.Constructions.ContinuedFractions where
 ----------------------------------
 import MathPrelude
 import qualified Data.Maybe                          as M
-import           MathPrelude.Classes.Derivation
+import           MathPrelude.Calculus.Derivation
 import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Field
 import           MathPrelude.Classes.Integral

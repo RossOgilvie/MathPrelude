@@ -1,8 +1,12 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax #-}
-{-# LANGUAGE ViewPatterns #-}
--- {-# LANGUAGE DataKinds #-}
-module ThreeDViewer where
+
+module MathPrelude.Graphics.ThreeDViewer(
+    ThreeDPoint(..)
+    , Viewer(..)
+    , graph
+    , graphs
+    ) where
 
 import MathPrelude
 import Graphics.EasyPlot

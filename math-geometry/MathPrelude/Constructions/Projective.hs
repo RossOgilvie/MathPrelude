@@ -3,7 +3,7 @@
 {-# LANGUAGE RebindableSyntax      #-}
 {-# LANGUAGE UnicodeSyntax         #-}
 
--- | An attempt at making a generic projectivisation operation, ie the operation of adding an infinity. It makes the arithmetic kinda screw-y though. This works well enough for computing cross rations, and even better and Mobius transformations.
+-- | An attempt at making a generic projectivisation operation, ie the operation of adding an infinity. It makes the arithmetic kinda screw-y though. This works well enough for computing cross rations, and even better at Mobius transformations.
 module MathPrelude.Constructions.Projective
   ( Proj
   , fromField

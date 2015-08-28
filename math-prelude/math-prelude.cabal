@@ -15,7 +15,7 @@ description:
 
     For math-prelude:
 
-    Building on top of basic prelude, I have introduced a new heirarchy of typeclass for arithmetic, one aligned with mathematical convention. This both gets rid of the strange features of Haskell's standard numerical classes, but also allows for more complicated and expansive mathematics programming to extend from it.
+    Building on top of basic prelude, I have introduced a new heirarchy of typeclass for arithmetic, aligned with mathematical convention. This both gets rid of the strange features of Haskell's standard numerical classes, but also allows for more complicated and expansive mathematics programming to extend from it.
 
 homepage:            https://github.com/RossOgilvie/math-prelude
 license:             GPL-3
@@ -46,7 +46,11 @@ library
     , MathPrelude.Constructions.Ratio
     , MathPrelude.Constructions.Complex
     , MathPrelude.Constructions.Polynomial
-  other-modules: BasicPrelude, CorePrelude, IntegralLists, PreludeNumConst
+  other-modules:
+    BasicPrelude
+    , CorePrelude
+    , IntegralLists
+    , PreludeNumConst
   other-extensions:    RebindableSyntax, UnicodeSyntax, NoImplicitPrelude, CPP, OverloadedStrings
   build-depends:       base >=4.8 && <4.9
     , hashable >=1.2 && <1.3

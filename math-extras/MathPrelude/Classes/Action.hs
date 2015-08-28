@@ -12,6 +12,7 @@ module MathPrelude.Classes.Action
   ) where
 
 import MathPrelude
+import MathPrelude.Constructions.Polynomial
 
 -- | A class for function like objects of type a that can act on points in type b to produce c's. Types a and b determine c.
 class Action a b c | a b → c where
@@ -25,3 +26,6 @@ infixr 9 $$
 
 instance Action (a→b) a b where
   act = ($)
+
+instance Ring a ⇒ Action (Poly a) a a where
+	act = evalP

@@ -93,7 +93,7 @@ instance RealFloat CReal where
 
 -- | The golden ratio
 phi ∷ CReal
-phi = (1 + P.sqrt 5)/2
+phi = (1 + sqrt 5)/2
 
 -- | Ramanujan's constant. It is almost an integer, despite being e^(pi * sqrt 163)
 ramanujan :: CReal
