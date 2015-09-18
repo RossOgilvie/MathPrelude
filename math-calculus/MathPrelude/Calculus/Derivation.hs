@@ -11,12 +11,8 @@ module MathPrelude.Calculus.Derivation where
 import qualified Prelude as P
 import MathPrelude
 
-import           MathPrelude.Classes.Ring
-import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Rational
 import           MathPrelude.Classes.Module
 import           MathPrelude.Classes.Norm
-import           MathPrelude.Classes.Transcendental
 import           MathPrelude.Constructions.Polynomial
 import           MathPrelude.Constructions.Complex
 
@@ -161,7 +157,7 @@ instance Q a ⇒ Q (Diff a) where toRational = toRational . value
 instance Fractional a ⇒ Fractional (Diff a)
 
 instance (Group v, Ord v, Norm v s, Ring s) ⇒ Norm (Diff v) (Diff s) where
-    norm (D x x') = D (norm x) y'
+    norm (D x _) = D (norm x) y'
         where
             y'
                 | x > zero = 1

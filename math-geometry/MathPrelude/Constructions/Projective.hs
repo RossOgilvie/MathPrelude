@@ -6,6 +6,7 @@
 -- | An attempt at making a generic projectivisation operation, ie the operation of adding an infinity. It makes the arithmetic kinda screw-y though. This works well enough for computing cross rations, and even better at Mobius transformations.
 module MathPrelude.Constructions.Projective
   ( Proj
+  , CP1
   , fromField
   , crossRatio
   , MobiusT(..)
@@ -18,8 +19,6 @@ module MathPrelude.Constructions.Projective
 import MathPrelude
 -- import           MathPrelude.Classes.Action
 -- import           MathPrelude.Classes.Derivation
-import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Rational
 import           MathPrelude.Constructions.Complex
 import qualified Prelude                           as P
 
@@ -30,7 +29,7 @@ import qualified Prelude                           as P
 data Proj a = Elem a | Zero a | Infty a
 
 -- | Complex projective space, aka CP^1
-type CP = Proj (Complex Double)
+type CP1 = Proj (Complex Double)
 
 
 -----------------------------------

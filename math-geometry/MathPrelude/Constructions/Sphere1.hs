@@ -4,63 +4,80 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE PatternSynonyms #-}
-module MathPrelude.Constructions.Sphere1 where
+module MathPrelude.Constructions.Sphere1(
+    S1(..)
+    , pattern Angle, s1ToAngle, s1FromAngle
+    , pattern S1inR2, s1ToR2, s1FromR2
+    , pattern S1inC, s1ToC, s1FromC
+    , pattern S1inStereo, s1ToStereo, s1FromStereo
+    , pattern S1inMat, s1inMat
+    , s1Pts
+    ) where
 
 import MathPrelude
 
-import MathPrelude.Classes.Field
-import MathPrelude.Classes.Transcendental
 import MathPrelude.Constructions.Complex
 import MathPrelude.Constructions.Vector
 import MathPrelude.Constructions.Matrix
 
--- import GHC.TypeLits
-
--- import Control.Lens
-
 data S1 = S1 { theta :: Double} deriving Show
 
-toAngle :: S1 → Double
-toAngle (S1 t) = t
 
-fromAngle :: Double → S1
-fromAngle t = S1 $ t - 2*pi*n
+pattern Angle θ <- (s1ToAngle -> θ)
+    where Angle θ = s1FromAngle θ
+
+s1ToAngle :: S1 → Double
+s1ToAngle (S1 θ) = θ
+
+s1FromAngle :: Double → S1
+s1FromAngle θ = S1 $ θ - 2*pi*n
     where
-        n = fromInteger . ceiling $ t / (2*pi) - 0.5
+        n = fromInteger . ceiling $ θ / (2*pi) - 0.5
 
-pattern Angle t <- (toAngle -> t)
-    where Angle t = fromAngle t
 
-toR2 ∷ S1 → Vec 2 Double
-toR2 (S1 theta) = V2 (cos theta, sin theta)
 
-fromR2 ∷ Vec 2 Double → S1
-fromR2 (V2 (x,y)) = S1 (atan2 y x)
+pattern S1inR2 v <- (s1ToR2 -> v)
+    where S1inR2 v = s1FromR2 v
 
-pattern S1inR2 v <- (toR2 -> v)
-    where S1inR2 v = fromR2 v
+s1ToR2 ∷ S1 → Vec 2 Double
+s1ToR2 (S1 θ) = V2 (cos θ, sin θ)
 
-fromC ∷ Complex Double → S1
-fromC (x:+y) = S1 (atan2 y x)
---
-toC ∷ S1 → Complex Double
-toC (S1 theta) = fromArg theta
+s1FromR2 ∷ Vec 2 Double → S1
+s1FromR2 (V2 (x,y)) = S1 (atan2 y x)
 
-pattern S1inC z <- (toC -> z)
-    where S1inC z = fromC z
 
-toStereo :: S1 → Double
-toStereo (S1 t) = 2 * tan (t/2)
 
-fromStereo :: Double → S1
-fromStereo y = S1 $ 2 * atan (y/2)
+pattern S1inC z <- (s1ToC -> z)
+    where S1inC z = s1FromC z
 
-pattern S1inStereo y <- (toStereo -> y)
-    where S1inStereo y = fromStereo y
+s1ToC ∷ S1 → Complex Double
+s1ToC (S1 θ) = fromArg θ
 
-toRot :: S1 → Mat 2 2 Double
-toRot (S1 t) = fromListsMt [[cos t, - sin t],[sin t, cos t]]
+s1FromC ∷ Complex Double → S1
+s1FromC (x:+y) = S1 (atan2 y x)
 
-pattern S1Rot mt <- (toRot -> mt)
 
-spacedPts k = map (*(2*pi/k)) [1..k]
+
+pattern S1inStereo y <- (s1ToStereo -> y)
+    where S1inStereo y = s1FromStereo y
+
+s1ToStereo :: S1 → Double
+s1ToStereo (S1 t) = 2 * tan (t/2)
+
+s1FromStereo :: Double → S1
+s1FromStereo y = S1 $ 2 * atan (y/2)
+
+
+
+pattern S1inMat mt <- (s1inMat -> mt)
+
+s1inMat :: S1 → Mat 2 2 Double
+s1inMat (S1 t) = fromListsMt [[cos t, - sin t],[sin t, cos t]]
+
+
+s1Pts ∷ Integer → [S1]
+s1Pts k' = map Angle pts
+    where
+        -- k = 50
+        k = fromInteger k'
+        pts = map (*(2*pi/k)) [1..k]

@@ -10,17 +10,13 @@ module MathPrelude.Calculus.Integration
   ) where
 
 import MathPrelude
-import           MathPrelude.Classes.Field
--- import MathPrelude.Constructions.Complex
 import           MathPrelude.Classes.Module
--- import MathPrelude.Classes.Transcendental
-
 import           MathPrelude.Calculus.Convergence
 
 
 -- | Numerical integration of a function on from the lower bound to the uper bound via Simpons' method with an increasingly fine partition.
 numIntegrate ∷ (Field a, NumEq b, Field b, Module b a) ⇒ (a→b)→a→a→b
-numIntegrate f a b = converge . map (simpsons f a b) . map (2^)$ [1..]
+numIntegrate f a b = converge . map (simpsons f a b) . map (2^) $ [1..]
 
 -- | The trapezoid rule for a function with the specified number of partitions.
 trapezoid ∷ (Field a, Field b, Module b a) ⇒ (a→b) → a → a → Integer → b

@@ -34,11 +34,11 @@ module MathPrelude.SpecialFunctions.EllipticFunctions
   , sc, sd, cs, cd, ds, dc
   -- * Jacobi Theta Functions
   -- $jtf
-  , jacobi_theta
-  , jacobi_theta00
-  , jacobi_theta01
-  , jacobi_theta10
-  , jacobi_theta11
+  , jacobiTheta
+  , jacobiTheta00
+  , jacobiTheta01
+  , jacobiTheta10
+  , jacobiTheta11
   ) where
 
 -----------------------------------
@@ -55,12 +55,12 @@ import           MathPrelude.Calculus.Convergence
 -----------------------------------
 --- Carlson Symmetric Integrals
 -----------------------------------
--- carl_seq ∷ a → a → a → a
-carl_seq x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
+carlSeq ∷ Transcendental a ⇒ a → a → a → a
+carlSeq x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
   where
     start = (x,y,z)
-    test (a,b,c) _ = (a =~ b) && (b=~ c) && (a=~c)
-    step (a,b,c) = (a',b',c')
+    test (!a, !b, !c) _ = (a =~ b) && (b=~ c) && (a=~c)
+    step (!a, !b, !c) = (a',b',c')
       where
         a' = (a+l)/4
         b' = (b+l)/4
@@ -71,11 +71,11 @@ carl_seq x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
 -- The Carlson symmetric forms of elliptic integrals are a modern alternative to the Legendre forms (the usual elliptic integrals). Their good duplication theorem make them easy to calculate.
 -- <https://en.wikipedia.org/wiki/Carlson_symmetric_form Wikipedia>
 
-carlsonF x y z = (\m → recip . sqrt $ m) $ carl_seq x y z
+carlsonF x y z = (\m → recip . sqrt $ m) $ carlSeq x y z
 carlsonC x y = carlsonF x y y
 carlsonD x y z = carlsonJ x y z z
 carlsonJ x y z p
-  | x =~ y && x =~ z && x =~ p = x **(-3/2)
+  | x =~ y && x =~ z && x =~ p = x ** (-3/2)
   | otherwise = (1/4) * carlsonJ x' y' z' p' + 6*carlsonC d2 s
     where
       l = sqrt (x*y) + sqrt (y*z) + sqrt (x*z)
@@ -139,8 +139,8 @@ completePi n k = carlsonF 0 (1-k^2) 1 - (1/3)*n* carlsonJ 0 (1-k^2) 1 (1-n)
 -- The Jacobi theta functions. They are quasi-periodic in the first variable z and the second argument is the conformal factor τ (in the upper half plane). The numbered theta functions use Riemann-Mumford notation.
 -- <https://en.wikipedia.org/wiki/Theta_function Wikipedia>
 
-jacobi_theta :: (Ord a, Transcendental a) => Complex a -> Complex a -> Complex a
-jacobi_theta z tau = 1 + 2* series' term 1
+jacobiTheta :: (Ord a, Transcendental a) => Complex a -> Complex a -> Complex a
+jacobiTheta z tau = 1 + 2* series' term 1
   where
     term n = q^(n''^2) * cos (2*pi*n'*z)
       where
@@ -148,10 +148,11 @@ jacobi_theta z tau = 1 + 2* series' term 1
           n'' = fromIntegral n
     q = exp (pi*iu*tau)
 
-jacobi_theta00 z tau = jacobi_theta z tau
-jacobi_theta01 z tau = jacobi_theta (z + (1/2)) tau
-jacobi_theta10 z tau = exp (pi*iu*tau/4 + pi*iu*z) * jacobi_theta (z + (tau/2)) tau
-jacobi_theta11 z tau = exp (pi*iu*tau/4 + pi*iu*(z + (1/2))) * jacobi_theta (z + (1/2) + (tau/2)) tau
+jacobiTheta00, jacobiTheta01, jacobiTheta10, jacobiTheta11 :: (Ord a, Transcendental a) ⇒ Complex a -> Complex a -> Complex a
+jacobiTheta00 = jacobiTheta
+jacobiTheta01 z = jacobiTheta (z + (1/2))
+jacobiTheta10 z tau = exp (pi*iu*tau/4 + pi*iu*z) * jacobiTheta (z + (tau/2)) tau
+jacobiTheta11 z tau = exp (pi*iu*tau/4 + pi*iu*(z + (1/2))) * jacobiTheta (z + (1/2) + (tau/2)) tau
 
 ------------------------------------
 -- Jacobi Elliptic
@@ -161,12 +162,10 @@ jacobi_theta11 z tau = exp (pi*iu*tau/4 + pi*iu*(z + (1/2))) * jacobi_theta (z +
 -- <https://en.wikipedia.org/wiki/Jacobi%27s_elliptic_functions Wikipedia>
 
 sn ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
-sn u k = - (t00* jacobi_theta11 z tau) / (t10 * jacobi_theta01 z tau)
+sn u k = - (t00* jacobiTheta11 z tau) / (t10 * jacobiTheta01 z tau)
   where
-    t00 = jacobi_theta00 0 tau
-    t01 = jacobi_theta01 0 tau
-    t10 = jacobi_theta10 0 tau
-    t11 = jacobi_theta11 0 tau
+    t00 = jacobiTheta00 0 tau
+    t10 = jacobiTheta10 0 tau
     k' = sqrt (1-k^2)
     k'' = sqrt k'
     l = (1-k'')/(1+k'')/2
@@ -175,12 +174,11 @@ sn u k = - (t00* jacobi_theta11 z tau) / (t10 * jacobi_theta01 z tau)
     z = u/pi/(t00^2)
 
 cn ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
-cn u k = (t01* jacobi_theta10 z tau) / (t10 * jacobi_theta01 z tau)
+cn u k = (t01* jacobiTheta10 z tau) / (t10 * jacobiTheta01 z tau)
   where
-    t00 = jacobi_theta00 0 tau
-    t01 = jacobi_theta01 0 tau
-    t10 = jacobi_theta10 0 tau
-    t11 = jacobi_theta11 0 tau
+    t00 = jacobiTheta00 0 tau
+    t01 = jacobiTheta01 0 tau
+    t10 = jacobiTheta10 0 tau
     k' = sqrt (1-k^2)
     k'' = sqrt k'
     l = (1-k'')/(1+k'')/2
@@ -189,12 +187,10 @@ cn u k = (t01* jacobi_theta10 z tau) / (t10 * jacobi_theta01 z tau)
     z = u/pi/(t00^2)
 
 dn ∷ (Ord a, Transcendental a) ⇒ Complex a → Complex a → Complex a
-dn u k = (t01* jacobi_theta00 z tau) / (t00 * jacobi_theta01 z tau)
+dn u k = (t01* jacobiTheta00 z tau) / (t00 * jacobiTheta01 z tau)
   where
-    t00 = jacobi_theta00 0 tau
-    t01 = jacobi_theta01 0 tau
-    t10 = jacobi_theta10 0 tau
-    t11 = jacobi_theta11 0 tau
+    t00 = jacobiTheta00 0 tau
+    t01 = jacobiTheta01 0 tau
     k' = sqrt (1-k^2)
     k'' = sqrt k'
     l = (1-k'')/(1+k'')/2
@@ -229,12 +225,13 @@ cd = cn / dn
 -- The Weierstrass elliptic function, its derivative and its invariants. Most functions take a complex number z and a conformal paramter τ (in the upper half plane. The primed wp' refers to derivative. The "2" versions of a function refer to it taking two lattice points ω_1 and ω_2, not τ. The invariants are functions of τ alone.
 -- <https://en.wikipedia.org/wiki/Weierstrass%27s_elliptic_functions Wikipedia>
 
-wp z tau = (pi*t00*t10*jacobi_theta01 z tau / jacobi_theta11 z tau)^2 - pi^2/3*(t00^4+t10^4)
+wp, wp' :: (Ord a, Transcendental a) ⇒ Complex a -> Complex a -> Complex a
+wp2, wp'2 :: (Ord a, Transcendental a) ⇒ Complex a -> Complex a -> Complex a -> Complex a
+
+wp z tau = (pi*t00*t10*jacobiTheta01 z tau / jacobiTheta11 z tau)^2 - pi^2/3*(t00^4+t10^4)
   where
-    t00 = jacobi_theta00 0 tau
-    t01 = jacobi_theta01 0 tau
-    t10 = jacobi_theta10 0 tau
-    t11 = jacobi_theta11 0 tau
+    t00 = jacobiTheta00 0 tau
+    t10 = jacobiTheta10 0 tau
 
 wp2 z w1 w2 = wp (z/w1) (w2/w1) / w1^2
 
@@ -246,27 +243,14 @@ wp' z tau = sqrt (4*p^3 - g2*p - g3)
 
 wp'2 z w1 w2 = 1/w1^3 * wp' (z/w1) (w2/w1)
 
+wp_g2, wp_g3 :: (Ord a, Transcendental a) ⇒ Complex a -> Complex a
 wp_g2 tau = pi^4/6*(a^8 + b^8 + c^8)
   where
-    b = jacobi_theta00 0 tau
-    c = jacobi_theta01 0 tau
-    a = jacobi_theta10 0 tau
+    b = jacobiTheta00 0 tau
+    c = jacobiTheta01 0 tau
+    a = jacobiTheta10 0 tau
 
 wp_g3 tau = pi^6/216*(a^12 - 33 *a^8*b^4 - 33*a^4 *b^8 + b^12)
   where
-    b = jacobi_theta00 0 tau
-    c = jacobi_theta01 0 tau
-    a = jacobi_theta10 0 tau
-
-------------------------------------
--- Misc
-------------------------------------
--- aperiod ∷ Double → Complex Double
--- -- aperiod ∷ (Ord a, Field a, Transcendental a) ⇒ a → Complex a Double → Complex Double
--- aperiod r = (-4∷Double) .* iu * (fromReal $ ellipticK (r ^ 2))
--- --bperiod ∷ (Ord a, Field a, Transcendental a) ⇒ a → Complex a
--- bperiod ∷ Double → Complex Double
--- bperiod r = ((-8)/(1+r)/(1+r)) .* (fromReal $ ellipticK ktilde)
---   where ktilde = (1-r)*(1-r)/(1+r)/(1+r)
---
--- tau r = (aperiod r)/(bperiod r)
+    b = jacobiTheta00 0 tau
+    a = jacobiTheta10 0 tau
