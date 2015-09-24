@@ -52,7 +52,8 @@ library
     , IntegralLists
     , PreludeNumConst
   other-extensions:    RebindableSyntax, UnicodeSyntax, NoImplicitPrelude, CPP, OverloadedStrings
-  build-depends:       base >=4.8 && <4.9
+  build-depends:
+    base >=4.8 && <4.9
     , hashable >=1.2 && <1.3
     , vector >=0.10 && <0.11
     , lifted-base >=0.2 && <0.3

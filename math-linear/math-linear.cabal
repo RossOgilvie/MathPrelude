@@ -24,6 +24,6 @@ library
   build-depends:
     base >=4.8 && <4.9
     , math-prelude
-    , lens >=4.9 && <4.10
+    , lens
   -- hs-source-dirs:
   default-language:    Haskell2010
