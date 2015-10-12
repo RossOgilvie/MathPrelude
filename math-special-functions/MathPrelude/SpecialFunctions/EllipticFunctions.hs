@@ -14,7 +14,7 @@ module MathPrelude.SpecialFunctions.EllipticFunctions
   , ellipticPi
   -- * Complete Elliptic Integrals
   , completeK
-  , completeE
+  , completeE, fastCompleteE
   , completePi
   -- * Carlson Symmetric Elliptic Integrals
   -- $carlson
@@ -126,6 +126,41 @@ completeK k = (pi/2)/ agm (1-k) (1+k)
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_second_kind Wikipedia>
 completeE ∷ Transcendental a ⇒ a → a
 completeE k = carlsonF 0 (1-k^2) 1 - (1/3)* k^2* carlsonD 0 (1-k^2) 1
+-- completeE = fastCompleteE
+
+completeEnearK0 k = pi/2*(
+    1
+    - 1/4*k^2
+    - 3/64*k^4
+    -5/256*k^6
+    - 175/16384*k^8
+    -441/65536*k^10
+    - 4851/1048576*k^12
+    -14157 * k^14 /4194304
+    -2760615 * k^16 /1073741824
+    -8690825 * k^18 /4294967296
+    -112285459* k^20 /68719476736)
+
+completeEnearK1 k =
+    1
+    + 1/4*(log (1-m) - 4*log 2 + 1)*(m-1)
+    + 1/64*(-6*log(1-m) + 24 * log 2 - 13) * (m-1)^2
+    + 3/256*(5*log(1-m) - 20 * log 2 + 12) * (m-1)^3
+    + 5/49152*(-420*log(1-m) + 1680 * log 2 - 1051) * (m-1)^4
+    + 7/131072*(630*log(1-m) - 2520 * log 2 + 1613) * (m-1)^5
+    +21/2621440*(-3465*log(1-m) + 13860* log 2 - 9001)*(m-1)^6
+    +11/41943040*(90090*log(1-m) - 360360* log 2 + 236381)*(m-1)^7
+    +429/7516192768*(-360360*log(1-m) + 1441440* log 2 - 952487)*(m-1)^8
+    -10725/120259084288*(-204204*log(1-m) + 816816* log 2 - 542779)*(m-1)^9
+    +2431/8658654068736*(-58198140*log(1-m) + 232792560*log 2 - 155378701)*(m-1)^10
+    where m = k^2
+
+fastCompleteE ∷ Complex Double → Complex Double
+fastCompleteE k
+    | realPart k <= 0.5 = completeEnearK0 k
+    | realPart k <= 0.9 = completeE k
+    | otherwise = completeEnearK1 k
+
 
 -- | The complete elliptic integral of the third kind. The first argument is the characteristic n. The second argument is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_third_kind Wikipedia>
