@@ -12,6 +12,7 @@ module MathPrelude.Constructions.Sphere1(
     , pattern S1inStereo, s1ToStereo, s1FromStereo
     , pattern S1inMat, s1inMat
     , s1Pts
+    , s1inD2
     ) where
 
 import MathPrelude
@@ -20,7 +21,9 @@ import MathPrelude.Constructions.Complex
 import MathPrelude.Constructions.Vector
 import MathPrelude.Constructions.Matrix
 
-data S1 = S1 { theta :: Double} deriving Show
+import MathPrelude.Constructions.Disc2
+
+newtype S1 = S1 { theta :: Double } deriving Show
 
 
 pattern Angle θ <- (s1ToAngle -> θ)
@@ -81,3 +84,6 @@ s1Pts k' = map Angle pts
         -- k = 50
         k = fromInteger k'
         pts = map (*(2*pi/k)) [1..k]
+
+s1inD2 ∷ S1 → D2
+s1inD2 (s1ToC → z) = D2 z

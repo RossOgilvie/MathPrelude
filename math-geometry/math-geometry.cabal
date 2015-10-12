@@ -19,6 +19,7 @@ library
   exposed-modules:
     MathPrelude.Constructions.Sphere3
     , MathPrelude.Constructions.Sphere1
+    , MathPrelude.Constructions.Disc2
     , MathPrelude.Constructions.Projective
   -- other-modules:
   other-extensions:
