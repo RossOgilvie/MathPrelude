@@ -190,11 +190,11 @@ instance Show a ⇒ Show (Mat n m a) where
 --
 instance (KnownNat n, KnownNat m, Monoid a) ⇒ Monoid (Mat n m a) where
   mappend = liftMt2 mappend
-  mempty = Mat (take n' $ repeat mempty)
-    where n' = fromInteger $ natVal (Proxy ∷ Proxy n)
+  mempty = fromRowsMt $ repeat mempty
 
-instance NumEq a ⇒ NumEq (Mat n m a) where
+instance (KnownNat n, KnownNat m, NumEq a) ⇒ NumEq (Mat n m a) where
   (=~) (Mat vs) (Mat ws) = vs =~ ws
+  epsilon = fromRowsMt $ repeat epsilon
 
 instance (KnownNat n, KnownNat m, Group a) ⇒ Group (Mat n m a) where
   negate = liftMt negate

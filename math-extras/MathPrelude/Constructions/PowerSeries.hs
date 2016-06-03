@@ -73,10 +73,10 @@ constPS (PS (x:_)) = x
 -- if you allow partial sums which add zero, then it breaks the otherwise useful converge trick. if you don't then you fail on PS with an infinite streak of zeroes. This latter case may be addressed another time by keeping track of degree
 
 -- complication. a small tail element looks the same as a zero. take a pragmatic approach, and don't look at the first 100 terms of the power series
-ps_tail_fudge = 50
+psTailFudge = 50
 -- | Evaluate a power series.
 evalPS ∷ Ring a ⇒ PS a → a → a
-evalPS ps = converge . drop ps_tail_fudge . partialSumsPS ps
+evalPS ps = converge . drop psTailFudge . partialSumsPS ps
 
 partialSumsPS ∷ Ring a ⇒ PS a → a → [a]
 partialSumsPS (PS xs) pt = partialSums $ zipWith (*) xs powers
@@ -91,7 +91,7 @@ fromPoly ∷ Monoid a ⇒ Poly a → PS a
 fromPoly = fromListPS . toListP
 
 -- | Use a power series as a generating function.
-toGenFunc ∷ Monoid a ⇒ PS a → (Int → a)
+toGenFunc ∷ Monoid a ⇒ PS a → Int → a
 toGenFunc (PS y) n
   | null y' = zero
   | otherwise = head y'
@@ -109,7 +109,7 @@ instance Functor PS where
   fmap f (PS xs) = PS (map f xs)
 
 instance (Show a, Ring a) ⇒ Show (PS a) where
-  show = refined_show
+  show = refinedShow
   -- show = guts
 
 instance NumEq a ⇒ NumEq (PS a) where
@@ -205,13 +205,13 @@ liftPS2' f (x:xs) (y:ys) = f x y : liftPS2' f xs ys
 --           factor = leadingP p / leadingP q
 --           r = removeTerm dp $ p - shiftPower deg (filterP $ factor .* q)
 --           (p',r') = div' r q
-refined_show ∷ (Show a, Ring a) ⇒ PS a → String
-refined_show p = s --if s /= "" then s else "0"
-  where s = refined_show' p
-refined_show' ∷ (Show a, Ring a) ⇒ PS a → String
-refined_show' (PS xs) = intercalate " + " $ zipWith show_m [0..] xs
-show_m ∷ (Show a, Ring a) ⇒ Int → a → String
-show_m n x
+refinedShow ∷ (Show a, Ring a) ⇒ PS a → String
+refinedShow p = s --if s /= "" then s else "0"
+  where s = refinedShow' p
+refinedShow' ∷ (Show a, Ring a) ⇒ PS a → String
+refinedShow' (PS xs) = intercalate " + " $ zipWith showM [0..] xs
+showM ∷ (Show a, Ring a) ⇒ Int → a → String
+showM n x
   | n == 0 = P.show x
   | n == 1 && (x =~ one) = "x"
   | n == 1 = P.show x ++ "x"

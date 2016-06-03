@@ -2,14 +2,14 @@
 {-# LANGUAGE UnicodeSyntax    #-}
 -- | A module for converting between integral types.
 module MathPrelude.Classes.Integral
-	( Integral(..)
-	, fromIntegral98
-	, toIntegral98
-	, fromIntegral
-	-- * Misc
-	, even
-	, odd
-	) where
+    ( Integral(..)
+    , fromIntegral98
+    , toIntegral98
+    , fromIntegral
+    -- * Misc
+    , even
+    , odd
+    ) where
 
 -----------------------------------
 --- Imports
@@ -24,8 +24,8 @@ import           MathPrelude.Classes.Ring
 -----------------------------------
 -- | This class describes types that can be transformed into the canonical integer type Integer. All rings already have a map from Integer, and these should be inverses (at least partially).
 class (Ring a, Enum a) ⇒ Integral a where
-	-- | Convert to Integer
-	toInteger ∷ a → Integer
+    -- | Convert to Integer
+    toInteger ∷ a → Integer
 
 -----------------------------------
 --- Methods
@@ -52,7 +52,7 @@ odd = P.odd . toInteger
 --- Instances
 -----------------------------------
 -- instance P.Integral a ⇒ Integral a where
--- 	toInteger = P.toInteger
+--     toInteger = P.toInteger
 instance Integral Integer where toInteger = id
 instance Integral Int where toInteger = P.toInteger
 instance Integral Int32 where toInteger = P.toInteger

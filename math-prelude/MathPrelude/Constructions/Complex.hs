@@ -8,15 +8,15 @@
 
 -- | A dataype to make complex numbers. Reuses Data.Complex.
 module MathPrelude.Constructions.Complex
-	( Complex(..)
-	, displayC
-	, iu, realPart, imagPart
-	, fromReal
-	, fromArg, arg, primitiveRoot
-	, fromPolar, toPolar
-	, conjugate, normsq, normsq'
-	-- , norm
-	) where
+    ( Complex(..)
+    , displayC
+    , iu, realPart, imagPart
+    , fromReal
+    , fromArg, arg, primitiveRoot
+    , fromPolar, toPolar
+    , conjugate, normsq, normsq'
+    -- , norm
+    ) where
 
 -----------------------------------
 --- Imports
@@ -41,9 +41,9 @@ import           MathPrelude.Classes.Transcendental
 -- | Display a complex number bracketed in the common notational form.
 displayC ∷ (Show a, NumEq a, Monoid a) ⇒ Complex a → Text
 displayC (x :+ y)
-	| nearZero y = show x
-	| nearZero x = show y ++ "i"
-	| otherwise = "(" ++ show x ++ "+" ++ show y ++ "i)"
+    | nearZero y = show x
+    | nearZero x = show y ++ "i"
+    | otherwise = "(" ++ show x ++ "+" ++ show y ++ "i)"
 
 -- | The imaginary unit, ie 0:+1.
 iu ∷ Ring a ⇒ Complex a
@@ -81,14 +81,14 @@ normsq' = realPart . normsq
 -- | Compute the argument of a complex numer. The range is from -pi to pi. Arg 0 = 0. Arg (-x:+0) = pi.
 arg ∷ (Ord a, Field a, Transcendental a) ⇒ Complex a → a
 arg (x :+ y)
-	| x > zero = atan (y/x)
-	| nearZero x && y > zero = pi * half
-	| nearZero x && y < zero = negate $ pi * half
-	| nearZero x && nearZero y = zero
-	| x < zero && y > zero = atan (y/x) + pi
-	| x < zero && y < zero = atan (y/x) - pi
-	| x < zero && nearZero y = pi
-	| otherwise = zero
+    | x > zero = atan (y/x)
+    | nearZero x && y > zero = pi * half
+    | nearZero x && y < zero = negate $ pi * half
+    | nearZero x && nearZero y = zero
+    | x < zero && y > zero = atan (y/x) + pi
+    | x < zero && y < zero = atan (y/x) - pi
+    | x < zero && nearZero y = pi
+    | otherwise = zero
 
 -- | Compute the primitive nth root of unity with least argument.
 primitiveRoot ∷ Int → Complex Double
@@ -100,74 +100,74 @@ primitiveRoot n = fromArg (2*pi/fromIntegral n)
 -----------------------------------
 
 instance Functor Complex where
-	fmap f (x :+ y) = f x :+ f y
+    fmap f (x :+ y) = f x :+ f y
 
 -- instance Derivation a ⇒ Derivation (Complex a) where
--- 	derive (x:+y) = derive x :+ derive y
+--     derive (x:+y) = derive x :+ derive y
 -- instance Action a b c ⇒ Action (Complex a) b (Complex c) where
--- 	act (x:+y) p = act x p :+ act y p
+--     act (x:+y) p = act x p :+ act y p
 instance NumEq a ⇒ NumEq (Complex a) where
-	(x1 :+ y1) =~ (x2 :+ y2) = (x1 =~ x2) && (y1 =~ y2)
-	-- epsilon = epsilon :+ epsilon
-	-- nearZero (a:+b)= nearZero a && nearZero b
-	-- (>>~) (x:+y) (a:+b) = m >>~ a && m >>~ b
-	-- 	where m = leastSmall [x,y]
+    (x1 :+ y1) =~ (x2 :+ y2) = (x1 =~ x2) && (y1 =~ y2)
+    epsilon = epsilon :+ epsilon
+    -- nearZero (a:+b)= nearZero a && nearZero b
+    -- (>>~) (x:+y) (a:+b) = m >>~ a && m >>~ b
+    --     where m = leastSmall [x,y]
 
 
 instance Monoid a ⇒ Monoid (Complex a) where
-	mempty = mempty :+ mempty
-	mappend (x:+y) (x':+y') = mappend x x' :+ mappend y y'
+    mempty = mempty :+ mempty
+    mappend (x:+y) (x':+y') = mappend x x' :+ mappend y y'
 instance Group a ⇒ Group (Complex a) where
-	negate (x:+y) = negate x :+ negate y
+    negate (x:+y) = negate x :+ negate y
 instance Abelian a ⇒ Abelian (Complex a) where
 instance Ring a ⇒ Ring (Complex a) where
-	one = one :+ zero
-	(*) (x:+y) (x':+y') = (x*x' - y*y') :+ (x*y' + x'*y)
-	fromInteger x = fromInteger x :+ zero
+    one = one :+ zero
+    (*) (x:+y) (x':+y') = (x*x' - y*y') :+ (x*y' + x'*y)
+    fromInteger x = fromInteger x :+ zero
 instance CRing a ⇒ CRing (Complex a)
 instance IntDom a ⇒ IntDom (Complex a)
 instance Field a ⇒ Field (Complex a) where
-	recip z@(x:+y) = (x/zz) :+ (negate y/zz)
-		where zz = normsq' z
+    recip z@(x:+y) = (x/zz) :+ (negate y/zz)
+        where zz = normsq' z
 instance Ring r ⇒ Module (Complex r) r where
-	-- scale r = map (r*)
-	scale r (x :+ y) = (r*x) :+ (r*y)
+    -- scale r = map (r*)
+    scale r (x :+ y) = (r*x) :+ (r*y)
 instance (Transcendental r, Ring r) ⇒ Norm (Complex r) r where
-	norm = sqrt . normsq'
-	
+    norm = sqrt . normsq'
+
 instance Ring r ⇒ ComplexInnerProd (Complex r) (Complex r) where
-	cxiprod z w = z * conjugate w
+    cxiprod z w = z * conjugate w
 
 instance Num a ⇒ Num (Complex a) where
-	abs = undefined
-	signum = undefined
+    abs = undefined
+    signum = undefined
 
 instance (Monoid a, CharZero a) ⇒ CharZero (Complex a) where
-	fromRational' = fromReal . fromRational'
+    fromRational' = fromReal . fromRational'
 
 half' ∷ Field a ⇒ Complex a
 half' = fromReal half
 
 instance (Ord a, Field a, Transcendental a) ⇒ Transcendental (Complex a) where
-	pi = fromReal pi
-	exp (x:+y) = exp x .* fromArg y
-	log z = log r :+ t
-		where (r,t) = toPolar z
-	--(**) -- use default
-	sqrt z
-		| nearZero z = zero
-		| otherwise = z ** half'
-	--logBase -- use default
-	sin (x:+y) = (sin x * cosh y) :+ (cos x * sinh y)
-	cos (x:+y) = (cos x * cosh y) :+ negate (sin x * sinh y)
-	--tan  -- use default
-	asin z = negate iu * log (iu*z + sqrt (one - z*z))
-	acos z = half' * pi - asin z
-	atan z = half' * iu * (log (one - iu*z) - log (one + iu*z))
-	atan2 x y
-		| nearZero x = zero
-		| otherwise = atan (y/x)
-	sinh (x:+y) = (sinh x * cos y) :+ (cosh x * sin y)
-	cosh (x:+y) = (cosh x * cos y) :+ (sinh x * sin y)
-	--tanh  -- use default
-	--ahyps -- use defaults
+    pi = fromReal pi
+    exp (x:+y) = exp x .* fromArg y
+    log z = log r :+ t
+        where (r,t) = toPolar z
+    --(**) -- use default
+    sqrt z
+        | nearZero z = zero
+        | otherwise = z ** half'
+    --logBase -- use default
+    sin (x:+y) = (sin x * cosh y) :+ (cos x * sinh y)
+    cos (x:+y) = (cos x * cosh y) :+ negate (sin x * sinh y)
+    --tan  -- use default
+    asin z = negate iu * log (iu*z + sqrt (one - z*z))
+    acos z = half' * pi - asin z
+    atan z = half' * iu * (log (one - iu*z) - log (one + iu*z))
+    atan2 x y
+        | nearZero x = zero
+        | otherwise = atan (y/x)
+    sinh (x:+y) = (sinh x * cos y) :+ (cosh x * sin y)
+    cosh (x:+y) = (cosh x * cos y) :+ (sinh x * sin y)
+    --tanh  -- use default
+    --ahyps -- use defaults

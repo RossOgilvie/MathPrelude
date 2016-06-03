@@ -4,7 +4,7 @@ module MathPrelude.SpecialFunctions.Combinatorics
   (
   -- * Factorials
   factorial
-  , dble_factorial
+  , doubleFactorial
   , pochhammer
   -- * Binomial Coefficients
   -- $bino
@@ -32,8 +32,8 @@ factorial n = product . map fromIntegral $ [1..n]
 
 -- | The double factorial function. Not defined on negative odd numbers, as we are resticted by the ring instance. Instead returns 1 on negative numbers.
 -- <https://en.wikipedia.org/wiki/Double_factorial Wikipedia>
-dble_factorial ∷ (Integral a, Ring b) ⇒ a → b
-dble_factorial n
+doubleFactorial ∷ (Integral a, Ring b) ⇒ a → b
+doubleFactorial n
   | even n = product . map fromIntegral $ [2,4..n]
   | otherwise = product . map fromIntegral $ [1,3..n]
 
@@ -104,4 +104,4 @@ stirling n k
   | k == n = 1
   | n > 0 && k == 0 = 0
   | n > 0 && k == 1 = 1
-  | otherwise = (stirlingRow n) !! fromIntegral k
+  | otherwise = stirlingRow n !! fromIntegral k

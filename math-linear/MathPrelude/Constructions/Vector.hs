@@ -229,8 +229,9 @@ instance (KnownNat n, Monoid a) ⇒ Monoid (Vec n a) where
   mempty = Vec (take n' $ repeat mempty)
     where n' = fromInteger $ natVal (Proxy ∷ Proxy n)
 
-instance NumEq a ⇒ NumEq (Vec n a) where
+instance (KnownNat n, NumEq a) ⇒ NumEq (Vec n a) where
   (=~) x = and . toListV . liftV2 (=~) x
+  epsilon = fromListV $ repeat epsilon
 
 instance (KnownNat n, Group a) ⇒ Group (Vec n a) where
   negate = liftV negate

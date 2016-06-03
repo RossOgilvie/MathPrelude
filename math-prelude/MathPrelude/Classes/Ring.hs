@@ -3,15 +3,15 @@
 {-# LANGUAGE UnicodeSyntax     #-}
 -- | Represent a ring, a structure that is an abelian group with a unital multiplication operator that distributes over the group operation. Our rings are all commutative.
 module MathPrelude.Classes.Ring
-	( module MathPrelude.Classes.Group
-	, Ring(..)
-	, Num(..)
-	, CRing
-	, IntDom
-	, (^)
-	, product
-	-- , two
-	) where
+    ( module MathPrelude.Classes.Group
+    , Ring(..)
+    , Num(..)
+    , CRing
+    , IntDom
+    , (^)
+    , product
+    -- , two
+    ) where
 
 -----------------------------------
 --- Imports
@@ -27,25 +27,25 @@ import           MathPrelude.Classes.Group
 -----------------------------------
 -- | A ring is an abelian group with a multiplication operation that distributes over addition. This operation has an identity element. The is always a homomorphism from the ring of integers to any ring R, given by repeated addition (\n → 1 + .... + 1 or (-1) + ... + (-1)), (alternatively, a ring is just a Z-module).
 class Abelian a ⇒ Ring a where
-	-- | The identity element
-	one ∷ a
-	-- | The multiplication operation
-	(*) ∷ a → a → a
-	-- | Push an integer into the ring.
-	fromInteger ∷ Integer → a
+    -- | The identity element
+    one ∷ a
+    -- | The multiplication operation
+    (*) ∷ a → a → a
+    -- | Push an integer into the ring.
+    fromInteger ∷ Integer → a
 
-	fromInteger n
-		| n < zeroInteger = negate (fi (negate n))
-		| otherwise = fi n
-			where
-				fi m
-					| m =~ zeroInteger = zero
-					| m =~ oneInteger = one
-					| P.even m    = fin + fin
-					| otherwise = fin + fin + one
-						where fin = fi (m `P.div` twoInteger)
+    fromInteger n
+        | n < zeroInteger = negate (fi (negate n))
+        | otherwise = fi n
+            where
+                fi m
+                    | m =~ zeroInteger = zero
+                    | m =~ oneInteger = one
+                    | P.even m    = fin + fin
+                    | otherwise = fin + fin + one
+                        where fin = fi (m `P.div` twoInteger)
 
-	{-# MINIMAL one, (*) #-}
+    {-# MINIMAL one, (*) #-}
 
 infixl 7 *
 
@@ -72,26 +72,26 @@ product = foldr (*) one
 -- | Take the repeated product of an element of the ring. eg a^3 = a*a*a. Throws an error on negative powers.
 (^) ∷ Ring a ⇒ a → Int → a
 (^) x n
-	| n < 0 = error "negative power"
-	| n == 0 = one
-	| otherwise = product $ zipWith f (intToBinary n) powers
-		where
-			powers = iterate (\a → a*a) x
-			f b y = if b then y else one
+    | n < 0 = error "negative power"
+    | n == 0 = one
+    | otherwise = product $ zipWith f (intToBinary n) powers
+        where
+            powers = iterate (\a → a*a) x
+            f b y = if b then y else one
 
 infixr 8 ^
 
 -- | converts an int to a list of binary digits. True= 1, False = 0
 intToBinary ∷ Int → [Bool]
 intToBinary n = reverse $ intToBinary' n powers
-	where
-		powers = reverse $ takeWhile (<= n) twopowers
+    where
+        powers = reverse $ takeWhile (<= n) twopowers
 
 intToBinary' ∷ Int → [Int] → [Bool]
 intToBinary' _ [] = []
 intToBinary' n (x:xs)
-	| n >= x = True : intToBinary' (n-x) xs
-	| otherwise = False : intToBinary' n xs
+    | n >= x = True : intToBinary' (n-x) xs
+    | otherwise = False : intToBinary' n xs
 
 -- | The powers of 2
 twopowers ∷ [Int]
@@ -137,7 +137,7 @@ instance CRing a ⇒ CRing (Maybe a)
 instance IntDom a ⇒ IntDom (Maybe a)
 
 instance Ring b ⇒ Ring (a → b) where
-	one = const one
-	(*) f g x = f x * g x
+    one = const one
+    (*) f g x = f x * g x
 instance CRing b ⇒ CRing (a → b)
 instance IntDom b ⇒ IntDom (a → b)

@@ -18,9 +18,9 @@ import           MathPrelude.Classes.Norm
 
 -- | A module over a ring is a generalisation of a vector space over a field. In fact the generalisation is exactly to allow ring. Scaling must distribute over addition of both the ring and the module. I am not concerned with left versus right modules, so both scalings are available and should be equal.
 class (Abelian m, Ring s) ⇒ Module m s | m → s where
-	-- | Scale a vector by a ring element.
-	scale ∷ s → m → m
-	{-# MINIMAL scale #-}
+    -- | Scale a vector by a ring element.
+    scale ∷ s → m → m
+    {-# MINIMAL scale #-}
 
 -- | Scale a vector by a ring element on the left.
 (.*) ∷ Module m s ⇒ s → m → m
@@ -38,6 +38,8 @@ class (Module m s, Field s) ⇒ VectorSpace m s
 -----------------------------------
 --- Instances
 -----------------------------------
+instance Module Float Float where scale = (*)
+instance Module Double Double where scale = (*)
 
 -----------------------------------
 --- Methods

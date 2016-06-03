@@ -9,8 +9,8 @@ module MathPrelude.SpecialFunctions.EllipticFunctions
   -- * Misc
   , agm
   -- * Incomplete Elliptic Integrals
-  , ellipticF
-  , ellipticE
+  , ellipticF, fastEllipticF
+  , ellipticE, fastEllipticE
   , ellipticPi
   -- * Complete Elliptic Integrals
   , completeK
@@ -45,9 +45,9 @@ module MathPrelude.SpecialFunctions.EllipticFunctions
 --- Imports
 -----------------------------------
 import MathPrelude
-import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Integral
-import           MathPrelude.Classes.Transcendental
+-- import           MathPrelude.Classes.Field
+-- import           MathPrelude.Classes.Integral
+-- import           MathPrelude.Classes.Transcendental
 import           MathPrelude.Constructions.Complex
 import           MathPrelude.Calculus.Convergence
 -- import MathPrelude.Classes.Module
@@ -96,10 +96,55 @@ carlsonJ x y z p
 ellipticF ∷ Transcendental a ⇒ a → a → a
 ellipticF x k = x * carlsonF (1-x^2) (1-k^2*x^2) 1
 
+fastEllipticF ∷ Complex Double → Complex Double → Complex Double
+fastEllipticF x k
+    | imagPart x < 0 = - fastEllipticF (-x) k
+    | xNear0 = x*(1+ (1+k^2)/6*x^2)
+    | not xNear0 && kNear0 && (not xNearInf || kxNear0) = asin x * (1+k^2)
+    | kxNearInf = iu*completeK k' - fastEllipticF (1/k/x) k
+    | kNear0 && xNearInf && kxMid= completeK k + iu*completeK k' + iu*log ((1-sqrtxk)/xk) + 1/4*iu*(log ((1-sqrtxk)/xk) - sqrtxk/xk^2)*k^2
+    | otherwise = ellipticF x k
+    where
+        k' = sqrt (1-k^2)
+        thres = 150
+        thres2 = thres^2
+        kNear1 = normsq' (1-k) < thres2
+        kNear0 = normsq' k < 1/thres2
+        xNear0 = normsq' x < 1/thres2
+        xNearInf = normsq' x > thres2
+        kxNear0 = normsq' (x*k) < 1/thres2
+        kxNearInf = normsq' (x*k) > thres2
+        kxMid = not kxNear0 && not kxNearInf
+        xk = x*k
+        sqrtxk = sqrt (1-xk^2)
+
 -- | The incomplete elliptic integral of the second kind. The first argument is the Jacobi argument x = sin φ and the second is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_second_kind Wikipedia>
 ellipticE ∷ Transcendental a ⇒ a → a → a
 ellipticE x k = x * carlsonF (1-x^2) (1-k^2*x^2) 1 - (1/3)* k^2 *x^3 * carlsonD (1-x^2) (1-k^2*x^2) 1
+
+fastEllipticE ∷ Complex Double → Complex Double → Complex Double
+fastEllipticE x k
+    | imagPart x < 0 = - fastEllipticE (-x) k
+    | kNear1 && xNear0 = x*(1+ (1-k)/3*x^2)
+    | not kNear1 && xNear0 = x*(1+ (1-k^2)/6*x^2)
+    | kNear1 && not xNearInf = x + (1-k)*(-x + 0.5*log ((1+x)/(1-x)))
+    | kNear0 && kxNear0 = asin x + 0.5*(asin x - x*sqrt (1-x^2))*k^2
+    | xNearInf && kxNearInf = k*x + iu*(completeK k' - fastCompleteE k') + (1-k^2)/2/k/x
+    | otherwise = ellipticE x k
+    where
+        k' = sqrt (1-k^2)
+        thres = 400
+        thres2 = thres^2
+        kNear1 = normsq' (1-k) < thres2
+        kNear0 = normsq' k < 1/thres2
+        xNear0 = normsq' x < 1/thres2
+        xNearInf = normsq' x > thres2
+        kxNear0 = normsq' (x*k) < 1/thres2
+        kxNearInf = normsq' (x*k) > thres2
+        xk = x*k
+        sqrtxk = sqrt (1-xk^2)
+
 
 -- | The incomplete elliptic integral of the third kind. The first argument is the Jacobi argument x = sin φ, the second is the characteristic n and the third is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_third_kind Wikipedia>

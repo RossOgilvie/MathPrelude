@@ -2,12 +2,12 @@
 {-# LANGUAGE UnicodeSyntax    #-}
 -- | A module with the basic logical operators
 module MathPrelude.Classes.Logic
-	( P.not
-	, (P.&&), (P.||)
-	, L.and, L.or
-	, implies, xor, iff, neither
-	, ifThenElse
-	) where
+    ( P.not
+    , (P.&&), (P.||)
+    , L.and, L.or
+    , implies, xor, iff, neither
+    , ifThenElse
+    ) where
 
 import           BasicPrelude
 import qualified Data.List    as L
@@ -41,5 +41,5 @@ neither x y = P.not $ (P.&&) x y
 -- | Exactly what you expect. This is required since the rebindable syntax extension overrides this as well, and without it "if-then-else" syntax won't work.
 ifThenElse ∷ Bool → a → a → a
 ifThenElse t a b
-	| t = a
-	| otherwise = b
+    | t = a
+    | otherwise = b
