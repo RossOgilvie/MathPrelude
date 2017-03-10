@@ -15,7 +15,8 @@ module MathPrelude.Constructions.Ratio
 import           BasicPrelude
 import qualified Prelude                             as P
 
-import           MathPrelude.Classes.NumEq
+import           MathPrelude.Classes.Logic
+import           MathPrelude.Classes.Approximate
 import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Field
 
@@ -68,7 +69,7 @@ instance (IntDom a, Ord a) ⇒ Ord (Ratio a) where
             yord = compare y zero
             y'ord = compare y' zero
 
-instance (IntDom a, NumEq a) ⇒ NumEq (Ratio a) where
+instance (IntDom a, Approx a) ⇒ Approx (Ratio a) where
     (=~) (x:%y) (x':%y') = (x*y' - x'*y) =~ 0
     epsilon = epsilon :% one
     -- (=~) (x:%y) (x':%y') = smallL [x,y,x',y'] (x*y' - x'*y)

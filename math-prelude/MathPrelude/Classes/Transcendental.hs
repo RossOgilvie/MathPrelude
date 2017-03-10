@@ -9,14 +9,14 @@ module MathPrelude.Classes.Transcendental where
 import           BasicPrelude
 import qualified Prelude                   as P
 
-import           MathPrelude.Classes.NumEq
+import           MathPrelude.Classes.Approximate
 import           MathPrelude.Classes.Field
 
 ------------------------------
 --- Classes
 ------------------------------
 -- | A class containg the simply transcendental functions, also known as the elementary transcendental functions.
-class (Field a, NumEq a) ⇒ Transcendental a where
+class (Field a, Approx a) ⇒ Transcendental a where
     -- | Everyone's favourite constant.
     pi                  ∷ a
     -- | The core functions. No specification about branch cuts.

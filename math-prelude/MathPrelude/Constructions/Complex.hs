@@ -39,7 +39,7 @@ import           MathPrelude.Classes.Transcendental
 --- Methods
 -----------------------------------
 -- | Display a complex number bracketed in the common notational form.
-displayC ∷ (Show a, NumEq a, Monoid a) ⇒ Complex a → Text
+displayC ∷ (Show a, Approx a, Monoid a) ⇒ Complex a → Text
 displayC (x :+ y)
     | nearZero y = show x
     | nearZero x = show y ++ "i"
@@ -106,7 +106,7 @@ primitiveRoot n = fromArg (2*pi/fromIntegral n)
 --     derive (x:+y) = derive x :+ derive y
 -- instance Action a b c ⇒ Action (Complex a) b (Complex c) where
 --     act (x:+y) p = act x p :+ act y p
-instance NumEq a ⇒ NumEq (Complex a) where
+instance Approx a ⇒ Approx (Complex a) where
     (x1 :+ y1) =~ (x2 :+ y2) = (x1 =~ x2) && (y1 =~ y2)
     epsilon = epsilon :+ epsilon
     -- nearZero (a:+b)= nearZero a && nearZero b

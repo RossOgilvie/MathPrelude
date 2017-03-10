@@ -7,7 +7,7 @@ module MathPrelude ( module X ) where
 -- import BasicPrelude as X
 import IntegralLists as X
 
-import MathPrelude.Classes.NumEq as X
+import MathPrelude.Classes.Approximate as X
 
 import MathPrelude.Classes.Logic as X
 import MathPrelude.Classes.Group as X

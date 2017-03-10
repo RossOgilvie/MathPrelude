@@ -31,7 +31,7 @@ cabal-version:       >=1.10
 library
   exposed-modules:
     MathPrelude
-    , MathPrelude.Classes.NumEq
+    , MathPrelude.Classes.Approximate
     , MathPrelude.Classes.Transcendental
     , MathPrelude.Classes.Integral
     , MathPrelude.Classes.Group

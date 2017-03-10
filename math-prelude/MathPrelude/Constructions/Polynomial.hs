@@ -167,7 +167,7 @@ instance (Show a, Ring a) ⇒ Show (Poly a) where
     show = displayP
     -- show = guts
 
-instance NumEq a ⇒ NumEq (Poly a) where
+instance Approx a ⇒ Approx (Poly a) where
     (=~) (Poly xs') (Poly ys') = tripEq xs' ys'
         where
             tripEq [] [] = True
