@@ -1,11 +1,11 @@
 {-# LANGUAGE RebindableSyntax #-}
-module MathPrelude.Tests.NumEqTest where
+module MathPrelude.Tests.ApproxTest where
 
 import MathPrelude
 import qualified Prelude as P
 
 import MathPrelude.Classes.Logic
-import MathPrelude.Classes.NumEq
+import MathPrelude.Classes.Approximate
 -- import MathPrelude.PreludeNumConst
 
 import Test.QuickCheck

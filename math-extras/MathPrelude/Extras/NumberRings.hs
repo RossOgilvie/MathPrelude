@@ -33,7 +33,7 @@ instance KnownNat n ⇒ Monoid (Z n) where
   mappend = liftZ2 mappend
   mempty = Z 0
 
-instance KnownNat n ⇒ NumEq (Z n) where
+instance KnownNat n ⇒ Approx (Z n) where
   (=~) = liftZ2' (=~)
 
 instance KnownNat n ⇒ Group (Z n) where

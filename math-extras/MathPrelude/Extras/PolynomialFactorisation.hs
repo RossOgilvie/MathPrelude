@@ -7,9 +7,9 @@ module MathPrelude.Extras.PolynomialFactorisation
     ( findRoot
     , findRoots
     , findRealRoots
-    , removeRoot
-    , rootOrder
-    , isRoot
+    , isRoot, isRootApprox
+    , removeRoot, removeRootApprox
+    , rootOrder, rootOrderApprox
     , solveBezout
     ) where
 
@@ -60,21 +60,31 @@ findRoots p = concatMap duplicate crudeRoots
         duplicate x = replicate ro x where ro = max 1 (rootOrder p x) -- sometimes even the refinement is not enough, in which case root order returns 0, but we 'know' it is a root already
 
 -- | Factor a root from a polynomial and return the factored polynomial and the multiplicity.
-removeRoot ∷ Field a ⇒ Poly a → a → (Poly a, Int)
+removeRoot ∷ (Field a, Eq a) ⇒ Poly a → a → (Poly a, Int)
 removeRoot p x
-    | isRoot p x = (p,0)
+    | not $ isRoot p x = (p,0)
     | otherwise = (p', n+1)
             where (p', n) = removeRoot (p `div` linearPolyWithRoot x) x
+-- | Factor a root from a polynomial and return the factored polynomial and the multiplicity.
+removeRootApprox ∷ (Field a, Approx a) ⇒ Poly a → a → (Poly a, Int)
+removeRootApprox p x
+    | not $ isRootApprox p x = (p,0)
+    | otherwise = (p', n+1)
+            where (p', n) = removeRootApprox (p `div` linearPolyWithRoot x) x
 
 -- | Calculate the order of a root.
-rootOrder ∷ (Derivation a, Ring a) ⇒ Poly a → a → Integer
+rootOrder ∷ (Derivation a, Ring a, Eq a) ⇒ Poly a → a → Integer
 rootOrder p x = length . takeWhile (`isRoot` x) . take (degreeP p) . iterate derive $ p
--- rootOrder p x = takeWhile (flip isRoot x) . take (degreeP p) . iterate derive $ p
--- rootOrder p x = iterate derive $ p
+-- | Calculate the order of a root.
+rootOrderApprox ∷ (Derivation a, Ring a, Approx a) ⇒ Poly a → a → Integer
+rootOrderApprox p x = length . takeWhile (`isRootApprox` x) . take (degreeP p) . iterate derive $ p
 
 -- | Does the polynomial has this point as a root.
-isRoot ∷ Ring a ⇒ Poly a → a → Bool
-isRoot p x = nearZero $ act p x
+isRoot ∷ (Ring a, Eq a) ⇒ Poly a → a → Bool
+isRoot p x = (== zero) $ act p x
+-- | Does the polynomial has this point as a root.
+isRootApprox ∷ (Ring a, Approx a) ⇒ Poly a → a → Bool
+isRootApprox p x = nearZero $ act p x
 
 linearPolyWithRoot ∷ Ring a ⇒ a → Poly a
 linearPolyWithRoot c = fromListP [negate c, one]
@@ -113,9 +123,9 @@ dkStep p before (old:after) = dkStep p (new : before) after
 -- Bezout's method
 ----------------------------------
 -- | Generalised Bezout's method. Given p, q and a right hand side, finds (x,y) s.t. x*p + y*q = rhs, with x and y of minimal degree.
-solveBezout ∷ EuclideanDomain a ⇒ a → a → a → (a,a)
+solveBezout ∷ (EuclideanDomain a, Eq a)⇒ a → a → a → (a,a)
 solveBezout p q rhs
-    | nearZero m = (x', y') -- only a sol if gcd | rhs
+    | m == mempty = (x', y') -- only a sol if gcd | rhs
     | otherwise = (zero, zero)
         where
             g = gcd' p q -- use the un-normalised gcd

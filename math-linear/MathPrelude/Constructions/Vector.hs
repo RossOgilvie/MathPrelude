@@ -54,6 +54,7 @@ import qualified Data.Foldable as F
 --- Vec
 -----------------------------------
 data Vec (n ∷ Nat) a = Vec [a]
+    deriving (Eq)
 
 type V0 a = Vec 0 a
 type V1 a = Vec 1 a
@@ -229,7 +230,7 @@ instance (KnownNat n, Monoid a) ⇒ Monoid (Vec n a) where
   mempty = Vec (take n' $ repeat mempty)
     where n' = fromInteger $ natVal (Proxy ∷ Proxy n)
 
-instance (KnownNat n, NumEq a) ⇒ NumEq (Vec n a) where
+instance (KnownNat n, Approx a) ⇒ Approx (Vec n a) where
   (=~) x = and . toListV . liftV2 (=~) x
   epsilon = fromListV $ repeat epsilon
 

@@ -7,8 +7,6 @@ module MathPrelude ( module X ) where
 -- import BasicPrelude as X
 import IntegralLists as X
 
-import MathPrelude.Classes.Approximate as X
-
 import MathPrelude.Classes.Logic as X
 import MathPrelude.Classes.Group as X
 import MathPrelude.Classes.Ring as X
@@ -18,6 +16,8 @@ import MathPrelude.Classes.Field as X
 import MathPrelude.Classes.Integral as X
 import MathPrelude.Classes.Rational as X
 import MathPrelude.Classes.Real as X
+
+import MathPrelude.Classes.Approximate as X
 import MathPrelude.Classes.Transcendental as X
 
 import MathPrelude.Constructions.Ratio as X

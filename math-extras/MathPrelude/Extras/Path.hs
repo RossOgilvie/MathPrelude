@@ -37,7 +37,7 @@ data Path a = Path {path ∷ Double → a, start ∷ Double, end ∷ Double}
 -----------------------------------
 
 -- | Use numerical integration to integrate a function over the given path.
-pathIntegration ∷ (Field b, Module b Double, NumEq b) ⇒ (a → b) → Path a → b
+pathIntegration ∷ (Field b, Module b Double, Approx b) ⇒ (a → b) → Path a → b
 pathIntegration f g = numIntegrate (f. path g) (start g) (end g)
 
 -- | Use path integration around a point to calculate a residue. Currently BROKEN because of branch cuts.

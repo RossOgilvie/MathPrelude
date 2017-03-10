@@ -18,7 +18,7 @@ import           MathPrelude.Classes.Rational
 import           MathPrelude.Classes.Real
 import           MathPrelude.Classes.Transcendental
 
-instance NumEq CReal where
+instance Approx CReal where
   (=~) = (==)
 
 instance Monoid CReal where

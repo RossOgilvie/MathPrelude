@@ -97,7 +97,7 @@ trDiv = TR 0 1 0 0 0 0 1 0
 -------------------------------------------
 -- Sanity Check
 -------------------------------------------
-instance (Arbitrary a, NumEq a, Monoid a) => Arbitrary (Ratio a) where
+instance (Arbitrary a, Approx a, Monoid a) => Arbitrary (Ratio a) where
   arbitrary = do
     x <- arbitrary
     y <- arbitrary `suchThat` (/=~ mempty)
@@ -195,7 +195,7 @@ instance Ord CF where
       opp LT = GT
       opp GT = LT
 
-instance NumEq (CF) where
+instance Approx (CF) where
   (=~) (CF ls) (CF ls') = ls == ls'
   -- epsilon = recip $ makeCF $ fromInteger (10^5)
   -- nearZero cf = cf < epsilon

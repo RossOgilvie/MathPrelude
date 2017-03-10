@@ -21,6 +21,7 @@ module MathPrelude.Constructions.Matrix
   , fromRowsMt, fromColsMt, fromListMt, fromListsMt
   , diag, eye
   , rowEsh, reduceRowEsh, solveSystem, rank
+  , rowEshApprox, reduceRowEshApprox, solveSystemApprox, rankApprox
   ) where
 
 -----------------------------------
@@ -43,6 +44,7 @@ import Control.Lens hiding (Action)
 --- Vec
 -----------------------------------
 data Mat (n ∷ Nat) (m ∷ Nat) a = Mat [Vec m a]
+    deriving (Eq)
 
 -----------------------------------
 --- Helpers
@@ -143,38 +145,55 @@ eye = diag (repeat 1)
 -----------------------------------
 --- Operations
 -----------------------------------
-elim ∷ Field k ⇒ [k] → [k] → [k]
-elim v w
+isZero ∷ (Monoid k, Eq k) ⇒ k → Bool
+isZero = (== mempty)
+
+elim ∷ Field k ⇒ (k → Bool) → [k] → [k] → [k]
+elim eq v w
   | null q = w
   | otherwise = zipWith (\wi vi -> wi - c*vi) w v
   where
-    (p,q) = partition nearZero v
+    (p,q) = partition eq v
     c = w !! length p
 
-normaliseRow :: Field k => [k] -> [k]
-normaliseRow v
+normaliseRow :: (Field k, Eq k) => [k] → [k]
+normaliseRow = normaliseRow' isZero
+normaliseRowApprox :: (Field k, Approx k) => [k] → [k]
+normaliseRowApprox = normaliseRow' nearZero
+normaliseRow' :: Field k => (k → Bool) → [k] → [k]
+normaliseRow' eq v
   | null q = v
   | otherwise = map (/head q) v
   where
-    (p,q) = partition nearZero v
+    (p,q) = partition eq v
 
-rowEsh ∷ (KnownNat n, KnownNat m, Field k) ⇒ Mat n m k → Mat n m k
-rowEsh (toListsMt -> rows) = fromListsMt $ rowEsh' rows
-rowEsh' ∷ Field k ⇒ [[k]] → [[k]]
-rowEsh' [] = []
-rowEsh' (row:rows) = nrow : (rowEsh' . map (elim nrow)) rows
-  where nrow = normaliseRow row
+rowEsh ∷ (KnownNat n, KnownNat m, Field k, Eq k) ⇒ Mat n m k → Mat n m k
+rowEsh (toListsMt -> rows) = fromListsMt $ rowEsh' isZero rows
+rowEshApprox ∷ (KnownNat n, KnownNat m, Field k, Approx k) ⇒ Mat n m k → Mat n m k
+rowEshApprox (toListsMt -> rows) = fromListsMt $ rowEsh' nearZero rows
+rowEsh' ∷ Field k ⇒ (k → Bool) → [[k]] → [[k]]
+rowEsh' eq [] = []
+rowEsh' eq (row:rows) = nrow : (rowEsh' eq . map (elim eq nrow)) rows
+    where nrow = normaliseRow' eq row
 
-reduceRowEsh ∷ (KnownNat n, KnownNat m, Field k) ⇒ Mat n m k → Mat n m k
-reduceRowEsh (toListsMt -> rows) = fromListsMt $ reduceRowEsh' rows
-reduceRowEsh' ∷ Field k ⇒ [[k]] → [[k]]
-reduceRowEsh' = reverse . rowEsh' . reverse . rowEsh'
 
-rank ∷ (KnownNat n, KnownNat m, Field k) ⇒ Mat n m k → Integer
-rank m = let Mat m' = rowEsh m in (fst . dimMt $ m) - (fromIntegral . length . fst . partition nearZero $ m')
+reduceRowEsh ∷ (KnownNat n, KnownNat m, Field k, Eq k) ⇒ Mat n m k → Mat n m k
+reduceRowEsh (toListsMt -> rows) = fromListsMt $ reduceRowEsh' isZero rows
+reduceRowEshApprox ∷ (KnownNat n, KnownNat m, Field k, Approx k) ⇒ Mat n m k → Mat n m k
+reduceRowEshApprox (toListsMt -> rows) = fromListsMt $ reduceRowEsh' nearZero rows
+reduceRowEsh' ∷ Field k ⇒ (k → Bool) → [[k]] → [[k]]
+reduceRowEsh' eq = reverse . rowEsh' eq . reverse . rowEsh' eq
 
-solveSystem :: (KnownNat n, KnownNat m, Field a) => Mat n m a -> Vec n a -> Vec n a
-solveSystem (map toListV . toColsMt -> cols) (toListV -> v) = fromListV . last . transpose . reduceRowEsh' . transpose $ cols ++ [v]
+rank ∷ (KnownNat n, KnownNat m, Field k, Eq k) ⇒ Mat n m k → Integer
+rank m = let Mat m' = rowEsh m in (fst . dimMt $ m) - (fromIntegral . length . fst . partition isZero $ m')
+rankApprox ∷ (KnownNat n, KnownNat m, Field k, Approx k) ⇒ Mat n m k → Integer
+rankApprox m = let Mat m' = rowEshApprox m in (fst . dimMt $ m) - (fromIntegral . length . fst . partition nearZero $ m')
+
+solveSystem :: (KnownNat n, KnownNat m, Field k, Eq k) => Mat n m k -> Vec n k -> Vec n k
+solveSystem (map toListV . toColsMt -> cols) (toListV -> v) = fromListV . last . transpose . reduceRowEsh' isZero . transpose $ cols ++ [v]
+
+solveSystemApprox :: (KnownNat n, KnownNat m, Field k, Approx k) => Mat n m k -> Vec n k -> Vec n k
+solveSystemApprox (map toListV . toColsMt -> cols) (toListV -> v) = fromListV . last . transpose . reduceRowEsh' nearZero . transpose $ cols ++ [v]
 
 
 
@@ -192,7 +211,7 @@ instance (KnownNat n, KnownNat m, Monoid a) ⇒ Monoid (Mat n m a) where
   mappend = liftMt2 mappend
   mempty = fromRowsMt $ repeat mempty
 
-instance (KnownNat n, KnownNat m, NumEq a) ⇒ NumEq (Mat n m a) where
+instance (KnownNat n, KnownNat m, Approx a) ⇒ Approx (Mat n m a) where
   (=~) (Mat vs) (Mat ws) = vs =~ ws
   epsilon = fromRowsMt $ repeat epsilon
 

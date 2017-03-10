@@ -7,7 +7,7 @@
 module MathPrelude.Constructions.Projective
   ( Proj
   , CP1
-  , fromField
+  , fromField, fromFieldApprox
   , crossRatio
   , MobiusT(..)
   ) where
@@ -25,8 +25,8 @@ import qualified Prelude                           as P
 -----------------------------------
 --- Proj
 -----------------------------------
--- | A data type representing the projectivisation of a given type, ie the type with a "point at infinity added". First order infinitessimal information is stored at zero and infinity.
-data Proj a = Elem a | Zero a | Infty a
+-- | A data type representing the projectivisation of a given type, ie the type with a "point at infinity added".
+data Proj a = Elem a | Zero | Infty
 
 -- | Complex projective space, aka CP^1
 type CP1 = Proj (Complex Double)
@@ -36,10 +36,15 @@ type CP1 = Proj (Complex Double)
 --- Methods
 -----------------------------------
 -- | Inject a field into its projectivisation.
-fromField ∷ Field a ⇒ a → Proj a
+fromField ∷ (Field a, Eq a) ⇒ a → Proj a
 fromField x
-  | x =~ 0 = Zero (x/epsilon)
-  | recip x =~ 0 = Infty (x*epsilon)
+  | x == 0 = Zero
+  | otherwise = Elem x
+
+fromFieldApprox ∷ (Field a, Approx a) ⇒ a → Proj a
+fromFieldApprox x
+  | nearZero x = Zero
+  | nearZero (recip x) = Infty
   | otherwise = Elem x
 
 -- | Calculate a cross-ratio.
@@ -57,84 +62,69 @@ data MobiusT a = MobiusT a a a a deriving Show
 -----------------------------------
 
 instance Show a ⇒ Show (Proj a) where
-  show (Zero _) = "0"
+  show Zero = "0"
   show (Elem a) = P.show a
-  show (Infty _) = "Infinity"
+  show Infty = "Infinity"
 
 instance Eq a ⇒ Eq (Proj a) where
-  (==) (Zero _) (Zero _) = True
+  (==) Zero Zero = True
   (==) (Elem a) (Elem b) = a==b
-  (==) (Infty _) (Infty _) = True
+  (==) Infty Infty = True
   (==) _ _ = False
 
-instance NumEq a ⇒ NumEq (Proj a) where
-  (=~) (Zero _) (Zero _) = True
+instance Approx a ⇒ Approx (Proj a) where
+  (=~) Zero Zero = True
   (=~) (Elem a) (Elem b) = a=~b
-  (=~) (Infty _) (Infty _) = True
-  -- epsilon = Elem epsilon
-  -- nearZero = (>>~) (Zero epsilon)
-  -- (>>~) (Zero _) (Zero _) = True
-  -- (>>~) (Zero _) (Elem a) = nearZero a
-  -- (>>~) (Zero _) (Infty _) = False
-  -- (>>~) (Elem _) (Zero _) = True
-  -- (>>~) (Elem a) (Elem b) = a >>~ b
-  -- (>>~) (Elem _) (Infty _) = False
-  -- (>>~) (Infty _) _ = True
+  (=~) Infty Infty = True
 
 instance Ord a ⇒ Ord (Proj a) where
-  compare (Zero _) (Zero _) = EQ
-  compare (Zero _) (Elem _) = LT
-  compare (Zero _) (Infty _) = LT
-  compare (Elem _) (Zero _) = GT
+  compare Zero Zero = EQ
+  compare Zero (Elem _) = LT
+  compare Zero Infty = LT
+  compare (Elem _) Zero = GT
   compare (Elem a) (Elem b) = compare a b
-  compare (Elem _) (Infty _) = LT
-  compare (Infty _) (Zero _) = GT
-  compare (Infty _) (Elem _) = GT
-  compare (Infty _) (Infty _) = EQ
-
--- instance (Field a, Derivation a) ⇒ Derivation (Proj a) where
---   derive (Zero a) = Zero (derive a)
---   derive (Elem a) = Elem (derive a)
---   derive (Infty a) = Infty (derive a)
-
+  compare (Elem _) Infty = LT
+  compare Infty Zero = GT
+  compare Infty (Elem _) = GT
+  compare Infty Infty = EQ
 
 instance Ring a ⇒ Monoid (Proj a) where
-  mempty = Zero one
-  mappend (Zero a) (Zero b) = Zero (a+b)
+  mempty = Zero
+  mappend Zero Zero = Zero
   mappend (Elem a) (Elem b) = Elem (a+b)
-  mappend (Infty a) (Infty b) = Infty (a+b)
-  mappend (Zero _) (Elem b) = Elem b
-  mappend (Elem b) (Zero _) = Elem b
-  mappend (Zero _) (Infty b) = Infty b
-  mappend (Infty b) (Zero _) = Infty b
-  mappend (Elem _) (Infty b) = Infty b
-  mappend (Infty b) (Elem _) = Infty b
+  mappend Infty Infty = Infty
+  mappend Zero (Elem b) = Elem b
+  mappend (Elem b) Zero = Elem b
+  mappend Zero Infty = Infty
+  mappend Infty Zero = Infty
+  mappend (Elem _) Infty = Infty
+  mappend Infty (Elem _) = Infty
 
 instance Ring a ⇒ Group (Proj a) where
-  negate (Zero a) = Zero (negate a)
+  negate Zero = Zero
   negate (Elem a) = Elem (negate a)
-  negate (Infty a) = Infty (negate a)
+  negate Infty = Infty
 instance Ring a ⇒ Abelian (Proj a)
 
 instance Field a ⇒ Ring (Proj a) where
   one = Elem one
-  (*) (Zero a) (Zero b) = Zero (a*b*epsilon)
+  (*) Zero Zero = Zero
   (*) (Elem a) (Elem b) = Elem (a*b)
-  (*) (Infty a) (Infty b) = Infty (a*b/epsilon)
-  (*) (Zero a) (Elem b) = Zero (a*b)
-  (*) (Elem a) (Zero b) = Zero (a*b)
-  (*) (Zero a) (Infty b) = Elem (a*b)
-  (*) (Infty a) (Zero b) = Elem (a*b)
-  (*) (Elem a) (Infty b) = Infty (a*b)
-  (*) (Infty a) (Elem b) = Infty (a*b)
+  (*) Infty Infty = Infty
+  (*) Zero (Elem b) = Zero
+  (*) (Elem a) Zero = Zero
+  (*) Zero Infty = Elem one
+  (*) Infty Zero = Elem one
+  (*) (Elem a) Infty = Infty
+  (*) Infty (Elem b) = Infty
 
 instance Field a ⇒ CRing (Proj a)
 instance Field a ⇒ IntDom (Proj a)
 
 instance Field a ⇒ Field (Proj a) where
-  recip (Zero a) = Infty (recip a)
+  recip Zero = Infty
   recip (Elem a) = Elem (recip a)
-  recip (Infty a) = Zero (recip a)
+  recip Infty = Zero
 
 instance (Eq a, CharZero a, Field a) ⇒ CharZero (Proj a) where
   fromRational' = fromField . fromRational'
@@ -151,7 +141,7 @@ instance (Eq a, Field a) ⇒ Eq (MobiusT a) where
       r3 = c/z
       r4 = d/w
 
-instance Field a ⇒ NumEq (MobiusT a) where
+instance (Approx a, Field a) ⇒ Approx (MobiusT a) where
   (=~) (MobiusT a b c d) (MobiusT x y z w) = r1=~r2 && r2 =~ r3 && r3 =~ r4
     where
       r1 = a/x

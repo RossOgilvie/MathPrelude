@@ -19,7 +19,7 @@ import           MathPrelude.Constructions.Quotient
 -- | The quadratic extenion of the rationals by the sqrt of 2.
 newtype Qr2 = Qr2 (Quotient (Poly Rational)) deriving
   ( Show
-  , NumEq
+  , Approx
   , Monoid
   , Group
   , Abelian

@@ -13,6 +13,7 @@ module MathPrelude.Constructions.PowerSeries
   , toPoly, fromPoly
   , toGenFunc, fromGenFunc
   , partialSumsPS
+  , divisionApprox
   ) where
 
 -----------------------------------
@@ -75,7 +76,7 @@ constPS (PS (x:_)) = x
 -- complication. a small tail element looks the same as a zero. take a pragmatic approach, and don't look at the first 100 terms of the power series
 psTailFudge = 50
 -- | Evaluate a power series.
-evalPS ∷ Ring a ⇒ PS a → a → a
+evalPS ∷ (Ring a, Approx a) ⇒ PS a → a → a
 evalPS ps = converge . drop psTailFudge . partialSumsPS ps
 
 partialSumsPS ∷ Ring a ⇒ PS a → a → [a]
@@ -112,7 +113,7 @@ instance (Show a, Ring a) ⇒ Show (PS a) where
   show = refinedShow
   -- show = guts
 
-instance NumEq a ⇒ NumEq (PS a) where
+instance Approx a ⇒ Approx (PS a) where
   (=~) (PS xs') (PS ys') = (=~) xs' ys'
   -- epsilon = scalarPS epsilon
   -- nearZero (PS xs) = and . map nearZero $ xs
@@ -121,7 +122,7 @@ instance Ring a ⇒ Derivation (PS a) where
   derive (PS p) = PS $ zipWith (*) (tail p) (map fromInteger [1..])
 -- instance Field a ⇒ Integration (PS a) where
 --   integrate (PS p) = PS $ 0 : zipWith (/) p (map fromInteger [1..])
-instance Ring a ⇒ Action (PS a) a a where
+instance (Ring a, Approx a) ⇒ Action (PS a) a a where
   act = evalPS
 
 
@@ -144,7 +145,7 @@ instance IntDom a ⇒ IntDom (PS a)
 instance Ring r ⇒ Module (PS r) r where
   scale r = map (r*)
 
-instance (Field a, NumEq a) ⇒ Field (PS a) where
+instance (Field a, Eq a) ⇒ Field (PS a) where
   (/) = division
 
 -----------------------------------
@@ -161,19 +162,24 @@ mul' xs ys n = cauchy : mul' xs ys (n+1)
     ys'' = replicate (n+1 - ly) zero ++ reverse ys'
     cauchy = sum $ zipWith (*) xs' ys''
 
+division ∷ (Field a, Eq a) ⇒ PS a → PS a → PS a
+division = division' (== zero)
+divisionApprox ∷ (Field a, Approx a) ⇒ PS a → PS a → PS a
+divisionApprox = division' nearZero
+
 -- the correct power is calculated here
-division ∷ Field a ⇒ PS a → PS a → PS a
-division (PS xs) (PS ys) = if deg_xs >= deg_ys then result else error "Power series division impossible: would result in negative powers."
+division' ∷ Field a ⇒ (a → Bool) → PS a → PS a → PS a
+division' eq (PS xs) (PS ys) = if deg_xs >= deg_ys then result else error "Power series division impossible: would result in negative powers."
   where
-    deg_xs = length' . takeWhile nearZero $ xs
-    deg_ys = length' . takeWhile nearZero $ ys
+    deg_xs = length' . takeWhile eq $ xs
+    deg_ys = length' . takeWhile eq $ ys
     xs' = drop' deg_xs xs ++ repeat 0
     ys' = drop' deg_ys ys ++ repeat 0
-    result = shiftPower (deg_xs - deg_ys) $ PS $ division' xs' ys'
+    result = shiftPower (deg_xs - deg_ys) $ PS $ division'' xs' ys'
 
 -- this builds the resultant list
-division' ∷ Field a ⇒ [a] → [a] → [a]
-division' xs ys = zs
+division'' ∷ Field a ⇒ [a] → [a] → [a]
+division'' xs ys = zs
   where
     y = head ys
     ys' = tail ys
@@ -213,9 +219,7 @@ refinedShow' (PS xs) = intercalate " + " $ zipWith showM [0..] xs
 showM ∷ (Show a, Ring a) ⇒ Int → a → String
 showM n x
   | n == 0 = P.show x
-  | n == 1 && (x =~ one) = "x"
   | n == 1 = P.show x ++ "x"
-  | x =~ one = "x^" ++ P.show n
   | otherwise = P.show x ++ "x^" ++ P.show n
 
 -----------------------------------

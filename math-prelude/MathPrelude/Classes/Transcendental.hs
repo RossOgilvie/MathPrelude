@@ -15,7 +15,7 @@ import           MathPrelude.Classes.Field
 ------------------------------
 --- Classes
 ------------------------------
--- | A class containg the simply transcendental functions, also known as the elementary transcendental functions.
+-- | A class containg the simple transcendental functions, also known as the elementary transcendental functions.
 class (Field a, Approx a) ⇒ Transcendental a where
     -- | Everyone's favourite constant.
     pi                  ∷ a

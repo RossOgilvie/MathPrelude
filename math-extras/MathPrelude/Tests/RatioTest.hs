@@ -17,7 +17,7 @@ import Test.QuickCheck
 -- --- Arbitrary
 -- -----------------------------------
 --
--- instance (Arbitrary a, NumEq a, Monoid a) => Arbitrary (Ratio a) where
+-- instance (Arbitrary a, Approx a, Monoid a) => Arbitrary (Ratio a) where
 --   arbitrary = do
 --     x <- arbitrary
 --     y <- arbitrary `suchThat` (/=~ mempty)

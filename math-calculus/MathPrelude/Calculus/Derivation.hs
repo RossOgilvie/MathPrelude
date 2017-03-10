@@ -82,7 +82,7 @@ instance Ring a ⇒ Derivation (Diff a) where
 instance Ring b ⇒ Derivation (a → Diff b) where
   derive f x = derive (f x)
 
-instance NumEq a ⇒ NumEq (Diff a) where
+instance Approx a ⇒ Approx (Diff a) where
   (=~) (D x x') (D y y') = x =~ y && x' =~ y'
   (=~) (C x) (C y) = x =~ y
   (=~) _ _ = False

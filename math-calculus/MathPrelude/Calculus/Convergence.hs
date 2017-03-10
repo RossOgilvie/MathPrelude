@@ -16,7 +16,7 @@ module MathPrelude.Calculus.Convergence
 
 import MathPrelude
 import qualified Data.Either               as E
--- import           MathPrelude.Classes.NumEq
+-- import           MathPrelude.Classes.Approximate
 -- import           MathPrelude.Classes.Ring
 
 -- | The supplied predicate is applied to successive terms of the sequence, and if it matches then that is returned in a Left. Otherwise the last term is returned in a Right. Throws an error on the empty list.
@@ -32,7 +32,7 @@ converges ∷ (a → a → Bool) → Integer → [a] → Bool
 converges f n ls = E.isLeft $ eitherConverge f (take n ls)
 
 -- | Returns the limit or the last term, using the predicate '=~'.
-converge ∷ NumEq a ⇒ [a] → a
+converge ∷ Approx a ⇒ [a] → a
 converge = regardless . eitherConverge (=~)
 
 -- | Returns the limit or the last term, using the supplied predicate.
@@ -56,9 +56,9 @@ partialSums' !acc (x:xs) = let acc' = x <> acc in acc' : partialSums' acc' xs
 
 
 -- | Compute the sum of a series, given a formula for the terms, starting from 0.
-series ∷ (NumEq a, Monoid a) ⇒ (Integer → a) → a
+series ∷ (Approx a, Monoid a) ⇒ (Integer → a) → a
 series f = converge . partialSums . map f $ [0..]
 
 -- | Compute the sum of a series, given a formula for the terms, starting from the given integer.
-series' ∷ (NumEq a, Monoid a) ⇒ (Integer → a) → Integer → a
+series' ∷ (Approx a, Monoid a) ⇒ (Integer → a) → Integer → a
 series' f k = converge . partialSums . map f $ [k..]

@@ -146,7 +146,7 @@ instance Monoid Perm where
   mappend p q = fromTable $ map ((p$$).(q$$)) [1..m]
     where m = max (size p) (size q)
 
-instance NumEq Perm where
+instance Approx Perm where
   (=~) (P xs) (P ys) = xs == ys
 
 instance Group Perm where

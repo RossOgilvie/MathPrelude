@@ -19,9 +19,9 @@ isRing a b c =
   && Laws.rightIdentity (*) one a
   && Laws.commutative (*) a b
 
--- propPowerCascade      :: (NumEq a, Ring a) => a -> Int -> Int -> Property
--- propPowerProduct      :: (NumEq a, Ring a) => a -> Int -> Int -> Property
--- propPowerDistributive :: (NumEq a, Ring a) => Int -> a -> a -> Property
+-- propPowerCascade      :: (Approx a, Ring a) => a -> Int -> Int -> Property
+-- propPowerProduct      :: (Approx a, Ring a) => a -> Int -> Int -> Property
+-- propPowerDistributive :: (Approx a, Ring a) => Int -> a -> a -> Property
 --
 -- propPowerCascade      x i j  =  i>=0 && j>=0 ==> Laws.rightCascade (*) (^) x i j
 -- propPowerProduct      x i j  =  i>=0 && j>=0 ==> Laws.homomorphism (x^) (+) (*) i j

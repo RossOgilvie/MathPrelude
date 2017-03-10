@@ -19,7 +19,7 @@ import MathPrelude
 import MathPrelude.Constructions.Complex
 import MathPrelude.Constructions.Vector
 
-newtype D2 = D2 (Complex Double) deriving (Show,Read,Eq,NumEq)
+newtype D2 = D2 (Complex Double) deriving (Show,Read,Eq,Approx)
 
 pattern D2inR2 v <- (d2ToR2 -> v)
     where D2inR2 v = d2FromR2 v

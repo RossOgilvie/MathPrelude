@@ -37,21 +37,21 @@ liftQ f (Quotient Nothing x) = Quotient Nothing $ f x
 liftQ f (Quotient (Just m) x) = proj m $ f x
 
 -- | The associated binary function defined on the quotient. Definitely not guaranteed to be well defined (ie may depend on the choice of coset representative).
-liftQ2' ∷ EuclideanDomain a ⇒ (a → a → b) → Quotient a → Quotient a → b
+liftQ2' ∷ (EuclideanDomain a, Eq a) ⇒ (a → a → b) → Quotient a → Quotient a → b
 liftQ2' f (Quotient Nothing x)  (Quotient Nothing y)  = f x y
 liftQ2' f (Quotient Nothing x)  (Quotient (Just m) y) = f (x `mod` m) y
 liftQ2' f (Quotient (Just m) x) (Quotient Nothing y)  = f x (y `mod` m)
 liftQ2' f (Quotient (Just m) x) (Quotient (Just m') y)
-  | m =~ m' = f x y
+  | m == m' = f x y
   | otherwise = error "non matching moduli"
 
 -- | The associated binary function defined on the quotient. Definitely not guaranteed to be well defined (ie may depend on the choice of coset representative).
-liftQ2 ∷ EuclideanDomain a ⇒ (a → a → a) → Quotient a → Quotient a → Quotient a
+liftQ2 ∷ (EuclideanDomain a, Eq a) ⇒ (a → a → a) → Quotient a → Quotient a → Quotient a
 liftQ2 f (Quotient Nothing x)  (Quotient Nothing y)  =  Quotient Nothing $ f x y
 liftQ2 f (Quotient Nothing x)  (Quotient (Just m) y) = Quotient (Just m) $ f (x `mod` m) y
 liftQ2 f (Quotient (Just m) x) (Quotient Nothing y)  = Quotient (Just m) $ f x (y `mod` m)
 liftQ2 f (Quotient (Just m) x) (Quotient (Just m') y)
-  | m =~ m' = proj m $ f x y
+  | m == m' = proj m $ f x y
   | otherwise = error "non matching moduli"
 
 ------------------------------
@@ -62,32 +62,26 @@ instance Show a ⇒ Show (Quotient a) where
   show (Quotient Nothing x) = P.show x
   show (Quotient (Just m) x) = P.show x ++ " (mod " ++ P.show m ++ ")"
 
-instance EuclideanDomain a ⇒ NumEq (Quotient a) where
+instance (EuclideanDomain a, Eq a, Approx a) ⇒ Approx (Quotient a) where
   (=~) = liftQ2' (=~)
-  -- epsilon = Quotient Nothing epsilon
-  -- nearZero (Quotient Nothing x) = nearZero x
-  -- nearZero (Quotient (Just m) x) = nearZero (x `mod` m)
-  -- (>>~) = liftQ2' (>>~)
 
 instance (EuclideanDomain a, Eq a) ⇒ Eq (Quotient a) where
   (==) = liftQ2' (==)
 
-instance EuclideanDomain a ⇒ Monoid (Quotient a) where
+instance (EuclideanDomain a, Eq a) ⇒ Monoid (Quotient a) where
   mempty = Quotient Nothing mempty
   mappend = liftQ2 mappend
 
-instance EuclideanDomain a ⇒ Group (Quotient a) where
-  --zero = zero :% one
-  --(+) (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
+instance (EuclideanDomain a, Eq a) ⇒ Group (Quotient a) where
   negate = liftQ negate
-  -- (-) (x:%y) (x':%y') = (x*y' - x'*y) :% (y*y')
-instance EuclideanDomain a ⇒ Abelian (Quotient a) where
 
-instance EuclideanDomain a ⇒ Ring (Quotient a) where
+instance (EuclideanDomain a, Eq a) ⇒ Abelian (Quotient a)
+
+instance (EuclideanDomain a, Eq a) ⇒ Ring (Quotient a) where
   one = Quotient Nothing one
   (*) = liftQ2 (*)
 
-instance EuclideanDomain a ⇒ CRing (Quotient a)
+instance (EuclideanDomain a, Eq a) ⇒ CRing (Quotient a)
 
-instance (Derivation a, EuclideanDomain a) ⇒ Derivation (Quotient  a) where
+instance (Derivation a, EuclideanDomain a, Eq a) ⇒ Derivation (Quotient  a) where
   derive = liftQ derive

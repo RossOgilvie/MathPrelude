@@ -19,7 +19,7 @@ import           MathPrelude.Classes.Ring
 
 -- | A type representing the integers as Roman numerals
 newtype Roman = R Integer
-  deriving (Enum, Eq, NumEq, Ord, Monoid, Group, Abelian, Ring, CRing, IntDom, EuclideanDomain, Integral)
+  deriving (Enum, Eq, Approx, Ord, Monoid, Group, Abelian, Ring, CRing, IntDom, EuclideanDomain, Integral)
 
 instance Show Roman where
   show n
