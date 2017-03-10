@@ -38,7 +38,7 @@ library
     , UndecidableInstances
     , ViewPatterns
   build-depends:
-    base >=4.8 && <4.9
+    base == 4.9.0.0
     , math-prelude >=0.2 && <0.3
     , math-linear >=0.1 && <0.2
     , lens

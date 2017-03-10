@@ -9,4 +9,4 @@ packages:
 - math-graphics/
 extra-deps:
 - easyplot-1.0
-resolver: lts-3.6
+resolver: lts-7.19

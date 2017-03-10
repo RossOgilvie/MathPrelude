@@ -29,7 +29,7 @@ library
     , FlexibleInstances
     , MultiParamTypeClasses
   build-depends:
-    base >=4.8 && <4.9
+    base == 4.9.0.0
     , math-prelude
     , math-linear
   -- hs-source-dirs:

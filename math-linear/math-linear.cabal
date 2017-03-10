@@ -22,7 +22,7 @@ library
   -- other-modules:
   other-extensions:    RebindableSyntax, UnicodeSyntax, OverloadedStrings, DataKinds, FlexibleInstances, KindSignatures, MultiParamTypeClasses, PolyKinds, TypeFamilies, TypeOperators, ScopedTypeVariables, FlexibleContexts, UndecidableInstances
   build-depends:
-    base >=4.8 && <4.9
+    base == 4.9.0.0
     , math-prelude
     , lens
   -- hs-source-dirs:
