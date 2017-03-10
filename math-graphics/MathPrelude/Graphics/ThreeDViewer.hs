@@ -5,10 +5,11 @@ module MathPrelude.Graphics.ThreeDViewer(
     ThreeDPoint
     , Viewer
     , PreGraph
-    , preGraph
-    , graph
-    , graphs
-    , graphs'
+    , pointsToPreGraph
+    , plotPoints
+    , plotPoints'
+    , plotPreGraph
+    , plotPreGraphs
     ) where
 
 import MathPrelude
@@ -18,16 +19,21 @@ type ThreeDPoint = (Double,Double,Double)
 type Viewer a = a → ThreeDPoint
 type PreGraph = Color → Graph3D Double Double Double
 
-preGraph ∷ Viewer a → [a] → PreGraph
-preGraph pr pts c = Data3D [Color c, Style Dots] [] $ map pr pts
 
-graph :: Viewer a → [a] → IO Bool
-graph pr pts = plot' [Interactive, Debug] X11 $ preGraph pr pts White
+plotPreGraph ∷ PreGraph → IO Bool
+plotPreGraph pg = plot' [Interactive, Debug] X11 $ pg White
 
-graphs :: Viewer a -> [[a]] -> IO Bool
-graphs pr = graphs' . map (preGraph pr)
-
-graphs' ∷ [PreGraph] → IO Bool
-graphs' pgs = plot' [Interactive, Debug] X11 $ zipWith ($) pgs colours
+plotPreGraphs ∷ [PreGraph] → IO Bool
+plotPreGraphs pgs = plot' [Interactive, Debug] X11 $ zipWith ($) pgs colours
     where
         colours = cycle [White, Yellow, Orange, Red, LightGreen, LightBlue, LightRed, Green, Blue]
+
+
+pointsToPreGraph ∷ Viewer a → [a] → PreGraph
+pointsToPreGraph vw pts c = Data3D [Color c, Style Dots] [] $ map vw pts
+
+plotPoints :: Viewer a → [a] → IO Bool
+plotPoints vw pts = plotPreGraph $ pointsToPreGraph vw pts
+
+plotPoints' :: Viewer a -> [[a]] -> IO Bool
+plotPoints' vw = plotPreGraphs . map (pointsToPreGraph vw)

@@ -5,7 +5,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module MathPrelude.Calculus.Integration
-  ( numIntegrate
+  (
+  module MathPrelude.Classes.Module
+  , numIntegrate
   , trapezoid
   , simpsons
   ) where

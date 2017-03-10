@@ -35,7 +35,7 @@ polyRootBound p = min opt1 opt2
 
 -- | Use Newton's method to find a root
 findRoot ∷ Poly (Complex Double) → Complex Double → Maybe (Complex Double)
-findRoot p = newtons (p$$) (p'$$)
+findRoot p = newtons 20 (p$$) (p'$$)
     where p' = derive p
 
 -- | A bastard polynomial that is difficult to factorise.
