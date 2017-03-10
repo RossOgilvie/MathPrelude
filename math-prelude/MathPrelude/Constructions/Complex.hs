@@ -99,8 +99,8 @@ primitiveRoot n = fromArg (2*pi/fromIntegral n)
 --- Instances
 -----------------------------------
 
-instance Functor Complex where
-    fmap f (x :+ y) = f x :+ f y
+-- instance Functor Complex where
+--     fmap f (x :+ y) = f x :+ f y
 
 -- instance Derivation a ⇒ Derivation (Complex a) where
 --     derive (x:+y) = derive x :+ derive y

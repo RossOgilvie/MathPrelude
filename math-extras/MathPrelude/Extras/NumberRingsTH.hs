@@ -61,10 +61,10 @@ mkFiniteFields ∷ [Integer] → Q [Dec]
 mkFiniteFields ns = monadConcat (map mkIntDom ns ++ map mkField ns)
 
 mkIntDom :: Integer -> Q [Dec]
-mkIntDom n = return [InstanceD [] (AppT (ConT ''IntDom) (AppT (ConT ''Z) (LitT (NumTyLit n)))) []]
+mkIntDom n = return [InstanceD Nothing [] (AppT (ConT ''IntDom) (AppT (ConT ''Z) (LitT (NumTyLit n)))) []]
 
 mkField :: Integer -> Q [Dec]
 mkField n = do
   a <- newName "a"
   z <- newName "z"
-  return [InstanceD [] (AppT (ConT ''Field) (AppT (ConT ''Z) (LitT (NumTyLit n)))) [FunD 'recip [Clause [VarP z] (NormalB (AppE (AppE (VarE 'liftZ) (AppE (VarE 'findRecip) (AppE (VarE 'modulusZ) (VarE z)))) (VarE z))) []]]]
+  return [InstanceD Nothing [] (AppT (ConT ''Field) (AppT (ConT ''Z) (LitT (NumTyLit n)))) [FunD 'recip [Clause [VarP z] (NormalB (AppE (AppE (VarE 'liftZ) (AppE (VarE 'findRecip) (AppE (VarE 'modulusZ) (VarE z)))) (VarE z))) []]]]
