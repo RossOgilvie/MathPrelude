@@ -20,6 +20,7 @@ import           BasicPrelude
 import           PreludeNumConst
 import qualified Prelude                     as P
 
+import           MathPrelude.Classes.Logic(ifThenElse)
 import           MathPrelude.Classes.Group
 
 -----------------------------------
@@ -38,9 +39,10 @@ class Abelian a ⇒ Ring a where
         | n < zeroInteger = negate (fi (negate n))
         | otherwise = fi n
             where
+                fi ∷ Ring a ⇒ Integer → a
                 fi m
-                    | m =~ zeroInteger = zero
-                    | m =~ oneInteger = one
+                    | m == zeroInteger = zero
+                    | m == oneInteger = one
                     | P.even m    = fin + fin
                     | otherwise = fin + fin + one
                         where fin = fi (m `P.div` twoInteger)

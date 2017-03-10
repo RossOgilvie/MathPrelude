@@ -47,17 +47,17 @@ class IntDom a ⇒ EuclideanDomain a where
 --- Methods
 -----------------------------------
 -- | The greatest common divisor of two elements, presented as the standard associate.
-gcd ∷ EuclideanDomain a ⇒ a → a → a
+gcd ∷ (EuclideanDomain a, Eq a) ⇒ a → a → a
 gcd a b = stdAssociate $ gcd' a b
 -- | The greatest common divisor of two elements, presented as is.
 gcd' a b
-    | b =~ 0 = a
+    | b == zero = a
     | otherwise = gcd' b (a `mod` b)
 
 -- | The extended Euclidean algorithm returns two numbers (x,y) from input (a,b) such that x*a + y*b = gcd'(a,b).
-extEuclidAlg ∷ (EuclideanDomain a, NumEq a) ⇒ a → a → (a,a)
+extEuclidAlg ∷ (EuclideanDomain a, Eq a) ⇒ a → a → (a,a)
 extEuclidAlg a b
-    | r =~ 0 = (zero,one)
+    | r == zero = (zero,one)
     | otherwise = (y, x - (y * q))
         where
             (q,r) = a `divMod` b

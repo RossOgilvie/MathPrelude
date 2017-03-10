@@ -2,8 +2,7 @@
 {-# LANGUAGE UnicodeSyntax    #-}
 -- | Represent a group, a structure with an invertible operation, that may or may not be commutative (aka abelian).
 module MathPrelude.Classes.Group
-    ( module MathPrelude.Classes.NumEq
-    , Group(..)
+    ( Group(..)
     , Abelian
     , zero
     , (+)
@@ -16,13 +15,11 @@ import           PreludeNumConst
 import           BasicPrelude
 import qualified Prelude                     as P
 
-import           MathPrelude.Classes.NumEq
-
 -----------------------------------
 --- Classes
 -----------------------------------
 -- | This class defines a group. It extends the monoid structure by allowing negation. Minimal definition is either 'negate' or '-'
-class (NumEq a, Monoid a) ⇒ Group a where
+class Monoid a ⇒ Group a where
     negate ∷ a → a
     (-) ∷ a → a → a
 
@@ -96,10 +93,6 @@ instance Group a ⇒ Group (Maybe a) where
     negate = liftM negate
 instance Abelian a ⇒ Abelian (Maybe a)
 
--- instance Monoid b ⇒ Monoid (a→b) where
---     mempty = const mempty
---     mappend f g x = mappend (f x) (g x)
-instance NumEq b ⇒ NumEq (a→b) where
 instance Group b ⇒ Group (a→b) where
     negate f x = negate (f x)
 instance Abelian b ⇒ Abelian (a→b)

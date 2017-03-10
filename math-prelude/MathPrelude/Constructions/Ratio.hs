@@ -15,6 +15,7 @@ module MathPrelude.Constructions.Ratio
 import           BasicPrelude
 import qualified Prelude                             as P
 
+import           MathPrelude.Classes.NumEq
 import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Field
 
@@ -42,7 +43,7 @@ parity' x y z
             opposite GT = LT
 
 -- | Reduce the ratio to one of coprime numbers.
-simplifyR ∷ EuclideanDomain a ⇒ Ratio a → Ratio a
+simplifyR ∷ (EuclideanDomain a, Eq a) ⇒ Ratio a → Ratio a
 simplifyR (p:%q) = (p `div` g) :% (q `div` g)
     where g = gcd p q
 

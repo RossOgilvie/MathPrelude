@@ -79,7 +79,7 @@ normsq' ∷ Ring a ⇒ Complex a → a
 normsq' = realPart . normsq
 
 -- | Compute the argument of a complex numer. The range is from -pi to pi. Arg 0 = 0. Arg (-x:+0) = pi.
-arg ∷ (Ord a, Field a, Transcendental a) ⇒ Complex a → a
+arg ∷ (Ord a, Transcendental a) ⇒ Complex a → a
 arg (x :+ y)
     | x > zero = atan (y/x)
     | nearZero x && y > zero = pi * half
