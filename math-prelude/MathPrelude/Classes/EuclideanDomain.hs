@@ -71,6 +71,9 @@ instance EuclideanDomain Integer where stdAssociate = P.abs; stdUnit = P.signum;
 instance EuclideanDomain Int where stdAssociate = P.abs;stdUnit = P.signum; divMod = P.divMod;
 instance EuclideanDomain Int32 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
 instance EuclideanDomain Int64 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
+instance EuclideanDomain Word where stdAssociate = P.abs;stdUnit = P.signum; divMod = P.divMod;
+instance EuclideanDomain Word32 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
+instance EuclideanDomain Word64 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
 
 instance EuclideanDomain a ⇒ EuclideanDomain (Maybe a) where
     stdAssociate = liftM stdAssociate

@@ -76,6 +76,24 @@ instance Group Int64 where
     (-) = (P.-)
 instance Abelian Int64
 
+instance Monoid Word where mempty = zeroWord; mappend = (P.+)
+instance Group Word where
+    negate = P.negate;
+    (-) = (P.-)
+instance Abelian Word
+
+instance Monoid Word32 where mempty = zeroWord32; mappend = (P.+)
+instance Group Word32 where
+    negate = P.negate;
+    (-) = (P.-)
+instance Abelian Word32
+
+instance Monoid Word64 where mempty = zeroWord64; mappend = (P.+)
+instance Group Word64 where
+    negate = P.negate;
+    (-) = (P.-)
+instance Abelian Word64
+
 instance Monoid Float where mempty = zeroFloat; mappend = (P.+)
 instance Group Float where
     negate = P.negate;

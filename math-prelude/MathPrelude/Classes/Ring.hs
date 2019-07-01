@@ -110,6 +110,9 @@ instance Ring Integer where one = oneInteger; (*) = (P.*); fromInteger = id;
 instance Ring Int where one = oneInt; (*) = (P.*); fromInteger = P.fromInteger;
 instance Ring Int32 where one = oneInt32; (*) = (P.*); fromInteger = P.fromInteger;
 instance Ring Int64 where one = oneInt64; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Word where one = oneWord; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Word32 where one = oneWord32; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Word64 where one = oneWord64; (*) = (P.*); fromInteger = P.fromInteger;
 instance Ring Float where one = oneFloat; (*) = (P.*); fromInteger = P.fromInteger;
 instance Ring Double where one = oneDouble; (*) = (P.*); fromInteger = P.fromInteger;
 
@@ -117,6 +120,9 @@ instance CRing Integer
 instance CRing Int
 instance CRing Int32
 instance CRing Int64
+instance CRing Word
+instance CRing Word32
+instance CRing Word64
 instance CRing Float
 instance CRing Double
 
@@ -124,6 +130,9 @@ instance IntDom Integer
 instance IntDom Int
 instance IntDom Int32
 instance IntDom Int64
+instance IntDom Word
+instance IntDom Word32
+instance IntDom Word64
 instance IntDom Float
 instance IntDom Double
 
@@ -131,6 +140,9 @@ instance Num Integer where abs = P.abs; signum = P.signum
 instance Num Int where abs = P.abs; signum = P.signum
 instance Num Int32 where abs = P.abs; signum = P.signum
 instance Num Int64 where abs = P.abs; signum = P.signum
+instance Num Word where abs = P.abs; signum = P.signum
+instance Num Word32 where abs = P.abs; signum = P.signum
+instance Num Word64 where abs = P.abs; signum = P.signum
 instance Num Float where abs = P.abs; signum = P.signum
 instance Num Double where abs = P.abs; signum = P.signum
 

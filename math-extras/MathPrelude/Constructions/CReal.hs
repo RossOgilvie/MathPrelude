@@ -1,25 +1,27 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
 
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 -- | The computable reals, to arbitrary precision. Wraps Data.Number.CReal
 module MathPrelude.Constructions.CReal
-  ( phi
+  ( CReal
+  , showCReal
+  , phi
   , ramanujan
   ) where
 
 import MathPrelude
 import qualified Prelude                            as P
 
-import           Data.Number.CReal
+import Data.Number.CReal
 
-import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Integral
-import           MathPrelude.Classes.Rational
-import           MathPrelude.Classes.Real
-import           MathPrelude.Classes.Transcendental
+epsCReal ∷ CReal
+epsCReal = 1e-5
 
 instance Approx CReal where
-  (=~) = (==)
+  (=~) x y = P.abs (x P.- y) <= epsCReal P.* P.maximum [one, P.abs x, P.abs y]
+  epsilon = epsCReal
 
 instance Monoid CReal where
   mempty = 0

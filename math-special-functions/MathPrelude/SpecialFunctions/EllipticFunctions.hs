@@ -59,8 +59,8 @@ carlSeq ∷ Transcendental a ⇒ a → a → a → a
 carlSeq x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
   where
     start = (x,y,z)
-    test (!a, !b, !c) _ = (a =~ b) && (b=~ c) && (a=~c)
-    step (!a, !b, !c) = (a',b',c')
+    test (a, b, c) _ = (a =~ b) && (b=~ c) && (a=~c)
+    step (a, b, c) = (a',b',c')
       where
         a' = (a+l)/4
         b' = (b+l)/4

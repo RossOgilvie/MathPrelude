@@ -1,8 +1,8 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax #-}
 
--- | The 'mathless-prelude' has some list functions that take Ints. This module generalises them to take any integral type.
--- | This module did do that, but then it fails without explicit type annotations. For now, use Integer
+-- | The 'mathless-prelude' has some list functions that use the Int type. Our canonical type for integers is Integer, so we export versions of the standard list functions that use Integer.
+-- | The original list functions which use Int are available with a prime, eg length'. List function working with an arbitrary Integral type are available with a double prime, eg length''
 module IntegralLists
   ( module BasicPrelude
   , length

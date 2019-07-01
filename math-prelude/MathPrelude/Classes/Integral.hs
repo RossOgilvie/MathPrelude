@@ -57,6 +57,9 @@ instance Integral Integer where toInteger = id
 instance Integral Int where toInteger = P.toInteger
 instance Integral Int32 where toInteger = P.toInteger
 instance Integral Int64 where toInteger = P.toInteger
+instance Integral Word where toInteger = P.toInteger
+instance Integral Word32 where toInteger = P.toInteger
+instance Integral Word64 where toInteger = P.toInteger
 
 -----------------------------------
 -- Rerwite Rules -- for great justice!
