@@ -126,9 +126,11 @@ instance (Ring a, Approx a) ⇒ Action (PS a) a a where
   act = evalPS
 
 
+instance Semigroup a ⇒ Semigroup (PS a) where
+  (<>) = liftPS2 (<>)
+
 instance Monoid a ⇒ Monoid (PS a) where
   mempty = scalarPS mempty
-  mappend = liftPS2 mappend
 
 instance Group a ⇒ Group (PS a) where
   negate = map negate

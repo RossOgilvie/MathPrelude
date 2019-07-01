@@ -87,12 +87,13 @@ instance Approx a ⇒ Approx (Diff a) where
   (=~) (C x) (C y) = x =~ y
   (=~) _ _ = False
 
+instance Semigroup a ⇒ Semigroup (Diff a) where
+  (<>) (D x x') (D y y') = D (x<>y) (x'<>y')
+  (<>) (D x x') (C y) = D (x<>y) x'
+  (<>) (C x) (D y y') = D (x<>y) y'
+  (<>) (C x) (C y) = C (x<>y)
 instance Monoid a ⇒ Monoid (Diff a) where
   mempty = C mempty
-  mappend (D x x') (D y y') = D (x<>y) (x'<>y')
-  mappend (D x x') (C y) = D (x<>y) x'
-  mappend (C x) (D y y') = D (x<>y) y'
-  mappend (C x) (C y) = C (x<>y)
 
 instance Group a ⇒ Group (Diff a) where
   negate (D x x') = D (negate x) (negate x')

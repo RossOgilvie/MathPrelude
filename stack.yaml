@@ -9,4 +9,5 @@ packages:
 - math-graphics/
 extra-deps:
 - easyplot-1.0
-resolver: lts-7.19
+- ReadArgs-1.2.3
+resolver: lts-13.3

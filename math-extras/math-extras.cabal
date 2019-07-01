@@ -70,7 +70,7 @@ library
     , FunctionalDependencies
     , AllowAmbiguousTypes
   build-depends:
-    base == 4.9.0.0
+    base == 4.12.0.0
     , math-prelude >=0.2 && <0.3
     , math-calculus >= 0.1 && <0.2
     , math-special-functions >= 0.1 && <0.2

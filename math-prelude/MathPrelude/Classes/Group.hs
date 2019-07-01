@@ -52,55 +52,70 @@ sum = foldr mappend mempty
 -----------------------------------
 --- Instances
 -----------------------------------
-instance Monoid Integer where mempty = zeroInteger; mappend = (P.+)
+instance Semigroup Integer where (<>) = (P.+)
+instance Monoid Integer where mempty = zeroInteger
 instance Group Integer where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Integer
 
-instance Monoid Int where mempty = zeroInt; mappend = (P.+)
+instance Semigroup Int where (<>) = (P.+)
+instance Monoid Int where mempty = zeroInt
 instance Group Int where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Int
 
-instance Monoid Int32 where mempty = zeroInt32; mappend = (P.+)
+instance Semigroup Int32 where (<>) = (P.+)
+instance Monoid Int32 where mempty = zeroInt32
 instance Group Int32 where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Int32
 
-instance Monoid Int64 where mempty = zeroInt64; mappend = (P.+)
+instance Semigroup Int64 where
+    (<>) = (P.+)
+instance Monoid Int64 where
+    mempty = zeroInt64
 instance Group Int64 where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Int64
 
-instance Monoid Word where mempty = zeroWord; mappend = (P.+)
+instance Semigroup Word where (<>) = (P.+)
+instance Monoid Word where mempty = zeroWord
 instance Group Word where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Word
 
-instance Monoid Word32 where mempty = zeroWord32; mappend = (P.+)
+instance Semigroup Word32 where
+    (<>) = (P.+)
+instance Monoid Word32 where
+    mempty = zeroWord32
 instance Group Word32 where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Word32
 
-instance Monoid Word64 where mempty = zeroWord64; mappend = (P.+)
+instance Semigroup Word64 where
+    (<>) = (P.+)
+instance Monoid Word64 where
+    mempty = zeroWord64
 instance Group Word64 where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Word64
 
-instance Monoid Float where mempty = zeroFloat; mappend = (P.+)
+instance Semigroup Float where (<>) = (P.+)
+instance Monoid Float where mempty = zeroFloat
 instance Group Float where
     negate = P.negate;
     (-) = (P.-)
 instance Abelian Float
 
-instance Monoid Double where mempty = zeroDouble; mappend = (P.+)
+instance Semigroup Double where (<>) = (P.+)
+instance Monoid Double where mempty = zeroDouble
 instance Group Double where
     negate = P.negate;
     (-) = (P.-)

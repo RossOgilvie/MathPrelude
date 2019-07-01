@@ -205,9 +205,11 @@ sigfigs = 16
 ieps = 10^sigfigs
 eps = recip $ makeCF $ fromInteger ieps
 
+instance Semigroup (CF) where
+  (<>) = doTR trAdd
+
 instance Monoid (CF) where
   mempty = CF [zero]
-  mappend = doTR trAdd
 
 instance Group (CF) where
   negate p = doTR trNeg p 0

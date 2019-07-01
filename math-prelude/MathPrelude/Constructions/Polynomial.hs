@@ -177,9 +177,10 @@ instance Approx a ⇒ Approx (Poly a) where
             tripEq _ _ = False
 
 
+instance Monoid a ⇒ Semigroup (Poly a) where
+    (<>) p q = merge (<>) p q
 instance Monoid a ⇒ Monoid (Poly a) where
     mempty = mempty *^ 0
-    mappend p q = merge mappend p q
 instance Group a ⇒ Group (Poly a) where
     negate = map negate
     (-) p q = mappend p (negate q)

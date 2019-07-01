@@ -77,9 +77,10 @@ instance (IntDom a, Approx a) ⇒ Approx (Ratio a) where
     -- (>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
 
 
+instance IntDom a ⇒ Semigroup (Ratio a) where
+    (<>) (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
 instance IntDom a ⇒ Monoid (Ratio a) where
     mempty = zero :% one
-    mappend (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
 
 instance IntDom a ⇒ Group (Ratio a) where
     negate (x:%y) = negate x :% y

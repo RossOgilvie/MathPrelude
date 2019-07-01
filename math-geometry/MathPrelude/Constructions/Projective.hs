@@ -88,17 +88,19 @@ instance Ord a ⇒ Ord (Proj a) where
   compare Infty (Elem _) = GT
   compare Infty Infty = EQ
 
+instance Ring a ⇒ Semigroup (Proj a) where
+  (<>) Zero Zero = Zero
+  (<>) (Elem a) (Elem b) = Elem (a+b)
+  (<>) Infty Infty = Infty
+  (<>) Zero (Elem b) = Elem b
+  (<>) (Elem b) Zero = Elem b
+  (<>) Zero Infty = Infty
+  (<>) Infty Zero = Infty
+  (<>) (Elem _) Infty = Infty
+  (<>) Infty (Elem _) = Infty
+
 instance Ring a ⇒ Monoid (Proj a) where
   mempty = Zero
-  mappend Zero Zero = Zero
-  mappend (Elem a) (Elem b) = Elem (a+b)
-  mappend Infty Infty = Infty
-  mappend Zero (Elem b) = Elem b
-  mappend (Elem b) Zero = Elem b
-  mappend Zero Infty = Infty
-  mappend Infty Zero = Infty
-  mappend (Elem _) Infty = Infty
-  mappend Infty (Elem _) = Infty
 
 instance Ring a ⇒ Group (Proj a) where
   negate Zero = Zero

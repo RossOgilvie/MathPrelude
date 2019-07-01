@@ -114,9 +114,10 @@ instance Approx a ⇒ Approx (Complex a) where
     --     where m = leastSmall [x,y]
 
 
+instance Semigroup a ⇒ Semigroup (Complex a) where
+    (<>) (x:+y) (x':+y') = (x <> x') :+ (y <> y')
 instance Monoid a ⇒ Monoid (Complex a) where
     mempty = mempty :+ mempty
-    mappend (x:+y) (x':+y') = mappend x x' :+ mappend y y'
 instance Group a ⇒ Group (Complex a) where
     negate (x:+y) = negate x :+ negate y
 instance Abelian a ⇒ Abelian (Complex a) where

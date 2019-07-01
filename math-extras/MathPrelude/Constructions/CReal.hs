@@ -23,9 +23,11 @@ instance Approx CReal where
   (=~) x y = P.abs (x P.- y) <= epsCReal P.* P.maximum [one, P.abs x, P.abs y]
   epsilon = epsCReal
 
+instance Semigroup CReal where
+  (<>) = (P.+)
+
 instance Monoid CReal where
   mempty = 0
-  mappend = (P.+)
 
 instance Group CReal where
   negate = P.negate

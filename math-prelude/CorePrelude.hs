@@ -94,6 +94,7 @@ module CorePrelude
     --, Prelude.fromIntegral
     --, Prelude.realToFrac
       -- ** Monoids
+    , Semigroup (..)
     , Monoid (..)
     , (<>)
       -- ** Arrow
@@ -166,6 +167,7 @@ import Prelude (Char, (.), Eq, Bool)
 import Data.Hashable (Hashable, hash, hashWithSalt)
 import Data.Vector.Unboxed (Unbox)
 
+import Data.Semigroup (Semigroup (..))
 import Data.Monoid (Monoid (..))
 import qualified Control.Arrow
 import Control.Applicative
@@ -213,24 +215,10 @@ import qualified Data.List
 import System.IO.Error hiding (catch, try)
 import qualified GHC.Exts
 
--- #if MIN_VERSION_base(4,5,0)
-import Data.Monoid ((<>))
--- #endif
-
 type LText = Data.Text.Lazy.Text
 type LByteString = Data.ByteString.Lazy.ByteString
 type UVector = Data.Vector.Unboxed.Vector
 type SVector = Data.Vector.Storable.Vector
-
-
--- #if !MIN_VERSION_base(4,5,0)
-
---infixr 6 <>
--- (<>) :: Monoid w => w -> w -> w
--- (<>) = mappend
--- {-# INLINE (<>) #-}
-
--- #endif
 
 equating :: Eq a => (b -> a) -> b -> b -> Bool
 equating = Data.Function.on (Prelude.==)

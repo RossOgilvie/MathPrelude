@@ -207,8 +207,9 @@ solveSystemApprox (map toListV . toColsMt -> cols) (toListV -> v) = fromListV . 
 instance Show a ⇒ Show (Mat n m a) where
   show m = "Mat " ++ P.show (toListsMt m)
 --
+instance (KnownNat n, KnownNat m, Semigroup a) ⇒ Semigroup (Mat n m a) where
+  (<>) = liftMt2 (<>)
 instance (KnownNat n, KnownNat m, Monoid a) ⇒ Monoid (Mat n m a) where
-  mappend = liftMt2 mappend
   mempty = fromRowsMt $ repeat mempty
 
 instance (KnownNat n, KnownNat m, Approx a) ⇒ Approx (Mat n m a) where

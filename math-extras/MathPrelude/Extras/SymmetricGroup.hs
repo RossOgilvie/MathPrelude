@@ -141,10 +141,12 @@ instance Action Perm Integer Integer where
   act (P []) y = y
   act (P (c:cs)) y = P cs $$ actCycle c y
 
+instance Semigroup Perm where
+  (<>) p q = fromTable $ map ((p$$).(q$$)) [1..m]
+    where m = max (size p) (size q)
+
 instance Monoid Perm where
   mempty = P []
-  mappend p q = fromTable $ map ((p$$).(q$$)) [1..m]
-    where m = max (size p) (size q)
 
 instance Approx Perm where
   (=~) (P xs) (P ys) = xs == ys

@@ -225,8 +225,9 @@ instance Traversable (Vec n) where
 -----------------------------------
 --- Math Instances
 -----------------------------------
+instance (KnownNat n, Semigroup a) ⇒ Semigroup (Vec n a) where
+  (<>) = liftV2 (<>)
 instance (KnownNat n, Monoid a) ⇒ Monoid (Vec n a) where
-  mappend = liftV2 mappend
   mempty = Vec (take n' $ repeat mempty)
     where n' = fromInteger $ natVal (Proxy ∷ Proxy n)
 

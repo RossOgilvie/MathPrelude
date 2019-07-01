@@ -68,9 +68,11 @@ instance (EuclideanDomain a, Eq a, Approx a) ⇒ Approx (Quotient a) where
 instance (EuclideanDomain a, Eq a) ⇒ Eq (Quotient a) where
   (==) = liftQ2' (==)
 
+instance (EuclideanDomain a, Eq a) ⇒ Semigroup (Quotient a) where
+  (<>) = liftQ2 (<>)
+
 instance (EuclideanDomain a, Eq a) ⇒ Monoid (Quotient a) where
   mempty = Quotient Nothing mempty
-  mappend = liftQ2 mappend
 
 instance (EuclideanDomain a, Eq a) ⇒ Group (Quotient a) where
   negate = liftQ negate

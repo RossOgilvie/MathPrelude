@@ -29,8 +29,10 @@ import           Language.Haskell.TH
 instance KnownNat n ⇒ Show (Z n) where
   show (Z a) = P.show a
 
+instance KnownNat n ⇒ Semigroup (Z n) where
+  (<>) = liftZ2 (<>)
+
 instance KnownNat n ⇒ Monoid (Z n) where
-  mappend = liftZ2 mappend
   mempty = Z 0
 
 instance KnownNat n ⇒ Approx (Z n) where

@@ -20,6 +20,7 @@ import           MathPrelude.Constructions.Quotient
 newtype Qr2 = Qr2 (Quotient (Poly Rational)) deriving
   ( Show
   , Approx
+  , Semigroup
   , Monoid
   , Group
   , Abelian
