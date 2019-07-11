@@ -30,6 +30,7 @@ where
 -----------------------------------
 import           MathPrelude
 import           MathPrelude.Classes.Norm
+import           MathPrelude.Classes.VectorSpace
 
 import           Data.Complex                   ( Complex(..) )
 
@@ -127,7 +128,6 @@ instance IntDom a ⇒ IntDom (Complex a)
 instance Field a ⇒ Field (Complex a) where
     recip z@(x :+ y) = (x / zz) :+ (negate y / zz) where zz = normsq' z
 instance Ring r ⇒ Module (Complex r) r where
-    -- scale r = map (r*)
     scale r (x :+ y) = (r * x) :+ (r * y)
 instance (Transcendental r, Ring r) ⇒ Norm (Complex r) r where
     norm = sqrt . normsq'
