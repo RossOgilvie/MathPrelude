@@ -1,5 +1,6 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
 -- | Represent a group, a structure with an invertible operation, that may or may not be commutative (aka abelian).
 module MathPrelude.Classes.Group
     ( Group(..)
@@ -11,8 +12,8 @@ module MathPrelude.Classes.Group
 -----------------------------------
 --- Imports
 -----------------------------------
-import           PreludeNumConst
-import           BasicPrelude
+import           MathPrelude.Prelude.NamedNumbers
+import           MathPrelude.Prelude.CorePrelude
 import qualified Prelude                     as P
 
 -----------------------------------

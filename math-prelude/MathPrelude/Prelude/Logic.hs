@@ -1,19 +1,25 @@
-{-# LANGUAGE RebindableSyntax #-}
+-- {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
 -- | A module with the basic logical operators
-module MathPrelude.Classes.Logic
-    ( P.not
-    , (P.&&), (P.||)
-    , L.and, L.or
-    , implies, xor, iff, neither
+module MathPrelude.Prelude.Logic
+    ( Prelude.not
+    , (Prelude.&&)
+    , (Prelude.||)
+    , Prelude.otherwise
     , ifThenElse
+    , L.and, L.or
+    , implies
+    , xor
+    , iff
+    , neither
     ) where
 
-import           BasicPrelude
+-- import           MathPrelude.Prelude.CorePrelude
 import qualified Data.List    as L
-import qualified Prelude      as P
+-- import qualified Prelude      as P
 
--- | This binary logic function corresponds to the formal logic implication operator, aka logical consequence or entailment. It is false if and only if the first argument is true and the second is  false.
+-- | This binary logic function corresponds to the formal logic implication operator, aka material implication or entailment. It is false if and only if the first argument is true and the second is false.
 implies ∷ Bool → Bool → Bool
 implies True True = True
 implies True False = False
@@ -36,7 +42,7 @@ iff False False = True
 
 -- | Not Or. Is true exactly when both arguments are false.
 neither ∷ Bool → Bool → Bool
-neither x y = P.not $ (P.&&) x y
+neither x y = not $ (&&) x y
 
 -- | Exactly what you expect. This is required since the rebindable syntax extension overrides this as well, and without it "if-then-else" syntax won't work.
 ifThenElse ∷ Bool → a → a → a

@@ -7,7 +7,7 @@ module MathPrelude.Classes.Field
     , half
     )  where
 
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
 import qualified Prelude                  as P
 
 import           MathPrelude.Classes.Ring

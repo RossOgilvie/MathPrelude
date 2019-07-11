@@ -14,7 +14,7 @@ module MathPrelude.Classes.Rational
 ------------------------------
 --- Imports
 ------------------------------
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
 import qualified Data.Ratio                      as Ratio98
 import qualified Prelude                         as P
 

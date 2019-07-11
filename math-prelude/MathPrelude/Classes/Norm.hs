@@ -14,7 +14,8 @@ module MathPrelude.Classes.Norm
   , ComplexInnerProd(..)
   ) where
 
-import MathPrelude
+import MathPrelude.Prelude.CorePrelude
+import MathPrelude.Prelude.NamedNumbers
 import qualified Prelude      as P
 
 -- import MathPrelude.Classes.Module

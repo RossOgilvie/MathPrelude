@@ -9,11 +9,10 @@ module MathPrelude.Classes.Approximate
     )
 where
 
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
+import           MathPrelude.Prelude.NamedNumbers
 import qualified Prelude                     as P
 
-import           MathPrelude.Classes.Logic
-import           PreludeNumConst
 
 -----------------------------------
 --- Class

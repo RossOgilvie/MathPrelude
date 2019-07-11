@@ -16,11 +16,10 @@ module MathPrelude.Classes.Ring
 -----------------------------------
 --- Imports
 -----------------------------------
-import           BasicPrelude
-import           PreludeNumConst
+import           MathPrelude.Prelude.CorePrelude
+import           MathPrelude.Prelude.NamedNumbers
 import qualified Prelude                     as P
 
-import           MathPrelude.Classes.Logic(ifThenElse)
 import           MathPrelude.Classes.Group
 
 -----------------------------------
@@ -67,7 +66,7 @@ class CRing a ⇒ IntDom a
 -----------------------------------
 -- Methods
 -----------------------------------
--- | Fold a list together multiplicatively. An empty list yield the multiplicative identity
+-- | Fold a list together multiplicatively. An empty list yields the multiplicative identity
 product ∷ Ring a ⇒ [a] → a
 product = foldr (*) one
 
@@ -146,7 +145,10 @@ instance Num Word64 where abs = P.abs; signum = P.signum
 instance Num Float where abs = P.abs; signum = P.signum
 instance Num Double where abs = P.abs; signum = P.signum
 
-instance Ring a ⇒ Ring (Maybe a) where one = Just one; (*) = liftM2 (*); fromInteger x = Just (fromInteger x)
+instance Ring a ⇒ Ring (Maybe a) where 
+    one = Just one
+    (*) = liftM2 (*)
+    fromInteger x = Just (fromInteger x)
 instance CRing a ⇒ CRing (Maybe a)
 instance IntDom a ⇒ IntDom (Maybe a)
 

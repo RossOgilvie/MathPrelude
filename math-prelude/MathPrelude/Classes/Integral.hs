@@ -1,5 +1,6 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
 -- | A module for converting between integral types.
 module MathPrelude.Classes.Integral
     ( Integral(..)
@@ -14,7 +15,8 @@ module MathPrelude.Classes.Integral
 -----------------------------------
 --- Imports
 -----------------------------------
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
+import           MathPrelude.Prelude.NamedNumbers
 import qualified Prelude                  as P
 
 import           MathPrelude.Classes.Ring

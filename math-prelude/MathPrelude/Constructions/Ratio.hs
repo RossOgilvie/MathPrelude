@@ -12,10 +12,9 @@ module MathPrelude.Constructions.Ratio
     , evaluateR
     )  where
 
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
 import qualified Prelude                             as P
 
-import           MathPrelude.Classes.Logic
 import           MathPrelude.Classes.Approximate
 import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Field

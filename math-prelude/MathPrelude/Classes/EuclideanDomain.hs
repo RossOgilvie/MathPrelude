@@ -8,7 +8,8 @@ module MathPrelude.Classes.EuclideanDomain
     , extEuclidAlg
     ) where
 
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
+import           MathPrelude.Prelude.NamedNumbers
 import qualified Prelude                  as P
 
 import           MathPrelude.Classes.Ring

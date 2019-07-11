@@ -6,7 +6,7 @@ module MathPrelude.Classes.Transcendental where
 ------------------------------
 --- Imports
 ------------------------------
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
 import qualified Prelude                   as P
 
 import           MathPrelude.Classes.Approximate

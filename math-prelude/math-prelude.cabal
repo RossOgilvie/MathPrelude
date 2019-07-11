@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9c7de3f79168443469727f7194460058b520ab9ad34aaea907c2f349cf9002c0
+-- hash: ce0d08b63c67a7a4e3bc49fca79818a2257e3f22a656d43ae88bcb36626d137f
 
 name:           math-prelude
 version:        0.2.0.0
@@ -26,7 +26,6 @@ library
       MathPrelude.Classes.Integral
       MathPrelude.Classes.Group
       MathPrelude.Classes.Ring
-      MathPrelude.Classes.Logic
       MathPrelude.Classes.Rational
       MathPrelude.Classes.Field
       MathPrelude.Classes.EuclideanDomain
@@ -37,23 +36,15 @@ library
       MathPrelude.Constructions.Complex
       MathPrelude.Constructions.Polynomial
   other-modules:
-      BasicPrelude
-      CorePrelude
-      IntegralLists
-      PreludeNumConst
+      MathPrelude.Prelude.CorePrelude
+      MathPrelude.Prelude.Logic
+      MathPrelude.Prelude.IntegralLists
+      MathPrelude.Prelude.NamedNumbers
   other-extensions: RebindableSyntax UnicodeSyntax NoImplicitPrelude CPP OverloadedStrings
   ghc-options: -O2 -Wall -fwarn-tabs
   build-depends:
-      ReadArgs >=1.2 && <1.3
-    , base ==4.12.0.0
-    , bytestring >=0.10 && <0.11
-    , containers >=0.6 && <0.7
-    , hashable >=1.2 && <1.3
-    , lifted-base >=0.2 && <0.3
+      base ==4.12.0.0
     , safe >=0.3 && <0.4
     , system-filepath >=0.4 && <0.5
     , text >=1.2 && <1.3
-    , transformers >=0.5 && <0.6
-    , unordered-containers >=0.2 && <0.3
-    , vector >=0.12 && <0.13
   default-language: Haskell2010

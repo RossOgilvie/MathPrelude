@@ -1,7 +1,15 @@
-{-# LANGUAGE RebindableSyntax #-}
+-- {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax #-}
-module PreludeNumConst
-    ( zeroInteger
+
+module MathPrelude.Prelude.NamedNumbers
+    ( 
+    Int32
+    , Int64
+    , Word
+    , Word32
+    , Word64
+    
+    , zeroInteger
     , zeroInt
     , zeroInt32
     , zeroInt64
@@ -10,6 +18,7 @@ module PreludeNumConst
     , zeroWord64
     , zeroFloat
     , zeroDouble
+
     , oneInteger
     , oneInt
     , oneInt32
@@ -19,6 +28,7 @@ module PreludeNumConst
     , oneWord64
     , oneFloat
     , oneDouble
+
     , twoInteger
     , epsFloat
     , epsDouble

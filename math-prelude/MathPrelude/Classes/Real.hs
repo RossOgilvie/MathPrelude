@@ -6,14 +6,13 @@ module MathPrelude.Classes.Real where
 ------------------------------
 --- Imports
 ------------------------------
-import           BasicPrelude
+import           MathPrelude.Prelude.CorePrelude
 import qualified Prelude                      as P
 
 import qualified GHC.Float                    as GF
 
 import           MathPrelude.Classes.Field
 import           MathPrelude.Classes.Integral
-import           MathPrelude.Classes.Ring
 
 ------------------------------
 --- Classes
