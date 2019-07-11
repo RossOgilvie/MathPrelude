@@ -3,6 +3,7 @@
 {-# LANGUAGE RebindableSyntax      #-}
 {-# LANGUAGE UndecidableInstances  #-}
 {-# LANGUAGE UnicodeSyntax         #-}
+
 module MathPrelude.Constructions.Ratio
     ( module MathPrelude.Classes.Field
     , Ratio(..)

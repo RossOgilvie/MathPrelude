@@ -4,13 +4,15 @@
 module MathPrelude.Classes.EuclideanDomain
     ( module MathPrelude.Classes.Ring
     , EuclideanDomain(..)
-    , gcd, gcd'
+    , gcd
+    , gcd'
     , extEuclidAlg
-    ) where
+    )
+where
 
 import           MathPrelude.Prelude.CorePrelude
 import           MathPrelude.Prelude.NamedNumbers
-import qualified Prelude                  as P
+import qualified Prelude                       as P
 
 import           MathPrelude.Classes.Ring
 
@@ -48,37 +50,56 @@ class IntDom a ⇒ EuclideanDomain a where
 --- Methods
 -----------------------------------
 -- | The greatest common divisor of two elements, presented as the standard associate.
-gcd ∷ (EuclideanDomain a, Eq a) ⇒ a → a → a
+gcd :: (EuclideanDomain a, Eq a) => a -> a -> a
 gcd a b = stdAssociate $ gcd' a b
 -- | The greatest common divisor of two elements, presented as is.
-gcd' ∷ (EuclideanDomain a, Eq a) ⇒ a → a → a
-gcd' a b
-    | b == zero = a
-    | otherwise = gcd' b (a `mod` b)
+gcd' :: (EuclideanDomain a, Eq a) => a -> a -> a
+gcd' a b | b == zero = a
+         | otherwise = gcd' b (a `mod` b)
 
 -- | The extended Euclidean algorithm returns two numbers (x,y) from input (a,b) such that x*a + y*b = gcd'(a,b).
-extEuclidAlg ∷ (EuclideanDomain a, Eq a) ⇒ a → a → (a,a)
-extEuclidAlg a b
-    | r == zero = (zero,one)
-    | otherwise = (y, x - (y * q))
-        where
-            (q,r) = a `divMod` b
-            (x,y) = extEuclidAlg b r
+extEuclidAlg :: (EuclideanDomain a, Eq a) => a -> a -> (a, a)
+extEuclidAlg a b | r == zero = (zero, one)
+                 | otherwise = (y, x - (y * q))
+  where
+    (q, r) = a `divMod` b
+    (x, y) = extEuclidAlg b r
 
 
 -----------------------------------
 --- Instances
 -----------------------------------
-instance EuclideanDomain Integer where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
-instance EuclideanDomain Int where stdAssociate = P.abs;stdUnit = P.signum; divMod = P.divMod;
-instance EuclideanDomain Int32 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
-instance EuclideanDomain Int64 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
-instance EuclideanDomain Word where stdAssociate = P.abs;stdUnit = P.signum; divMod = P.divMod;
-instance EuclideanDomain Word32 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
-instance EuclideanDomain Word64 where stdAssociate = P.abs; stdUnit = P.signum; divMod = P.divMod
+instance EuclideanDomain Integer where
+    stdAssociate = P.abs
+    stdUnit      = P.signum
+    divMod       = P.divMod
+instance EuclideanDomain Int where
+    stdAssociate = P.abs
+    stdUnit      = P.signum
+    divMod       = P.divMod
+instance EuclideanDomain Int32 where
+    stdAssociate = P.abs
+    stdUnit      = P.signum
+    divMod       = P.divMod
+instance EuclideanDomain Int64 where
+    stdAssociate = P.abs
+    stdUnit      = P.signum
+    divMod       = P.divMod
+instance EuclideanDomain Word where
+    stdAssociate = P.abs
+    stdUnit      = P.signum
+    divMod       = P.divMod
+instance EuclideanDomain Word32 where
+    stdAssociate = P.abs
+    stdUnit      = P.signum
+    divMod       = P.divMod
+instance EuclideanDomain Word64 where
+    stdAssociate = P.abs
+    stdUnit      = P.signum
+    divMod       = P.divMod
 
 instance EuclideanDomain a ⇒ EuclideanDomain (Maybe a) where
     stdAssociate = liftM stdAssociate
-    stdUnit = liftM stdUnit
-    div = liftM2 div
-    mod = liftM2 mod
+    stdUnit      = liftM stdUnit
+    div          = liftM2 div
+    mod          = liftM2 mod

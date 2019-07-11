@@ -10,14 +10,15 @@ module MathPrelude.Classes.Integral
     -- * Misc
     , even
     , odd
-    ) where
+    )
+where
 
 -----------------------------------
 --- Imports
 -----------------------------------
 import           MathPrelude.Prelude.CorePrelude
 import           MathPrelude.Prelude.NamedNumbers
-import qualified Prelude                  as P
+import qualified Prelude                       as P
 
 import           MathPrelude.Classes.Ring
 
@@ -33,21 +34,21 @@ class (Ring a, Enum a) ⇒ Integral a where
 --- Methods
 -----------------------------------
 -- | Convert from a Prelude defined Integral type to our Integral
-fromIntegral98 ∷ (P.Integral a, Integral b) ⇒ a → b
+fromIntegral98 :: (P.Integral a, Integral b) => a -> b
 fromIntegral98 = fromInteger . P.fromIntegral
 -- | Convert from our Integral type to the Prelude defined Integral type.
-toIntegral98 ∷ (Integral a, P.Integral b) ⇒ a → b
+toIntegral98 :: (Integral a, P.Integral b) => a -> b
 toIntegral98 = P.fromIntegral . toInteger
 
 -- | Convert any integral to an element of any ring.
-fromIntegral ∷ (Integral a, Ring b) ⇒ a → b
-fromIntegral =  fromInteger . toInteger
+fromIntegral :: (Integral a, Ring b) => a -> b
+fromIntegral = fromInteger . toInteger
 
 -- | Test whether an integral is even.
-even ∷ Integral a ⇒ a → Bool
+even :: Integral a => a -> Bool
 even = P.even . toInteger
 -- | Test whether an integral is odd.
-odd ∷ Integral a ⇒ a → Bool
+odd :: Integral a => a -> Bool
 odd = P.odd . toInteger
 
 -----------------------------------
@@ -55,13 +56,20 @@ odd = P.odd . toInteger
 -----------------------------------
 -- instance P.Integral a ⇒ Integral a where
 --     toInteger = P.toInteger
-instance Integral Integer where toInteger = id
-instance Integral Int where toInteger = P.toInteger
-instance Integral Int32 where toInteger = P.toInteger
-instance Integral Int64 where toInteger = P.toInteger
-instance Integral Word where toInteger = P.toInteger
-instance Integral Word32 where toInteger = P.toInteger
-instance Integral Word64 where toInteger = P.toInteger
+instance Integral Integer where
+    toInteger = id
+instance Integral Int where
+    toInteger = P.toInteger
+instance Integral Int32 where
+    toInteger = P.toInteger
+instance Integral Int64 where
+    toInteger = P.toInteger
+instance Integral Word where
+    toInteger = P.toInteger
+instance Integral Word32 where
+    toInteger = P.toInteger
+instance Integral Word64 where
+    toInteger = P.toInteger
 
 -----------------------------------
 -- Rerwite Rules -- for great justice!

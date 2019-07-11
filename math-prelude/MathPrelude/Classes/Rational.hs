@@ -1,5 +1,6 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
 -- | A module for converting between rational types.
 module MathPrelude.Classes.Rational
     ( Rational
@@ -9,17 +10,18 @@ module MathPrelude.Classes.Rational
     , fromRational
     , fromRational98
     , toRational98
-    ) where
+    )
+where
 
 ------------------------------
 --- Imports
 ------------------------------
 import           MathPrelude.Prelude.CorePrelude
-import qualified Data.Ratio                      as Ratio98
-import qualified Prelude                         as P
-
 import           MathPrelude.Classes.Integral
 import           MathPrelude.Constructions.Ratio
+
+import qualified Data.Ratio                    as Ratio98
+import qualified Prelude                       as P
 
 ------------------------------
 --- Classes
@@ -51,30 +53,34 @@ class CharZero a ⇒ Fractional a
 --- Methods
 ------------------------------
 -- | Used to marshall numeric literals into types. Must be defined on prelude's rational type. Needed to use expresions such as 0.5 if RebindaleSyntax is enabled.
-fromRational ∷ CharZero a ⇒ P.Rational → a
+fromRational :: CharZero a => P.Rational -> a
 fromRational x = fromRational' (Ratio98.numerator x :% Ratio98.denominator x)
 
 -- | Helper function to go between the prelude's and our rational types
-toRational98 ∷ Rational → P.Rational
+toRational98 :: Rational -> P.Rational
 toRational98 x = numerator x Ratio98.% denominator x
 -- | Helper function to go between the prelude's and our rational types
-fromRational98 ∷ P.Rational → Rational
+fromRational98 :: P.Rational -> Rational
 fromRational98 x = Ratio98.numerator x :% Ratio98.denominator x
 
 ------------------------------
 --- Instances
 ------------------------------
 instance Integral a ⇒ CharZero (Ratio a) where
-     fromRational' (x :% y) = fromInteger x :% fromInteger y
+    fromRational' (x :% y) = fromInteger x :% fromInteger y
 instance Integral a ⇒ Q (Ratio a) where
-     toRational (x :% y) = toInteger x :% toInteger y
+    toRational (x :% y) = toInteger x :% toInteger y
 
 
-instance CharZero Float where    fromRational' = P.fromRational . toRational98
-instance CharZero Double where fromRational' = P.fromRational . toRational98
+instance CharZero Float where
+    fromRational' = P.fromRational . toRational98
+instance CharZero Double where
+    fromRational' = P.fromRational . toRational98
 
-instance Q Float where toRational = fromRational98 . P.toRational
-instance Q Double where toRational = fromRational98 . P.toRational
+instance Q Float where
+    toRational = fromRational98 . P.toRational
+instance Q Double where
+    toRational = fromRational98 . P.toRational
 
 instance Fractional Float
 instance Fractional Double

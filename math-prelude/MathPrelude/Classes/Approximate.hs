@@ -1,17 +1,16 @@
 {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
+
 -- | A comparison operation that makes sense for numeric types, such as applying approximate equality for floats.
 module MathPrelude.Classes.Approximate
     ( Approx(..)
     , nearZero
-    -- , smallL, leastSmall
-    -- , (<<~), big
     )
 where
 
 import           MathPrelude.Prelude.CorePrelude
 import           MathPrelude.Prelude.NamedNumbers
-import qualified Prelude                     as P
+import qualified Prelude                       as P
 
 
 -----------------------------------
@@ -36,30 +35,32 @@ infixl 4 /=~
 --- Methods
 -----------------------------------
 -- | Test whether we are close to zero.
-nearZero ∷ (Approx a , Monoid a) ⇒ a → Bool
+nearZero :: (Approx a, Monoid a) => a -> Bool
 nearZero a = a =~ mempty
 
 -----------------------------------
 --- Instances
 -----------------------------------
 instance Approx Int where
-    (=~) = (==)
+    (=~)    = (==)
     epsilon = zeroInt
 instance Approx Int32 where
-    (=~) = (==)
+    (=~)    = (==)
     epsilon = zeroInt32
 instance Approx Int64 where
-    (=~) = (==)
+    (=~)    = (==)
     epsilon = zeroInt64
 instance Approx Integer where
-    (=~) = (==)
+    (=~)    = (==)
     epsilon = zeroInteger
 
 instance Approx Float where
-    (=~) x y = P.abs (x P.- y) <= epsFloat P.* P.maximum [oneFloat, P.abs x, P.abs y]
+    (=~) x y =
+        P.abs (x P.- y) <= epsFloat P.* P.maximum [oneFloat, P.abs x, P.abs y]
     epsilon = epsFloat
 instance Approx Double where
-    (=~) x y = P.abs (x P.- y) <= epsDouble P.* P.maximum [oneDouble, P.abs x, P.abs y]
+    (=~) x y =
+        P.abs (x P.- y) <= epsDouble P.* P.maximum [oneDouble, P.abs x, P.abs y]
     epsilon = epsDouble
 
 instance Approx a ⇒ Approx [a] where
@@ -67,20 +68,22 @@ instance Approx a ⇒ Approx [a] where
     epsilon = [epsilon]
 
 instance (Approx a, Approx b) ⇒ Approx (a,b) where
-    (a1,b1) =~ (a2,b2) = a1=~a2 && b1=~b2
-    epsilon = (epsilon,epsilon)
+    (a1, b1) =~ (a2, b2) = a1 =~ a2 && b1 =~ b2
+    epsilon = (epsilon, epsilon)
 instance (Approx a, Approx b, Approx c) ⇒ Approx (a,b,c) where
-    (a1,b1,c1) =~ (a2,b2,c2) = a1=~a2 && b1=~b2 && c1=~c2
-    epsilon = (epsilon,epsilon,epsilon)
+    (a1, b1, c1) =~ (a2, b2, c2) = a1 =~ a2 && b1 =~ b2 && c1 =~ c2
+    epsilon = (epsilon, epsilon, epsilon)
 instance (Approx a, Approx b, Approx c, Approx d) ⇒ Approx (a,b,c,d) where
-    (a1,b1,c1,d1) =~ (a2,b2,c2,d2) = a1=~a2 && b1=~b2 && c1=~c2 && d1=~d2
-    epsilon = (epsilon,epsilon,epsilon,epsilon)
+    (a1, b1, c1, d1) =~ (a2, b2, c2, d2) =
+        a1 =~ a2 && b1 =~ b2 && c1 =~ c2 && d1 =~ d2
+    epsilon = (epsilon, epsilon, epsilon, epsilon)
 instance (Approx a, Approx b, Approx c, Approx d, Approx e) ⇒ Approx (a,b,c,d,e) where
-    (a1,b1,c1,d1,e1) =~ (a2,b2,c2,d2,e2) = a1=~a2 && b1=~b2 && c1=~c2 && d1=~d2 && e1=~e2
-    epsilon = (epsilon,epsilon,epsilon,epsilon,epsilon)
+    (a1, b1, c1, d1, e1) =~ (a2, b2, c2, d2, e2) =
+        a1 =~ a2 && b1 =~ b2 && c1 =~ c2 && d1 =~ d2 && e1 =~ e2
+    epsilon = (epsilon, epsilon, epsilon, epsilon, epsilon)
 
 instance Approx a ⇒ Approx (Maybe a) where
     (=~) (Just x) (Just y) = x =~ y
-    (=~) Nothing Nothing = True
-    (=~) _ _ = False
+    (=~) Nothing  Nothing  = True
+    (=~) _        _        = False
     epsilon = Just epsilon

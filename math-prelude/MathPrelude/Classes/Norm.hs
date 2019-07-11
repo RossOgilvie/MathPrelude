@@ -1,7 +1,6 @@
 {-# LANGUAGE RebindableSyntax       #-}
 {-# LANGUAGE UnicodeSyntax          #-}
 
--- {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
@@ -12,15 +11,12 @@ module MathPrelude.Classes.Norm
   ( Norm(..)
   , InnerProd(..)
   , ComplexInnerProd(..)
-  ) where
+  )
+where
 
-import MathPrelude.Prelude.CorePrelude
-import MathPrelude.Prelude.NamedNumbers
-import qualified Prelude      as P
-
--- import MathPrelude.Classes.Module
--- import MathPrelude.Classes.Integral
--- import MathPrelude.Classes.Transcendental
+import           MathPrelude.Prelude.CorePrelude
+import           MathPrelude.Prelude.NamedNumbers
+import qualified Prelude                       as P
 
 -- | The norm is the length of a object. If the object is a vector, the norm should commute with positive scaling and obey the triangle inequality.
 class Norm v s | v → s where
