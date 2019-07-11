@@ -1,0 +1,54 @@
+name: math-extras
+version: '0.1.0.0'
+category: Math
+author: Ross Ogilvie
+maintainer: ross@rossogilvie.id.au
+license: GPL-3
+other-extensions:
+- BangPatterns
+- RebindableSyntax
+- UnicodeSyntax
+- MultiParamTypeClasses
+- FlexibleContexts
+- FlexibleInstances
+- TemplateHaskell
+- OverloadedStrings
+- DataKinds
+- KindSignatures
+- ScopedTypeVariables
+- GeneralizedNewtypeDeriving
+- RankNTypes
+- IncoherentInstances
+- UndecidableInstances
+- PolyKinds
+- TypeFamilies
+- TypeOperators
+- ViewPatterns
+- FunctionalDependencies
+- AllowAmbiguousTypes
+dependencies:
+- base ==4.12.0.0
+- math-prelude >=0.2 && <0.3
+- math-calculus >=0.1 && <0.2
+- math-special-functions >=0.1 && <0.2
+- template-haskell
+- QuickCheck
+- primes
+- lens
+- numbers
+library:
+  exposed-modules:
+  - MathPrelude.Extras.DifferentialEqns
+  - MathPrelude.Extras.NumberRings
+  - MathPrelude.Extras.NumberRingsTH
+  - MathPrelude.Extras.Path
+  - MathPrelude.Extras.PolynomialFactorisation
+  - MathPrelude.Extras.QuadraticExtensions
+  - MathPrelude.Extras.RomanNumerals
+  - MathPrelude.Extras.SymmetricGroup
+  - MathPrelude.Exports.Polynomials
+  - MathPrelude.Constructions.PowerSeries
+  - MathPrelude.Constructions.CReal
+  - MathPrelude.Constructions.ContinuedFractions
+  - MathPrelude.Constructions.Quotient
+  - MathPrelude.Classes.Action
