@@ -3,8 +3,9 @@
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE RebindableSyntax      #-}
 {-# LANGUAGE UnicodeSyntax         #-}
+
 module MathPrelude.Constructions.Polynomial
-    ( module EX
+    ( module Export
     , Poly()
     -- , poly
     , toListP, fromListP
@@ -21,14 +22,15 @@ module MathPrelude.Constructions.Polynomial
 import MathPrelude
 import qualified Prelude                             as P
 
-import           MathPrelude.Classes.EuclideanDomain as EX
-import           MathPrelude.Classes.Field as EX
-import           MathPrelude.Classes.Integral
-import           MathPrelude.Classes.Module as EX
-import           MathPrelude.Classes.Rational
+-- import           MathPrelude.Classes.EuclideanDomain as Export
+-- import           MathPrelude.Classes.Field     as Export
+-- import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.VectorSpace
+                                               as Export
+-- import           MathPrelude.Classes.Rational
 
 -- import           Control.Lens                        hiding (Action)
-import qualified Data.Foldable                       as F
+-- import qualified Data.Foldable                       as F
 
 -----------------------------------
 --- Poly

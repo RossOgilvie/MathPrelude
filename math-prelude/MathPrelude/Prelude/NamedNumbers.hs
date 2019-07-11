@@ -34,7 +34,7 @@ module MathPrelude.Prelude.NamedNumbers
     , epsDouble
     ) where
 
-import Prelude(fromInteger, fromRational, Int, Integer, Float, Double)
+-- import Prelude(fromInteger, fromRationalInt, Integer, Float, Double)
 import Data.Int (Int32, Int64)
 import Data.Word (Word, Word32, Word64)
 

@@ -5,7 +5,7 @@ module MathPrelude.Classes.Rational
     ( Rational
     , CharZero(..)
     , Q(..)
-    , Fractional(..)
+    , Fractional
     , fromRational
     , fromRational98
     , toRational98

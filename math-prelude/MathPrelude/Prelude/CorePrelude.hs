@@ -35,7 +35,6 @@ module MathPrelude.Prelude.CorePrelude
     (Prelude..)
     , (Prelude.$)
     , (Prelude.$!)
-    , (Control.Monad.=<<)
     -- ** Functions
     , Prelude.fst
     , Prelude.snd
@@ -128,7 +127,6 @@ module MathPrelude.Prelude.CorePrelude
     , (Control.Applicative.<|>)
     -- ** Monad
     , module Control.Monad
-    , (Control.Monad.>=>)
 
 -----------------------------------------------
 -- TEXT AND FILEPATH STUFF

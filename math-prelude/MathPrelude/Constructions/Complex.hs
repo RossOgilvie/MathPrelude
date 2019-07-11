@@ -22,18 +22,18 @@ module MathPrelude.Constructions.Complex
 --- Imports
 -----------------------------------
 import MathPrelude
-import qualified Prelude                            as P
+-- import qualified Prelude                            as P
 
 import           Data.Complex                       (Complex (..))
 
 -- import           MathPrelude.Classes.Action
 -- import           MathPrelude.Classes.Derivation
-import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Integral
-import           MathPrelude.Classes.Module
+-- import           MathPrelude.Classes.Field
+-- import           MathPrelude.Classes.Integral
+import           MathPrelude.Classes.VectorSpace
 import           MathPrelude.Classes.Norm
-import           MathPrelude.Classes.Rational
-import           MathPrelude.Classes.Transcendental
+-- import           MathPrelude.Classes.Rational
+-- import           MathPrelude.Classes.Transcendental
 
 -----------------------------------
 --- Methods

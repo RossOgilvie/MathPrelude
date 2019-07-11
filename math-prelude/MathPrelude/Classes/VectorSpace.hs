@@ -5,12 +5,10 @@
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
 -- | A module (the algebraic object, not the Haskell file) abstracts the notion of scaling an additive group. A vector space is a module where the scalars form a field.
-module MathPrelude.Classes.Module where
+module MathPrelude.Classes.VectorSpace where
 
 import MathPrelude
-
-import           MathPrelude.Classes.Field
-import           MathPrelude.Classes.Norm
+import MathPrelude.Classes.Norm
 
 -----------------------------------
 --- Module

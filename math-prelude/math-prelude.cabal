@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ce0d08b63c67a7a4e3bc49fca79818a2257e3f22a656d43ae88bcb36626d137f
+-- hash: c0417b886d0faf2b22acba95fd1f75fd6c00189744ab764ef949e9a9b7b6f04d
 
 name:           math-prelude
 version:        0.2.0.0
@@ -30,7 +30,7 @@ library
       MathPrelude.Classes.Field
       MathPrelude.Classes.EuclideanDomain
       MathPrelude.Classes.Real
-      MathPrelude.Classes.Module
+      MathPrelude.Classes.VectorSpace
       MathPrelude.Classes.Norm
       MathPrelude.Constructions.Ratio
       MathPrelude.Constructions.Complex

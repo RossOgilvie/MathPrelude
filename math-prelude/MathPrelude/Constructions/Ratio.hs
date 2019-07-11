@@ -13,7 +13,6 @@ module MathPrelude.Constructions.Ratio
     )  where
 
 import           MathPrelude.Prelude.CorePrelude
-import qualified Prelude                             as P
 
 import           MathPrelude.Classes.Approximate
 import           MathPrelude.Classes.EuclideanDomain
@@ -27,10 +26,10 @@ data Ratio a = a :% a deriving Show
 
 -- | Return the numerator (the top number).
 numerator ∷ Ratio a → a
-numerator (a :% b) = a
+numerator (a :% _) = a
 -- | Return the denominator (the bottom number).
 denominator ∷ Ratio a → a
-denominator (a :% b) = b
+denominator (_ :% b) = b
 
 -- | Calculates the canonical choice of sign.
 parity' ∷ Ordering → Ordering → Ordering → Ordering

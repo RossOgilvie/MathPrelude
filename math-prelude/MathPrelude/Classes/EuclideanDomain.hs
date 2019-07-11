@@ -51,6 +51,7 @@ class IntDom a ⇒ EuclideanDomain a where
 gcd ∷ (EuclideanDomain a, Eq a) ⇒ a → a → a
 gcd a b = stdAssociate $ gcd' a b
 -- | The greatest common divisor of two elements, presented as is.
+gcd' ∷ (EuclideanDomain a, Eq a) ⇒ a → a → a
 gcd' a b
     | b == zero = a
     | otherwise = gcd' b (a `mod` b)
