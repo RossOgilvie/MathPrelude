@@ -28,7 +28,7 @@ eitherConverge p (x:ys@(y:_))
   | otherwise = eitherConverge p ys
 
 -- | Similiar to 'eitherConverge', returning True if it has returned after the specified number of term, and False if it has reached the end of those terms without converging.
-converges ∷ (a → a → Bool) → Integer → [a] → Bool
+converges ∷ (a → a → Bool) → Int → [a] → Bool
 converges f n ls = E.isLeft $ eitherConverge f (take n ls)
 
 -- | Returns the limit or the last term, using the predicate '=~'.

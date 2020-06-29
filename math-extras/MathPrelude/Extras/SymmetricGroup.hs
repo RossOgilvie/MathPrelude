@@ -31,7 +31,7 @@ import MathPrelude.Classes.Action
 --- Data
 ------------------------------
 -- | Typesym representing a cycle in cycle notation.
-type Cycle = [Integer]
+type Cycle = [Int]
 -- | A Permutation sotred as the product of disjoInteger cycles.
 newtype Perm = P [Cycle]
 
@@ -39,7 +39,7 @@ newtype Perm = P [Cycle]
 ---  Constructors
 ------------------------------
 -- | Construct a permutation from a table. The input is the bottom line of a permutation table.
-fromTable ∷ [Integer] → Perm
+fromTable ∷ [Int] → Perm
 fromTable ls = P . fromTable' [1..(length ls)] $ ls
 
 -- | Aux function to make a permutation by picking out an unused number from ns and constructing its cycle.
@@ -50,16 +50,16 @@ fromTable' ns ls
   where c = makeCycle (head ns) ls
 
 -- | Given a number and a table, find its cycle.
-makeCycle ∷ Integer → [Integer] -> Cycle
+makeCycle ∷ Int → [Int] -> Cycle
 makeCycle x ls =  (x :) . takeWhile (/= x) . tail . iterate f $ x
   where f y = ls !! (y-1)
 
 -- | Make a permutation table from a given Permutation.
-toTable ∷ Perm → [Integer]
-toTable p = map (p$$) ([1..(size p)]::[Integer])
+toTable ∷ Perm → [Int]
+toTable p = map (p$$) ([1..(size p)]::[Int])
 
 -- | The transposition of the two elements.
-transp :: Integer → Integer → Perm
+transp :: Int → Int → Perm
 transp m n
   | m == n = P []
   | m < n = P [[m,n]]
@@ -67,14 +67,14 @@ transp m n
 
 -- | Construct a cyclic permutation.
 -- Repeated elements are ignored. eg [1,2,2,3] becomes (1 2 3).
-cyc ∷ [Integer] → Perm
+cyc ∷ [Int] → Perm
 cyc xs = P [dedupe xs]
 
 ------------------------------
 --- Methods
 ------------------------------
 -- | Act a cycle on an element.
-actCycle ∷ Cycle → Integer → Integer
+actCycle ∷ Cycle → Int → Int
 actCycle [] y = y
 actCycle ls y = actCycle' (ls ++ [head ls]) y
 
@@ -100,17 +100,17 @@ takeDrop p (x:xs)
   | otherwise = ([],x:xs)
 
 -- | Calculate the sign of a cycle. Cycles of even length are odd (-1), and odd length cycles are even (1).
-parityC ∷ Cycle → Integer
+parityC ∷ Cycle → Int
 parityC = negate . sign . length
     where
         sign k = if even k then 1 else -1
 
 -- | Calculate the sign of a permutation, ie whether it is composed of an even or odd number of transpositions.
-parity ∷ Perm → Integer
+parity ∷ Perm → Int
 parity (P cs) = product . map parityC $ cs
 
 -- | To which S_n does the permutation belong?
-size ∷ Perm → Integer
+size ∷ Perm → Int
 size (P []) = 0
 size (P cs) = maximum . map maximum $ cs
 
@@ -124,7 +124,7 @@ dedupe [] = []
 dedupe (x:xs) = x : dedupe (filter (/=x) xs)
 
 -- | Construct all the permutations of a given size.
-symm ∷ Integer → [Perm]
+symm ∷ Int → [Perm]
 symm n = map fromTable $ permutations [1..n]
 
 ------------------------------
@@ -137,7 +137,7 @@ instance Show Perm where
   show (P []) = "()"
   show (P cs) = concatMap showC cs
 
-instance Action Perm Integer Integer where
+instance Action Perm Int Int where
   act (P []) y = y
   act (P (c:cs)) y = P cs $$ actCycle c y
 

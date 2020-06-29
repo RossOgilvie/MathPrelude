@@ -50,7 +50,7 @@ import MathPrelude
 -- import           MathPrelude.Classes.Transcendental
 import           MathPrelude.Constructions.Complex
 import           MathPrelude.Calculus.Convergence
--- import MathPrelude.Classes.Module
+-- import MathPrelude.Classes.VectorSpace
 
 -----------------------------------
 --- Carlson Symmetric Integrals

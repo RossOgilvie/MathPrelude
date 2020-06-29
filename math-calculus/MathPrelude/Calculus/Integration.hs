@@ -6,14 +6,14 @@
 
 module MathPrelude.Calculus.Integration
   (
-  module MathPrelude.Classes.Module
+  module MathPrelude.Classes.VectorSpace
   , numIntegrate
   , trapezoid
   , simpsons
   ) where
 
 import MathPrelude
-import           MathPrelude.Classes.Module
+import           MathPrelude.Classes.VectorSpace
 import           MathPrelude.Calculus.Convergence
 
 

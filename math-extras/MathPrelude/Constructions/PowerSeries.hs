@@ -26,7 +26,7 @@ import qualified Prelude as P
 -- From math-prelude
 import           MathPrelude.Classes.Field
 import           MathPrelude.Classes.Integral
-import           MathPrelude.Classes.Module
+import           MathPrelude.Classes.VectorSpace
 import           MathPrelude.Classes.Transcendental
 import           MathPrelude.Constructions.Polynomial
 
@@ -64,7 +64,7 @@ scalarPS x = PS [x]
 monomialPS ∷ Monoid a ⇒ Int → a → PS a
 monomialPS d c
   | d < 0 = zero
-  | otherwise = PS $ replicate' d zero
+  | otherwise = PS $ replicate d zero
 
 -- | Extract the constant coefficient of a power series.
 constPS ∷ Monoid a ⇒ PS a → a
@@ -85,7 +85,7 @@ partialSumsPS (PS xs) pt = partialSums $ zipWith (*) xs powers
 
 -- | Truncate a power series to a polynomial of given degree.
 toPoly ∷ Monoid a ⇒ Int → PS a → Poly a
-toPoly n = fromListP . take' n . toListPS
+toPoly n = fromListP . take n . toListPS
 
 -- | Construct a finite power series from a given polynomial.
 fromPoly ∷ Monoid a ⇒ Poly a → PS a
@@ -96,7 +96,7 @@ toGenFunc ∷ Monoid a ⇒ PS a → Int → a
 toGenFunc (PS y) n
   | null y' = zero
   | otherwise = head y'
-  where y' = drop' n y
+  where y' = drop n y
 
 -- | Construct a power series from a generating function.
 fromGenFunc ∷ (Int → a) → PS a
@@ -173,10 +173,10 @@ divisionApprox = division' nearZero
 division' ∷ Field a ⇒ (a → Bool) → PS a → PS a → PS a
 division' eq (PS xs) (PS ys) = if deg_xs >= deg_ys then result else error "Power series division impossible: would result in negative powers."
   where
-    deg_xs = length' . takeWhile eq $ xs
-    deg_ys = length' . takeWhile eq $ ys
-    xs' = drop' deg_xs xs ++ repeat 0
-    ys' = drop' deg_ys ys ++ repeat 0
+    deg_xs = length . takeWhile eq $ xs
+    deg_ys = length . takeWhile eq $ ys
+    xs' = drop deg_xs xs ++ repeat 0
+    ys' = drop deg_ys ys ++ repeat 0
     result = shiftPower (deg_xs - deg_ys) $ PS $ division'' xs' ys'
 
 -- this builds the resultant list
@@ -240,5 +240,5 @@ guts (PS xs) = P.show xs
 --
 shiftPower ∷ Monoid a ⇒ Int → PS a → PS a
 shiftPower d (PS xs)
-  | d < 0 = PS $ drop' d xs
-  | otherwise = PS $ replicate' d zero ++ xs
+  | d < 0 = PS $ drop d xs
+  | otherwise = PS $ replicate d zero ++ xs

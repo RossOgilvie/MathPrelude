@@ -33,7 +33,7 @@ module MathPrelude.Constructions.Vector
 import MathPrelude hiding (foldr)
 import qualified Prelude as P
 
-import MathPrelude.Classes.Module
+import MathPrelude.Classes.VectorSpace
 import MathPrelude.Classes.Field
 import MathPrelude.Classes.Integral
 -- import MathPrelude.Classes.Real

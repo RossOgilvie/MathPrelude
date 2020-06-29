@@ -11,7 +11,7 @@ module MathPrelude.Calculus.Derivation where
 import qualified Prelude as P
 import MathPrelude
 
-import           MathPrelude.Classes.Module
+import           MathPrelude.Classes.VectorSpace
 import           MathPrelude.Classes.Norm
 import           MathPrelude.Constructions.Polynomial
 import           MathPrelude.Constructions.Complex
@@ -29,8 +29,8 @@ class Ring r ⇒ Derivation r where
 -----------------------------------
 instance Derivation Integer where derive _ = zero;
 instance Derivation Int where derive _ = zero;
-instance Derivation Int32 where derive _ = zero;
-instance Derivation Int64 where derive _ = zero;
+-- instance Derivation Int32 where derive _ = zero;
+-- instance Derivation Int64 where derive _ = zero;
 instance Derivation Float where derive _ = zero;
 instance Derivation Double where derive _ = zero;
 

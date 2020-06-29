@@ -25,15 +25,18 @@ import      MathPrelude.Constructions.Matrix
 component :: KnownNat n => Integer -> Vec n a -> a
 component k v
     | k < 0 || k >= dimV v = error ("Error MathPrelude.Calculus.VectorCalc.component: Index outside range. Dim v = " ++ show' (dimV v) ++ " index = " ++ show' k)
-    | otherwise = head . drop k . toListV $ v
+    -- TODO: int type mismatch here
+    | otherwise = head . drop (fromInteger k) . toListV $ v
 
 slice :: (KnownNat n, Ring a) => Integer -> Vec n a -> Vec n (Diff a)
 slice k v = fromListV (pre ++ [variable x] ++ post)
     where
         v' = toListV v
-        pre = map constant . take k $ v'
+        -- TODO: int type mismatch here
+        pre = map constant . take (fromInteger k) $ v'
         x = component k v
-        post = map constant . drop (k+1) $ v'
+        -- TODO: int type mismatch here
+        post = map constant . drop (fromInteger $ k+1) $ v'
 
 partial :: (KnownNat n, Ring a, Ring b) => (Vec n (Diff a) -> Diff b) -> Integer -> Vec n a -> Diff b
 partial f k = derive (f . slice k)

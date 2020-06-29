@@ -15,7 +15,7 @@ module MathPrelude.Constructions.Sphere3 (
 
 import MathPrelude
 
-import MathPrelude.Classes.Module
+import MathPrelude.Classes.VectorSpace
 import MathPrelude.Constructions.Complex
 import MathPrelude.Constructions.Vector
 

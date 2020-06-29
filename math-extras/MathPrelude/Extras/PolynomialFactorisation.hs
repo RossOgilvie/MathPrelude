@@ -73,11 +73,11 @@ removeRootApprox p x
             where (p', n) = removeRootApprox (p `div` linearPolyWithRoot x) x
 
 -- | Calculate the order of a root.
-rootOrder ∷ (Derivation a, Ring a, Eq a) ⇒ Poly a → a → Integer
-rootOrder p x = length . takeWhile (`isRoot` x) . take (degreeP p) . iterate derive $ p
+rootOrder ∷ (Derivation a, Ring a, Eq a) ⇒ Poly a → a → Int
+rootOrder p x = length . takeWhile (`isRoot` x) . take' (degreeP p) . iterate derive $ p
 -- | Calculate the order of a root.
-rootOrderApprox ∷ (Derivation a, Ring a, Approx a) ⇒ Poly a → a → Integer
-rootOrderApprox p x = length . takeWhile (`isRootApprox` x) . take (degreeP p) . iterate derive $ p
+rootOrderApprox ∷ (Derivation a, Ring a, Approx a) ⇒ Poly a → a → Int
+rootOrderApprox p x = length . takeWhile (`isRootApprox` x) . take' (degreeP p) . iterate derive $ p
 
 -- | Does the polynomial has this point as a root.
 isRoot ∷ (Ring a, Eq a) ⇒ Poly a → a → Bool

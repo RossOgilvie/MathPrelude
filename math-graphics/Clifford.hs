@@ -5,7 +5,7 @@
 module Clifford where
 
 import MathPrelude
-import MathPrelude.Classes.Module
+import MathPrelude.Classes.VectorSpace
 import MathPrelude.Constructions.Complex
 import MathPrelude.Constructions.Vector
 import MathPrelude.Constructions.Sphere1

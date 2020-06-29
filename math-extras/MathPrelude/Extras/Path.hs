@@ -15,7 +15,7 @@ module MathPrelude.Extras.Path
 -- from math-prelude
 import MathPrelude
 import MathPrelude.Classes.Field
-import MathPrelude.Classes.Module
+import MathPrelude.Classes.VectorSpace
 import MathPrelude.Classes.Rational
 import MathPrelude.Classes.Transcendental
 import MathPrelude.Constructions.Complex
