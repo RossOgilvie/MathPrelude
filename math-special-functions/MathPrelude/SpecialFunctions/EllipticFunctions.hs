@@ -108,7 +108,7 @@ fastEllipticF x k
         k' = sqrt (1-k^2)
         thres = 150
         thres2 = thres^2
-        kNear1 = normsq' (1-k) < thres2
+        kNear1 = normsq' (1-k) < 1/thres2
         kNear0 = normsq' k < 1/thres2
         xNear0 = normsq' x < 1/thres2
         xNearInf = normsq' x > thres2
@@ -136,7 +136,7 @@ fastEllipticE x k
         k' = sqrt (1-k^2)
         thres = 400
         thres2 = thres^2
-        kNear1 = normsq' (1-k) < thres2
+        kNear1 = normsq' (1-k) < 1/thres2
         kNear0 = normsq' k < 1/thres2
         xNear0 = normsq' x < 1/thres2
         xNearInf = normsq' x > thres2
@@ -206,6 +206,12 @@ fastCompleteE k
     | realPart k <= 0.9 = completeE k
     | otherwise = completeEnearK1 k
 
+fastCompleteEReal ∷ Double → Double
+fastCompleteEReal k
+    | k <= 0.5 = completeEnearK0 k
+    | k <= 0.9 = completeE k
+    | otherwise = completeEnearK1 k
+
 
 -- | The complete elliptic integral of the third kind. The first argument is the characteristic n. The second argument is the modulus k.
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_third_kind Wikipedia>
@@ -222,11 +228,10 @@ completePi n k = carlsonF 0 (1-k^2) 1 - (1/3)*n* carlsonJ 0 (1-k^2) 1 (1-n)
 jacobiTheta :: (Ord a, Transcendental a) => Complex a -> Complex a -> Complex a
 jacobiTheta z tau = 1 + 2* series' term 1
   where
-    term n = q^(n''^2) * cos (2*pi*n'*z)
+    term n = qn2 * cos (2*pi*n'*z)
       where
           n' = fromInteger n
-          n'' = fromIntegral n
-    q = exp (pi*iu*tau)
+          qn2 = exp (pi*iu*tau*n'^2)
 
 jacobiTheta00, jacobiTheta01, jacobiTheta10, jacobiTheta11 :: (Ord a, Transcendental a) ⇒ Complex a -> Complex a -> Complex a
 jacobiTheta00 = jacobiTheta
