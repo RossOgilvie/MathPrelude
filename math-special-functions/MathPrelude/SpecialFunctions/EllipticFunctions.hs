@@ -9,9 +9,9 @@ module MathPrelude.SpecialFunctions.EllipticFunctions
   -- * Misc
   , agm
   -- * Incomplete Elliptic Integrals
-  , ellipticF, fastEllipticF
-  , ellipticE, fastEllipticE
-  , ellipticPi
+  , ellipticF, ellipticFcx, fastEllipticF
+  , ellipticE, ellipticEcx, fastEllipticE
+  , ellipticPi, ellipticPicx
   -- * Complete Elliptic Integrals
   , completeK
   , completeE, fastCompleteE
@@ -22,6 +22,10 @@ module MathPrelude.SpecialFunctions.EllipticFunctions
   , carlsonC
   , carlsonJ
   , carlsonD
+  , carlsonFcx
+  , carlsonCcx
+  , carlsonJcx
+  , carlsonDcx
   -- * Weierstrass Elliptic Functions
   -- $weierstrass
   , wp, wp2
@@ -65,7 +69,7 @@ carlSeq x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
         a' = (a+l)/4
         b' = (b+l)/4
         c' = (c+l)/4
-        l = sqrt (a*b) + sqrt (b*c) + sqrt (a*c)
+        l = sqrt a * sqrt b + sqrt b * sqrt c + sqrt a * sqrt c
 
 -- $carlson
 -- The Carlson symmetric forms of elliptic integrals are a modern alternative to the Legendre forms (the usual elliptic integrals). Their good duplication theorem make them easy to calculate.
@@ -78,7 +82,7 @@ carlsonJ x y z p
   | x =~ y && x =~ z && x =~ p = x ** (-3/2)
   | otherwise = (1/4) * carlsonJ x' y' z' p' + 6*carlsonC d2 s
     where
-      l = sqrt (x*y) + sqrt (y*z) + sqrt (x*z)
+      l = sqrt x * sqrt y + sqrt y * sqrt z + sqrt x * sqrt z
       x' = (x + l)/4
       y' = (y + l)/4
       z' = (z + l)/4
@@ -86,6 +90,43 @@ carlsonJ x y z p
       d = (sqrt p + sqrt x)*(sqrt p + sqrt y)*(sqrt p + sqrt z)
       d2 = d^2
       s = d2 + (p-x)*(p-y)*(p-z)
+
+-- There is a potential source of branch cut error in the square roots. Carlson's paper 1994 says to use the square roots with positive real parts. This is only possible for explicitly complex valued versions
+possqrt ∷ (Transcendental a, Ord a) ⇒ Complex a → Complex a
+possqrt z
+  | realPart sz < 0 = - sz
+  | otherwise = sz
+  where sz = sqrt z
+
+carlSeqcx ∷ (Transcendental a, Ord a) ⇒ Complex a → Complex a → Complex a → Complex a
+carlSeqcx x y z = (\(a,_,_) → a) . converge' test . iterate step $ start
+  where
+    start = (x,y,z)
+    test (a, b, c) _ = (a =~ b) && (b=~ c) && (a=~c)
+    step (a, b, c) = (a',b',c')
+      where
+        a' = (a+l)/4
+        b' = (b+l)/4
+        c' = (c+l)/4
+        l = possqrt a * possqrt b + possqrt b * possqrt c + possqrt a * possqrt c
+
+carlsonFcx x y z = (\m → recip . sqrt $ m) $ carlSeqcx x y z
+carlsonCcx x y = carlsonFcx x y y
+carlsonDcx x y z = carlsonJcx x y z z
+carlsonJcx x y z p
+  | x =~ y && x =~ z && x =~ p = x ** (-3/2)
+  | otherwise = (1/4) * carlsonJcx x' y' z' p' + 6*carlsonCcx d2 s
+    where
+      l = possqrt x * possqrt y + possqrt y * possqrt z + possqrt x * possqrt z
+      x' = (x + l)/4
+      y' = (y + l)/4
+      z' = (z + l)/4
+      p' = (p + l)/4
+      d = (possqrt p + possqrt x)*(possqrt p + possqrt y)*(possqrt p + possqrt z)
+      d2 = d^2
+      s = d2 + (p-x)*(p-y)*(p-z)
+
+
 
 -----------------------------------
 --- Incomplete Integrals
@@ -96,6 +137,9 @@ carlsonJ x y z p
 ellipticF ∷ Transcendental a ⇒ a → a → a
 ellipticF x k = x * carlsonF (1-x^2) (1-k^2*x^2) 1
 
+ellipticFcx ∷ (Transcendental a, Ord a)⇒ Complex a → Complex a → Complex a
+ellipticFcx x k = x * carlsonFcx (1-x^2) (1-k^2*x^2) 1
+
 fastEllipticF ∷ Complex Double → Complex Double → Complex Double
 fastEllipticF x k
     | imagPart x < 0 = - fastEllipticF (-x) k
@@ -103,7 +147,7 @@ fastEllipticF x k
     | not xNear0 && kNear0 && (not xNearInf || kxNear0) = asin x * (1+k^2)
     | kxNearInf = iu*completeK k' - fastEllipticF (1/k/x) k
     | kNear0 && xNearInf && kxMid= completeK k + iu*completeK k' + iu*log ((1-sqrtxk)/xk) + 1/4*iu*(log ((1-sqrtxk)/xk) - sqrtxk/xk^2)*k^2
-    | otherwise = ellipticF x k
+    | otherwise = ellipticFcx x k
     where
         k' = sqrt (1-k^2)
         thres = 150
@@ -123,6 +167,9 @@ fastEllipticF x k
 ellipticE ∷ Transcendental a ⇒ a → a → a
 ellipticE x k = x * carlsonF (1-x^2) (1-k^2*x^2) 1 - (1/3)* k^2 *x^3 * carlsonD (1-x^2) (1-k^2*x^2) 1
 
+ellipticEcx ∷ (Transcendental a, Ord a) ⇒ Complex a → Complex a → Complex a
+ellipticEcx x k = x * carlsonFcx (1-x^2) (1-k^2*x^2) 1 - (1/3)* k^2 *x^3 * carlsonDcx (1-x^2) (1-k^2*x^2) 1
+
 fastEllipticE ∷ Complex Double → Complex Double → Complex Double
 fastEllipticE x k
     | imagPart x < 0 = - fastEllipticE (-x) k
@@ -131,7 +178,7 @@ fastEllipticE x k
     | kNear1 && not xNearInf = x + (1-k)*(-x + 0.5*log ((1+x)/(1-x)))
     | kNear0 && kxNear0 = asin x + 0.5*(asin x - x*sqrt (1-x^2))*k^2
     | xNearInf && kxNearInf = k*x + iu*(completeK k' - fastCompleteE k') + (1-k^2)/2/k/x
-    | otherwise = ellipticE x k
+    | otherwise = ellipticEcx x k
     where
         k' = sqrt (1-k^2)
         thres = 400
@@ -150,6 +197,9 @@ fastEllipticE x k
 -- <https://en.wikipedia.org/wiki/Elliptic_integral#Complete_elliptic_integral_of_the_third_kind Wikipedia>
 ellipticPi ∷ Transcendental a ⇒ a → a → a → a
 ellipticPi x n k = x * carlsonF (1-x^2) (1-k^2*x^2) 1 - (1/3)*n*x^3 * carlsonJ (1-x^2) (1-k^2*x^2) 1 (1-n*x^2)
+
+ellipticPicx ∷ (Transcendental a, Ord a) ⇒ Complex a → Complex a → Complex a → Complex a
+ellipticPicx x n k = x * carlsonFcx (1-x^2) (1-k^2*x^2) 1 - (1/3)*n*x^3 * carlsonJcx (1-x^2) (1-k^2*x^2) 1 (1-n*x^2)
 
 -----------------------------------
 --- Complete Integrals
