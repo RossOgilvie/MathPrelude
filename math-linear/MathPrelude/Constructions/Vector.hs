@@ -15,6 +15,7 @@
 
 module MathPrelude.Constructions.Vector
   ( Vec()
+  , V1, V2, V3, V4, V5
   , dimV
   , liftV, liftV2
   , vectorL, toListV, fromListV
