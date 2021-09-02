@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c853cc7c4f0b922d2ff56085740aad7f0fa82c93ed6617a133cc35bd39f41a15
+-- hash: ac2458d6883f3d532bc65de11ada51ddfcc909d066e2a69c5d4543fec8ddf47e
 
 name:           math-extras
 version:        0.1.0.0
@@ -33,14 +33,35 @@ library
       MathPrelude.Classes.Action
   other-modules:
       Paths_math_extras
-  other-extensions: BangPatterns RebindableSyntax UnicodeSyntax MultiParamTypeClasses FlexibleContexts FlexibleInstances TemplateHaskell OverloadedStrings DataKinds KindSignatures ScopedTypeVariables GeneralizedNewtypeDeriving RankNTypes IncoherentInstances UndecidableInstances PolyKinds TypeFamilies TypeOperators ViewPatterns FunctionalDependencies AllowAmbiguousTypes
+  other-extensions:
+      BangPatterns
+      RebindableSyntax
+      UnicodeSyntax
+      MultiParamTypeClasses
+      FlexibleContexts
+      FlexibleInstances
+      TemplateHaskell
+      OverloadedStrings
+      DataKinds
+      KindSignatures
+      ScopedTypeVariables
+      GeneralizedNewtypeDeriving
+      RankNTypes
+      IncoherentInstances
+      UndecidableInstances
+      PolyKinds
+      TypeFamilies
+      TypeOperators
+      ViewPatterns
+      FunctionalDependencies
+      AllowAmbiguousTypes
   build-depends:
       QuickCheck
     , base ==4.12.0.0
     , lens
-    , math-calculus >=0.1 && <0.2
-    , math-prelude >=0.2 && <0.3
-    , math-special-functions >=0.1 && <0.2
+    , math-calculus ==0.1.*
+    , math-prelude ==0.2.*
+    , math-special-functions ==0.1.*
     , numbers
     , primes
     , template-haskell

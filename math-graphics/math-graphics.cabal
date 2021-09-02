@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5bd12161d82844f43c1942f25694247d933ac307875407c174f0723619613807
+-- hash: c836d198afed7ad47da6f69981fab4e9597b8ce0bc508b9f68142e9d77aeae49
 
 name:           math-graphics
 version:        0.1.0.0
@@ -20,9 +20,11 @@ library
       MathPrelude.Graphics.TwoDViewer
   other-modules:
       Paths_math_graphics
-  other-extensions: RebindableSyntax UnicodeSyntax
+  other-extensions:
+      RebindableSyntax
+      UnicodeSyntax
   build-depends:
       base ==4.12.0.0
     , easyplot ==1.0
-    , math-prelude >=0.2 && <0.3
+    , math-prelude ==0.2.*
   default-language: Haskell2010

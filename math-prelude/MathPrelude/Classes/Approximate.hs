@@ -1,4 +1,4 @@
-{-# LANGUAGE RebindableSyntax #-}
+-- {-# LANGUAGE RebindableSyntax #-}
 {-# LANGUAGE UnicodeSyntax    #-}
 
 -- | A comparison operation that makes sense for numeric types, such as applying approximate equality for floats.
@@ -37,6 +37,10 @@ infixl 4 /=~
 -- | Test whether we are close to zero.
 nearZero :: (Approx a, Monoid a) => a -> Bool
 nearZero a = a =~ mempty
+
+-- These are actually in the named numbers module
+-- epsFloat = 1e-5 ∷ Float
+-- epsDouble = 1e-10 ∷ Double
 
 -----------------------------------
 --- Instances

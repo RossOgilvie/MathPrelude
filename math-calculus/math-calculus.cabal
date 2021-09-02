@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: eb0b86e798fd7ffc29dd0c28531f9119f1c95b33466be3b1fcb102dcd9162141
+-- hash: ec91cd25c97cf16f439b5a9a435d5de2f207c59adb90b92bc5191c09d162ba68
 
 name:           math-calculus
 version:        0.1.0.0
@@ -24,7 +24,11 @@ library
       MathPrelude.Calculus.VectorCalc
   other-modules:
       Paths_math_calculus
-  other-extensions: RebindableSyntax UnicodeSyntax FlexibleInstances MultiParamTypeClasses
+  other-extensions:
+      RebindableSyntax
+      UnicodeSyntax
+      FlexibleInstances
+      MultiParamTypeClasses
   build-depends:
       base ==4.12.0.0
     , math-linear

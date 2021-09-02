@@ -65,6 +65,5 @@ oneFloat = 1 ∷ Float
 oneDouble = 1 ∷ Double
 
 twoInteger = 2 ∷ Integer
-
 epsFloat = 1e-5 ∷ Float
 epsDouble = 1e-10 ∷ Double
