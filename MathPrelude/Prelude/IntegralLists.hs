@@ -1,4 +1,5 @@
-{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE NoRebindableSyntax #-}
+{-# LANGUAGE ImplicitPrelude #-}
 
 -- | Often we want to use list functions with integral types other than Int, most often Integer. We supply alternative list functions, named with a prime eg length', that use Integer. List function working with an arbitrary Integral type are available with a double prime, eg length''
 module MathPrelude.Prelude.IntegralLists

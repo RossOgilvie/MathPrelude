@@ -54,9 +54,9 @@ class (Field a, Approx a) ⇒ Transcendental a where
 ------------------------------
 -- | Reciprocal trig functions
 cosec, sec, cot ∷ Transcendental a ⇒ a → a
-cosec = 1/sin
-sec = 1/cos
-cot = 1/tan
+cosec x = 1/sin x
+sec x = 1/cos x
+cot x = 1/tan x
 
 
 

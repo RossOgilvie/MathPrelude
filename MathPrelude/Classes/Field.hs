@@ -44,6 +44,6 @@ half = recip 2
 instance Field Float where recip = P.recip; (/) = (P./)
 instance Field Double where recip = P.recip; (/) = (P./)
 
-instance Field b ⇒ Field (a → b) where
-    recip f = recip . f
-    (/) f g x = f x / g x
+-- instance Field b ⇒ Field (a → b) where
+--     recip f = recip . f
+--     (/) f g x = f x / g x

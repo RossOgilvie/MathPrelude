@@ -54,72 +54,48 @@ sum = foldr mappend mempty
 --- Instances
 -----------------------------------
 instance Semigroup Integer where (<>) = (P.+)
-instance Monoid Integer where mempty = zeroInteger
-instance Group Integer where
-    negate = P.negate;
-    (-) = (P.-)
+instance Monoid Integer where mempty = zeroGeneric 
+instance Group Integer where negate = P.negate; (-) = (P.-)
 instance Abelian Integer
 
 instance Semigroup Int where (<>) = (P.+)
-instance Monoid Int where mempty = zeroInt
-instance Group Int where
-    negate = P.negate;
-    (-) = (P.-)
+instance Monoid Int where mempty = zeroGeneric
+instance Group Int where negate = P.negate; (-) = (P.-)
 instance Abelian Int
 
 instance Semigroup Int32 where (<>) = (P.+)
-instance Monoid Int32 where mempty = zeroInt32
-instance Group Int32 where
-    negate = P.negate;
-    (-) = (P.-)
+instance Monoid Int32 where mempty = zeroGeneric
+instance Group Int32 where negate = P.negate; (-) = (P.-)
 instance Abelian Int32
 
-instance Semigroup Int64 where
-    (<>) = (P.+)
-instance Monoid Int64 where
-    mempty = zeroInt64
-instance Group Int64 where
-    negate = P.negate;
-    (-) = (P.-)
+instance Semigroup Int64 where (<>) = (P.+)
+instance Monoid Int64 where mempty = zeroGeneric
+instance Group Int64 where negate = P.negate; (-) = (P.-)
 instance Abelian Int64
 
 instance Semigroup Word where (<>) = (P.+)
-instance Monoid Word where mempty = zeroWord
-instance Group Word where
-    negate = P.negate;
-    (-) = (P.-)
+instance Monoid Word where mempty = zeroGeneric
+instance Group Word where negate = P.negate; (-) = (P.-)
 instance Abelian Word
 
-instance Semigroup Word32 where
-    (<>) = (P.+)
-instance Monoid Word32 where
-    mempty = zeroWord32
-instance Group Word32 where
-    negate = P.negate;
-    (-) = (P.-)
+instance Semigroup Word32 where (<>) = (P.+)
+instance Monoid Word32 where mempty = zeroGeneric
+instance Group Word32 where negate = P.negate; (-) = (P.-)
 instance Abelian Word32
 
-instance Semigroup Word64 where
-    (<>) = (P.+)
-instance Monoid Word64 where
-    mempty = zeroWord64
-instance Group Word64 where
-    negate = P.negate;
-    (-) = (P.-)
+instance Semigroup Word64 where (<>) = (P.+)
+instance Monoid Word64 where mempty = zeroGeneric
+instance Group Word64 where negate = P.negate; (-) = (P.-)
 instance Abelian Word64
 
 instance Semigroup Float where (<>) = (P.+)
-instance Monoid Float where mempty = zeroFloat
-instance Group Float where
-    negate = P.negate;
-    (-) = (P.-)
+instance Monoid Float where mempty = zeroGeneric
+instance Group Float where negate = P.negate; (-) = (P.-)
 instance Abelian Float
 
 instance Semigroup Double where (<>) = (P.+)
-instance Monoid Double where mempty = zeroDouble
-instance Group Double where
-    negate = P.negate;
-    (-) = (P.-)
+instance Monoid Double where mempty = zeroGeneric
+instance Group Double where negate = P.negate; (-) = (P.-)
 instance Abelian Double
 
 instance Group a ⇒ Group (Maybe a) where
@@ -127,6 +103,6 @@ instance Group a ⇒ Group (Maybe a) where
     negate = liftM negate
 instance Abelian a ⇒ Abelian (Maybe a)
 
-instance Group b ⇒ Group (a→b) where
-    negate f x = negate (f x)
-instance Abelian b ⇒ Abelian (a→b)
+-- instance Group b ⇒ Group (a→b) where
+--     negate f x = negate (f x)
+-- instance Abelian b ⇒ Abelian (a→b)

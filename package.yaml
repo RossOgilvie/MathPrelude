@@ -1,25 +1,24 @@
 name: math-prelude
-version: '0.2.0.0'
-synopsis: A better prelude for maths.
-description: I have introduced a new hierarchy of typeclasses for arithmetic, aligned
+version: '0.3.0.0'
+synopsis: A better prelude for mathematics.
+description: A new hierarchy of typeclasses for arithmetic, aligned
   with mathematical convention. This both gets rid of the strange quirks of Haskell's
-  standard numerical classes, but also allows for richer and expressive mathematical
+  standard numerical classes, but also allows for more expressive and nuanced mathematical
   constructions to extend from it.
 category: Math
 author: Ross Ogilvie
 maintainer: ross@rossogilvie.id.au
 license: GPL-3
 homepage: https://github.com/RossOgilvie/math-prelude
-other-extensions:
+default-extensions:
 - RebindableSyntax
 - UnicodeSyntax
-- NoImplicitPrelude
-- CPP
 - OverloadedStrings
 ghc-options:
 - -O2
 - -Wall
 - -fwarn-tabs
+- -fno-warn-orphans
 dependencies:
 - base ==4.12.0.0
 - system-filepath >=0.4 && <0.5

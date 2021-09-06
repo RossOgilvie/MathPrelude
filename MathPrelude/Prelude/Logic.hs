@@ -1,5 +1,5 @@
--- {-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
+{-# LANGUAGE NoRebindableSyntax #-}
+{-# LANGUAGE ImplicitPrelude #-}
 
 -- | A module with the basic logical operators
 module MathPrelude.Prelude.Logic

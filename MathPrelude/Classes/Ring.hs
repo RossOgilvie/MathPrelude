@@ -35,13 +35,13 @@ class Abelian a ⇒ Ring a where
     fromInteger ∷ Integer → a
 
     fromInteger n
-        | n < zeroInteger = negate (fi (negate n))
+        | n < zeroGeneric  = negate (fi (negate n))
         | otherwise = fi n
             where
                 fi ∷ Ring a ⇒ Integer → a
                 fi m
-                    | m == zeroInteger = zero
-                    | m == oneInteger = one
+                    | m == zeroGeneric = zero
+                    | m == oneGeneric = one
                     | P.even m    = fin + fin
                     | otherwise = fin + fin + one
                         where fin = fi (m `P.div` twoInteger)
@@ -105,15 +105,15 @@ twopowers = 1 : map (*2) twopowers
 --- Instances
 -----------------------------------
 
-instance Ring Integer where one = oneInteger; (*) = (P.*); fromInteger = id;
-instance Ring Int where one = oneInt; (*) = (P.*); fromInteger = P.fromInteger;
-instance Ring Int32 where one = oneInt32; (*) = (P.*); fromInteger = P.fromInteger;
-instance Ring Int64 where one = oneInt64; (*) = (P.*); fromInteger = P.fromInteger;
-instance Ring Word where one = oneWord; (*) = (P.*); fromInteger = P.fromInteger;
-instance Ring Word32 where one = oneWord32; (*) = (P.*); fromInteger = P.fromInteger;
-instance Ring Word64 where one = oneWord64; (*) = (P.*); fromInteger = P.fromInteger;
-instance Ring Float where one = oneFloat; (*) = (P.*); fromInteger = P.fromInteger;
-instance Ring Double where one = oneDouble; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Integer where one = oneGeneric; (*) = (P.*); fromInteger = id;
+instance Ring Int where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Int32 where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Int64 where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Word where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Word32 where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Word64 where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Float where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
+instance Ring Double where one = oneGeneric; (*) = (P.*); fromInteger = P.fromInteger;
 
 instance CRing Integer
 instance CRing Int
@@ -152,8 +152,8 @@ instance Ring a ⇒ Ring (Maybe a) where
 instance CRing a ⇒ CRing (Maybe a)
 instance IntDom a ⇒ IntDom (Maybe a)
 
-instance Ring b ⇒ Ring (a → b) where
-    one = const one
-    (*) f g x = f x * g x
-instance CRing b ⇒ CRing (a → b)
-instance IntDom b ⇒ IntDom (a → b)
+-- instance Ring b ⇒ Ring (a → b) where
+--     one = const one
+--     (*) f g x = f x * g x
+-- instance CRing b ⇒ CRing (a → b)
+-- instance IntDom b ⇒ IntDom (a → b)

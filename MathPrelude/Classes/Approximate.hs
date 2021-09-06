@@ -47,24 +47,24 @@ nearZero a = a =~ mempty
 -----------------------------------
 instance Approx Int where
     (=~)    = (==)
-    epsilon = zeroInt
+    epsilon = zeroGeneric
 instance Approx Int32 where
     (=~)    = (==)
-    epsilon = zeroInt32
+    epsilon = zeroGeneric
 instance Approx Int64 where
     (=~)    = (==)
-    epsilon = zeroInt64
+    epsilon = zeroGeneric
 instance Approx Integer where
     (=~)    = (==)
-    epsilon = zeroInteger
+    epsilon = zeroGeneric
 
 instance Approx Float where
     (=~) x y =
-        P.abs (x P.- y) <= epsFloat P.* P.maximum [oneFloat, P.abs x, P.abs y]
+        P.abs (x P.- y) <= epsFloat P.* P.maximum [oneGeneric, P.abs x, P.abs y]
     epsilon = epsFloat
 instance Approx Double where
     (=~) x y =
-        P.abs (x P.- y) <= epsDouble P.* P.maximum [oneDouble, P.abs x, P.abs y]
+        P.abs (x P.- y) <= epsDouble P.* P.maximum [oneGeneric, P.abs x, P.abs y]
     epsilon = epsDouble
 
 instance Approx a ⇒ Approx [a] where
