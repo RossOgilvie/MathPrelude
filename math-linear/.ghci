@@ -1,4 +1,0 @@
-:set -XRebindableSyntax
-:set -XUnicodeSyntax
-
-import qualified Prelude as P
