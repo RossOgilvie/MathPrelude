@@ -2,7 +2,7 @@
 module MathPrelude.Classes.Ring
     ( module MathPrelude.Classes.Group
     , Ring(..)
-    , Num(..)
+    -- , Num(..)
     , CRing
     , IntDom
     , (^)
@@ -47,9 +47,9 @@ class Abelian a ⇒ Ring a where
 
 infixl 7 *
 
--- | A compatibility class to replace the Prelude Num class.
-class (Eq a, Show a, Ring a) ⇒ Num a  where
-    abs, signum ∷ a → a
+-- -- | A compatibility class to replace the Prelude Num class.
+-- class (Eq a, Show a, Ring a) ⇒ Num a  where
+--     abs, signum ∷ a → a
 
 -- instance Num a ⇒ P.Num a
 
@@ -132,15 +132,15 @@ instance IntDom Word64
 instance IntDom Float
 instance IntDom Double
 
-instance Num Integer where abs = P.abs; signum = P.signum
-instance Num Int where abs = P.abs; signum = P.signum
-instance Num Int32 where abs = P.abs; signum = P.signum
-instance Num Int64 where abs = P.abs; signum = P.signum
-instance Num Word where abs = P.abs; signum = P.signum
-instance Num Word32 where abs = P.abs; signum = P.signum
-instance Num Word64 where abs = P.abs; signum = P.signum
-instance Num Float where abs = P.abs; signum = P.signum
-instance Num Double where abs = P.abs; signum = P.signum
+-- instance Num Integer where abs = P.abs; signum = P.signum
+-- instance Num Int where abs = P.abs; signum = P.signum
+-- instance Num Int32 where abs = P.abs; signum = P.signum
+-- instance Num Int64 where abs = P.abs; signum = P.signum
+-- instance Num Word where abs = P.abs; signum = P.signum
+-- instance Num Word32 where abs = P.abs; signum = P.signum
+-- instance Num Word64 where abs = P.abs; signum = P.signum
+-- instance Num Float where abs = P.abs; signum = P.signum
+-- instance Num Double where abs = P.abs; signum = P.signum
 
 instance Ring a ⇒ Ring (Maybe a) where 
     one = Just one

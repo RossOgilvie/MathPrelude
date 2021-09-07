@@ -8,6 +8,7 @@ module MathPrelude.Classes.Norm
   ( Norm(..)
   , InnerProd(..)
   , ComplexInnerProd(..)
+  , abs
   )
 where
 
@@ -27,9 +28,16 @@ class InnerProd v s | v → s where
 class ComplexInnerProd v s | v → s where
   cxiprod ∷ v → v → s
 
--- instance (Transcendental s, InnerProd v s) ⇒ Norm v s where
---   norm v = sqrt $ iprod v v
+-----------------------------------
+--- Methods
+-----------------------------------
+-- | The absolute value is a special case of a norm.
+abs ∷ Norm s s ⇒ s → s
+abs = norm
 
+-----------------------------------
+--- Instances
+-----------------------------------
 instance Norm Int Int where
   norm = P.abs
 instance Norm Int32 Int32 where

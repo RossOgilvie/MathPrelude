@@ -3,9 +3,18 @@
 {-# LANGUAGE MultiParamTypeClasses  #-}
 
 -- | A module (the algebraic object, not the Haskell file) abstracts the notion of scaling an additive group. A vector space is a module where the scalars form a field.
-module MathPrelude.Classes.VectorSpace where
+module MathPrelude.Classes.VectorSpace
+    ( Module(..)
+    , VectorSpace
+    , (.*)
+    , (*.)
+    , (./)
+    , (/.)
+    , normalize
+    ) where
 
-import           MathPrelude
+import MathPrelude.Prelude.CorePrelude
+import MathPrelude.Classes.Field
 import           MathPrelude.Classes.Norm
 
 -----------------------------------
@@ -53,5 +62,5 @@ infixr 7 ./
 infixl 7 /.
 
 -- | Scale a vector by dividing by its norm. This should make it uni length.
-normalise :: (VectorSpace v s, Norm v s) => v -> v
-normalise v = norm v ./ v
+normalize :: (VectorSpace v s, Norm v s) => v -> v
+normalize v = norm v ./ v

@@ -26,8 +26,8 @@ where
 --- Imports
 -----------------------------------
 import           MathPrelude
-import           MathPrelude.Classes.Norm
-import           MathPrelude.Classes.VectorSpace
+-- import           MathPrelude.Classes.Norm
+-- import           MathPrelude.Classes.VectorSpace
 
 import           Data.Complex                   ( Complex(..) )
 
@@ -77,8 +77,8 @@ normsq' = realPart . normsq
 -- | Compute the argument of a complex numer. The range is from -pi to pi. Arg 0 = 0. Arg (-x:+0) = pi.
 arg :: (Ord a, Transcendental a) => Complex a -> a
 arg (x :+ y) | x > zero                 = atan (y / x)
-             | nearZero x && y > zero   = pi * half
-             | nearZero x && y < zero   = negate $ pi * half
+             | nearZero x && y > zero   = pi / 2
+             | nearZero x && y < zero   = negate $ pi / 2
              | nearZero x && nearZero y = zero
              | x < zero && y > zero     = atan (y / x) + pi
              | x < zero && y < zero     = atan (y / x) - pi
@@ -124,23 +124,18 @@ instance CRing a ⇒ CRing (Complex a)
 instance IntDom a ⇒ IntDom (Complex a)
 instance Field a ⇒ Field (Complex a) where
     recip z@(x :+ y) = (x / zz) :+ (negate y / zz) where zz = normsq' z
+instance (Monoid a, CharZero a) ⇒ CharZero (Complex a) where
+    fromRational' = fromReal . fromRational'
+
 instance Ring r ⇒ Module (Complex r) r where
     scale r (x :+ y) = (r * x) :+ (r * y)
 instance (Transcendental r, Ring r) ⇒ Norm (Complex r) r where
     norm = sqrt . normsq'
-
 instance Ring r ⇒ ComplexInnerProd (Complex r) (Complex r) where
     cxiprod z w = z * conjugate w
 
-instance Num a ⇒ Num (Complex a) where
-    abs    = undefined
-    signum = undefined
-
-instance (Monoid a, CharZero a) ⇒ CharZero (Complex a) where
-    fromRational' = fromReal . fromRational'
-
 half' :: Field a => Complex a
-half' = fromReal half
+half' = fromReal (recip 2)
 
 instance (Ord a, Field a, Transcendental a) ⇒ Transcendental (Complex a) where
     pi = fromReal pi

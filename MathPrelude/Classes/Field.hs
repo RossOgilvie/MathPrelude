@@ -2,7 +2,7 @@
 module MathPrelude.Classes.Field
     ( module MathPrelude.Classes.Ring
     , Field(..)
-    , half
+    -- , half
     )  where
 
 import           MathPrelude.Prelude.CorePrelude
@@ -33,8 +33,8 @@ infixl 7 /
 ------------------------------
 
 -- | A convenient helper. half = 0.5 = 1/2 = recip 2
-half ∷ Field a ⇒ a
-half = recip 2
+-- half ∷ Field a ⇒ a
+-- half = recip 2
 
 ------------------------------
 --- Instances

@@ -18,6 +18,7 @@ import           MathPrelude.Prelude.CorePrelude
 import           MathPrelude.Classes.Approximate
 import           MathPrelude.Classes.EuclideanDomain
 import           MathPrelude.Classes.Field
+import MathPrelude.Classes.Norm
 
 ------------------------------
 --- Ratio
@@ -72,10 +73,6 @@ instance (IntDom a, Ord a) ⇒ Ord (Ratio a) where
 instance (IntDom a, Approx a) ⇒ Approx (Ratio a) where
     (=~) (x:%y) (x':%y') = (x*y' - x'*y) =~ 0
     epsilon = epsilon :% one
-    -- (=~) (x:%y) (x':%y') = smallL [x,y,x',y'] (x*y' - x'*y)
-    -- nearZero = (>>~) zero
-    -- (>>~) (x:%y) (x':%y') = (>>~) (x*y') (x'*y)
-
 
 instance IntDom a ⇒ Semigroup (Ratio a) where
     (<>) (x:%y) (x':%y') = (x*y' + x'*y) :% (y*y')
@@ -98,3 +95,6 @@ instance IntDom a ⇒ IntDom (Ratio a)
 instance IntDom a ⇒ Field (Ratio a) where
     recip (x :% y) = y :% x
     (/) (x:%y) (x':%y') = (x*y') :% (y*x')
+
+instance Norm a b ⇒ Norm (Ratio a) (Ratio b) where
+    norm (x:%y) = norm x :% norm y

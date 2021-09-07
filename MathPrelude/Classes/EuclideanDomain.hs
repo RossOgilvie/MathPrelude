@@ -31,17 +31,17 @@ class IntDom a ⇒ EuclideanDomain a where
     -- | The standard unit satisfies the property that x = stdAssoc * stdUnit.
     stdUnit ∷ a → a
     -- | A combination of (stdAssoc, stdUnit)
-    normalize ∷ a → (a, a)
+    stdAssociateUnit ∷ a → (a, a)
 
     stdAssociate x  =  x `div` stdUnit x
-    stdUnit x       =  snd (normalize x)
-    normalize x     =  (stdAssociate x, stdUnit x)
+    stdUnit x       =  snd (stdAssociateUnit x)
+    stdAssociateUnit x     =  (stdAssociate x, stdUnit x)
 
     n `divMod` d    =  (n `div` d, n `mod` d)
     n `div` d       =  fst $ divMod n d
     n `mod` d       =  snd $ divMod n d
 
-    {-# MINIMAL (stdUnit | normalize), (divMod | (div, mod))  #-}
+    {-# MINIMAL (stdUnit | stdAssociateUnit), (divMod | (div, mod))  #-}
 
 
 -----------------------------------

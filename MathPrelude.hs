@@ -13,6 +13,9 @@ import MathPrelude.Classes.Integral as X
 import MathPrelude.Classes.Rational as X
 import MathPrelude.Classes.Real as X
 
+import MathPrelude.Classes.Norm as X
+import MathPrelude.Classes.VectorSpace as X
+
 import MathPrelude.Classes.Approximate as X
 import MathPrelude.Classes.Transcendental as X
 
