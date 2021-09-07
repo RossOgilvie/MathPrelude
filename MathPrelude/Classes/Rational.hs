@@ -1,6 +1,3 @@
-{-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
-
 -- | A module for converting between rational types.
 module MathPrelude.Classes.Rational
     ( Rational

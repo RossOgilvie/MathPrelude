@@ -1,6 +1,3 @@
-{-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
-
 -- | A module for converting between integral types.
 module MathPrelude.Classes.Integral
     ( Integral(..)

@@ -1,10 +1,7 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE IncoherentInstances   #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE OverloadedStrings     #-}
-{-# LANGUAGE RebindableSyntax      #-}
 {-# LANGUAGE UndecidableInstances  #-}
-{-# LANGUAGE UnicodeSyntax         #-}
 
 -- | A dataype to make complex numbers. Reuses Data.Complex.
 module MathPrelude.Constructions.Complex

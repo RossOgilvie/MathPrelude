@@ -37,10 +37,11 @@ parity' ∷ Ordering → Ordering → Ordering → Ordering
 parity' EQ _ _ = EQ
 parity' x y z
     | y == z = x
-    | y /= z = opposite x
+    | otherwise = opposite x
         where
             opposite LT = GT
             opposite GT = LT
+            opposite EQ = EQ
 
 -- | Reduce the ratio to one of coprime numbers.
 simplifyR ∷ (EuclideanDomain a, Eq a) ⇒ Ratio a → Ratio a

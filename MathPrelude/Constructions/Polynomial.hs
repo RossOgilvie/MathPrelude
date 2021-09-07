@@ -1,8 +1,5 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE OverloadedStrings     #-}
-{-# LANGUAGE RebindableSyntax      #-}
-{-# LANGUAGE UnicodeSyntax         #-}
 
 module MathPrelude.Constructions.Polynomial
     ( module Export
@@ -36,7 +33,7 @@ import qualified Prelude                       as P
 -----------------------------------
 
 -- | A sparse representation of polynomials.
-data Poly a = Poly [(Integer,a)] deriving (Eq)
+newtype Poly a = Poly [(Integer,a)] deriving (Eq)
 
 
 -----------------------------------
@@ -69,7 +66,7 @@ scalarP c = Poly [(0, c)]
 
 -- | Construct a monic polynomial with the specified roots (counting multiplicities).
 fromFactorsP :: Ring a => [a] -> Poly a
-fromFactorsP ls = product . map (\l -> fromListP [-l, 1]) $ ls
+fromFactorsP = product . map (\l -> fromListP [-l, 1])
 
 -- | Extract the constant coeffiecient of a polynomial.
 constP :: Monoid a => Poly a -> a
@@ -126,26 +123,30 @@ mul (Poly xs) (Poly ys) =
 --                     r = removeTerm dp $ p - shiftPower d (factor .* q)
 
 -- | calculate the divMod of two polys.
+newDivMod :: Field a => Poly a -> Poly a -> (Poly a, Poly a)
 newDivMod p q = (Poly (combineP' d), m)
   where
     (d, m) = div' p q
-    -- div' ∷ Field a ⇒ Poly a → Poly a → ([(Int,a)],Poly a)
-    div' p q | deg < 0   = ([(0, mempty)], p)
-             | deg == 0  = ([(0, factor)], r)
-             | dq == 0   = (p'', 0)
-             | otherwise = (p' ++ [(deg, factor)], r')
-      where
-        dp       = degreeP p
-        dq       = degreeP q
-        deg      = dp - dq
-        factor   = leadingP p / leadingP q
-        r        = removeTerm dp $ p - shiftPower deg (factor .* q)
-        (p', r') = div' r q
-        Poly p'' = p /. constP q
+div' :: Field a => Poly a -> Poly a -> ([(Integer, a)], Poly a)
+div' p q | deg < 0   = ([(0, mempty)], p)
+            | deg == 0  = ([(0, factor)], r)
+            | dq == 0   = (p'', 0)
+            | otherwise = (p' ++ [(deg, factor)], r')
+    where
+    dp       = degreeP p
+    dq       = degreeP q
+    deg      = dp - dq
+    factor   = leadingP p / leadingP q
+    r        = removeTerm dp $ p - shiftPower deg (factor .* q)
+    (p', r') = div' r q
+    Poly p'' = p /. constP q
 
 -- | A better show functions, using conventions and a dummy variable "x"
+displayP :: Show a => Poly a -> String
 displayP p = if s /= "" then "(" ++ s ++ ")" else "0" where s = display' p
+display' :: Show a => Poly a -> String
 display' (Poly xs) = intercalate " + " . map displayM $ xs
+displayM :: (Eq a1, Ring a1, Show a2, Show a1) => (a1, a2) -> String
 displayM (n, x) | n == 0    = P.show x
                 | n == 1    = P.show x ++ "x"
                 | otherwise = P.show x ++ "x^" ++ P.show n
@@ -168,6 +169,7 @@ instance Approx a ⇒ Approx (Poly a) where
         tripEq ((n, a) : xs) ((m, b) : ys) | n == m    = a =~ b && tripEq xs ys
                                            | otherwise = False
         tripEq _ _ = False
+    epsilon = scalarP epsilon
 
 
 instance Monoid a ⇒ Semigroup (Poly a) where
@@ -198,7 +200,7 @@ instance (Monoid a, CharZero a) ⇒ CharZero (Poly a) where
 --- Internal Stuff
 -----------------------------------
 -- | just dump the contents of the poly
-guts (Poly xs) = P.show xs
+-- guts (Poly xs) = P.show xs
 
 -- | collect like terms, sort terms by degree.
 sortSimplifyP :: Monoid a => Poly a -> Poly a
@@ -208,8 +210,9 @@ sortSimplifyP' = combineP' . sortP'
 
 
 -- | collect like terms
-combineP :: Monoid a => Poly a -> Poly a
-combineP (Poly xs) = Poly . combineP' $ xs
+-- combineP :: Monoid a => Poly a -> Poly a
+-- combineP (Poly xs) = Poly . combineP' $ xs
+combineP' :: (Eq a, Monoid b) => [(a, b)] -> [(a, b)]
 combineP' []  = []
 combineP' [x] = [x]
 combineP' (x@(n, a) : y@(m, b) : xs)
@@ -218,8 +221,9 @@ combineP' (x@(n, a) : y@(m, b) : xs)
 
 
 -- | sort terms by degree
-sortP :: Poly a -> Poly a
-sortP (Poly xs) = Poly . sortP' $ xs
+-- sortP :: Poly a -> Poly a
+-- sortP (Poly xs) = Poly . sortP' $ xs
+sortP' :: [(Integer, b)] -> [(Integer, b)]
 sortP' = sortBy (compare `on` fst)
 
 

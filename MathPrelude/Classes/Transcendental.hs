@@ -1,5 +1,3 @@
-{-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
 -- | A module to do transcendental operations, such as exponentials and trigonometry.
 module MathPrelude.Classes.Transcendental where
 

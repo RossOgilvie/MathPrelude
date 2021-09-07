@@ -1,5 +1,3 @@
-{-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
 -- | A special ring that has a division procedure. This procedure allows the implementation of the Euclidean algorithm.
 module MathPrelude.Classes.EuclideanDomain
     ( module MathPrelude.Classes.Ring

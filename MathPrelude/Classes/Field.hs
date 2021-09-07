@@ -1,5 +1,3 @@
-{-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
 -- | A field is a ring where all non-zero elements have multiplicative inverses. Ie, it has a division operation.
 module MathPrelude.Classes.Field
     ( module MathPrelude.Classes.Ring

@@ -1,6 +1,3 @@
-{-# LANGUAGE RebindableSyntax       #-}
-{-# LANGUAGE UnicodeSyntax          #-}
-
 {-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}

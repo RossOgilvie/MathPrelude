@@ -1,6 +1,3 @@
-{-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
-
 -- | Represent a group, a structure with an invertible operation, that may or may not be commutative (aka abelian).
 module MathPrelude.Classes.Group
     ( Group(..)

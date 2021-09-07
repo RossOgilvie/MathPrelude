@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RebindableSyntax  #-}
-{-# LANGUAGE UnicodeSyntax     #-}
 -- | Represent a ring, a structure that is an abelian group with a unital multiplication operator that distributes over the group operation. Our rings are all commutative.
 module MathPrelude.Classes.Ring
     ( module MathPrelude.Classes.Group

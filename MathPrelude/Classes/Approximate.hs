@@ -1,6 +1,3 @@
--- {-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE UnicodeSyntax    #-}
-
 -- | A comparison operation that makes sense for numeric types, such as applying approximate equality for floats.
 module MathPrelude.Classes.Approximate
     ( Approx(..)
